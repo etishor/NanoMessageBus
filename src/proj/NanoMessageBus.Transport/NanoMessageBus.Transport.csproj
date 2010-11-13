@@ -47,8 +47,7 @@
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="EndpointException.cs" />
-    <Compile Include="IDequeueMessages.cs" />
-    <Compile Include="IEnqueueMessage.cs" />
+    <Compile Include="IMessageQueue.cs" />
     <Compile Include="IHandleUnitOfWork.cs" />
     <Compile Include="ISerializeMessages.cs" />
     <Compile Include="ITransportMessages.cs" />
