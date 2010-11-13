@@ -46,6 +46,16 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AddressNormalizer.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="MessageBuilder.cs" />
+    <Compile Include="MessageQueueFactory.cs" />
+    <Compile Include="MsmqAdapter.cs" />
+    <Compile Include="MsmqMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsmqMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +76,16 @@
       <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
       <Name>NanoMessageBus.Transport</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Messaging" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MsmqMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MsmqMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
