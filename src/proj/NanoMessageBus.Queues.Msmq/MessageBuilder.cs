@@ -10,14 +10,14 @@ namespace NanoMessageBus.Queues.Msmq
 	internal static class MessageBuilder
 	{
 		public static PhysicalMessage BuildPhysicalMessage(
-			this Message message, string localAddress, ISerializeMessages serializer)
+			this Message message, MessageQueue queue, ISerializeMessages serializer)
 		{
 			return new PhysicalMessage
 			{
-				MessageId = Guid.Parse(message.Id), // TODO
-				CorrelationId = Guid.Parse(message.CorrelationId), // TODO
-				ReturnAddress = message.ResponseQueue.NormalizeAddress(),
-				DestinationAddress = localAddress,
+				MessageId = Guid.Parse(message.Id), // TODO, this should probably come from the serialized payload?
+				CorrelationId = Guid.Parse(message.CorrelationId), // TODO, also from the payload?
+				ReturnAddress = message.ResponseQueue.ToQueueAddress(),
+				DestinationAddress = queue.ToQueueAddress(),
 				Durable = message.Recoverable,
 				Expiration = message.Expiration(),
 				Headers = message.Headers(serializer),

@@ -4,13 +4,13 @@ namespace NanoMessageBus.Queues.Msmq
 
 	internal static class AddressNormalizer
 	{
-		public static string NormalizeAddress(this MessageQueue queue)
+		public static string ToQueueAddress(this MessageQueue queue)
 		{
-			return queue.QueueName.NormalizeAddress();
+			return string.Empty; // TODO: translate \\machine\QueueName to QueueName@machine
 		}
-		public static string NormalizeAddress(this string address)
+		public static string ToQueuePath(this string address)
 		{
-			return address; // TODO
+			return string.Empty; // TODO: translate QueueName[@machine] to QueueName@machine
 		}
 	}
 }

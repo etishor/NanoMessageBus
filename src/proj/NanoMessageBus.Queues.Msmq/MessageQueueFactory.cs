@@ -10,7 +10,7 @@ namespace NanoMessageBus.Queues.Msmq
 			if (string.IsNullOrEmpty(address))
 				throw new MessagingException(MsmqMessages.MissingQueueAddress);
 
-			return new MessageQueue(address.NormalizeAddress())
+			return new MessageQueue(address.ToQueuePath())
 			{
 				MessageReadPropertyFilter = BuildFilter()
 			};

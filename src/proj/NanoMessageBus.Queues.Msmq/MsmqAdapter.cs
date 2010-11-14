@@ -73,8 +73,8 @@ namespace NanoMessageBus.Queues.Msmq
 		{
 			try
 			{
-				var message = this.queue.Receive(ReceiveMessageTimeout, this.transactionType);
-				return message.BuildPhysicalMessage(this.queue.NormalizeAddress(), this.serializer);
+				using (var message = this.queue.Receive(ReceiveMessageTimeout, this.transactionType))
+					return message.BuildPhysicalMessage(this.queue, this.serializer);
 			}
 			catch (MessageQueueException e)
 			{
@@ -90,6 +90,7 @@ namespace NanoMessageBus.Queues.Msmq
 		public void Enqueue(PhysicalMessage message)
 		{
 			// TODO
+			// note: send is thread safe, but only when sending an object of type System.Messaging.Message.
 		}
 	}
 }
