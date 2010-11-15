@@ -2,28 +2,27 @@ namespace NanoMessageBus.Endpoints.Msmq
 {
 	using System;
 	using System.Messaging;
-	using System.Transactions;
 	using Logging;
 	using Transport;
 
-	public class MsmqEndpoint : IReceiveFromEndpoints, ISendToEndpoints
+	public class MsmqEndpointReceiver : IReceiveFromEndpoints
 	{
 		public event EventHandler MessageAvailable;
 
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpoint));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
 		private static readonly TimeSpan ReceiveMessageTimeout = 2.Seconds();
 		private readonly MessageQueueTransactionType transactionType;
 		private readonly ISerializeMessages serializer;
 		private readonly MessageQueue inputQueue;
 		private bool disposed;
 
-		public MsmqEndpoint(bool transactional, ISerializeMessages serializer, string address)
+		public MsmqEndpointReceiver(bool transactional, ISerializeMessages serializer, string address)
 			: this(transactional, serializer, address.OpenForReceive())
 		{
 		}
-		public MsmqEndpoint(bool transactional, ISerializeMessages serializer, MessageQueue inputQueue)
+		public MsmqEndpointReceiver(bool transactional, ISerializeMessages serializer, MessageQueue inputQueue)
 		{
-			this.transactionType = transactional.GetTransactionalType();
+			this.transactionType = transactional.GetInboundTransactionType();
 			this.serializer = serializer;
 			this.inputQueue = inputQueue;
 
@@ -34,8 +33,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			this.inputQueue.PeekCompleted += this.OnPeekCompleted;
 			this.inputQueue.BeginPeek();
 		}
-
-		~MsmqEndpoint()
+		~MsmqEndpointReceiver()
 		{
 			this.Dispose(false);
 		}
@@ -87,21 +85,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 				throw new EndpointException(e.Message, e);
 			}
-		}
-		public virtual void Send(PhysicalMessage message, params string[] recipients)
-		{
-			var transactional = (Transaction.Current != null)
-				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
-
-			using (var envelope = message.BuildMsmqMessage(this.serializer))
-				foreach (var recipient in recipients ?? new string[0])
-					Send(envelope, transactional, recipient);
-		}
-
-		private static void Send(Message message, MessageQueueTransactionType transactional, string address)
-		{
-			using (var outboundQueue = address.OpenForSend())
-				outboundQueue.Send(message, transactional);
 		}
 	}
 }

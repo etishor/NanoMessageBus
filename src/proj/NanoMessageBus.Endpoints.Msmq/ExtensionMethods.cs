@@ -5,9 +5,13 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 	internal static class ExtensionMethods
 	{
-		public static MessageQueueTransactionType GetTransactionalType(this bool transactional)
+		public static MessageQueueTransactionType GetInboundTransactionType(this bool transactional)
 		{
 			return transactional ? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.None;
+		}
+		public static MessageQueueTransactionType GetOutboundTransactionType(this bool transactional)
+		{
+			return transactional ? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
 		}
 
 		public static TimeSpan Seconds(this int seconds)
