@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Subscription
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Endpoints.Msmq", "proj\NanoMessageBus.Endpoints.Msmq\NanoMessageBus.Endpoints.Msmq.csproj", "{A5151E49-1445-4B69-BAE9-4D5445DED4F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Endpoints", "proj\NanoMessageBus.Endpoints\NanoMessageBus.Endpoints.csproj", "{FE46F683-F9A7-477E-B017-A8E3A1A48E24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{A5151E49-1445-4B69-BAE9-4D5445DED4F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5151E49-1445-4B69-BAE9-4D5445DED4F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5151E49-1445-4B69-BAE9-4D5445DED4F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE46F683-F9A7-477E-B017-A8E3A1A48E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE46F683-F9A7-477E-B017-A8E3A1A48E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE46F683-F9A7-477E-B017-A8E3A1A48E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE46F683-F9A7-477E-B017-A8E3A1A48E24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +73,6 @@ Global
 		{9C04BE79-85E3-45BB-8827-B5390C7E803E} = {2A1220B4-FCED-4283-9C2D-BF10ACFA412C}
 		{2787552C-88AE-4CED-A3F3-C0AD78754E63} = {2A1220B4-FCED-4283-9C2D-BF10ACFA412C}
 		{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34} = {2A1220B4-FCED-4283-9C2D-BF10ACFA412C}
+		{FE46F683-F9A7-477E-B017-A8E3A1A48E24} = {2A1220B4-FCED-4283-9C2D-BF10ACFA412C}
 	EndGlobalSection
 EndGlobal

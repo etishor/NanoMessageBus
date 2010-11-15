@@ -3,7 +3,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System;
 	using System.Messaging;
 	using System.Transactions;
-	using Core;
 	using Logging;
 	using Transport;
 

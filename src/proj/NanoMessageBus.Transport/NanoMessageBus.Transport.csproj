@@ -46,11 +46,7 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="EndpointException.cs" />
     <Compile Include="IHandleUnitOfWork.cs" />
-    <Compile Include="IReceiveFromEndpoints.cs" />
-    <Compile Include="ISendToEndpoints.cs" />
-    <Compile Include="ISerializeMessages.cs" />
     <Compile Include="ITransportMessages.cs" />
     <Compile Include="MessageBusException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,10 +57,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NanoMessageBus.Core\NanoMessageBus.Core.csproj">
-      <Project>{A2D7EDF7-FA67-43E3-AA34-C7483508A5F1}</Project>
-      <Name>NanoMessageBus.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
       <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
       <Name>NanoMessageBus</Name>

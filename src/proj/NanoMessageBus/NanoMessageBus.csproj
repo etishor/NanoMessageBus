@@ -49,6 +49,7 @@
     <Compile Include="IHandleMessages.cs" />
     <Compile Include="ISendMessages.cs" />
     <Compile Include="IPublishMessages.cs" />
+    <Compile Include="PhysicalMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

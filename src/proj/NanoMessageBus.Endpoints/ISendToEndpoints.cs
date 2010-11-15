@@ -1,7 +1,6 @@
-namespace NanoMessageBus.Transport
+namespace NanoMessageBus.Endpoints
 {
 	using System;
-	using Core;
 
 	public interface ISendToEndpoints : IDisposable
 	{

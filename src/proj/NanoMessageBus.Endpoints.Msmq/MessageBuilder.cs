@@ -5,8 +5,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Messaging;
-	using Core;
-	using Transport;
 
 	internal static class MessageBuilder
 	{

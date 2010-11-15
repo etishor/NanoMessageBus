@@ -2,7 +2,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 {
 	using System;
 	using System.Messaging;
-	using Core;
 
 	internal static class ExtensionMethods
 	{

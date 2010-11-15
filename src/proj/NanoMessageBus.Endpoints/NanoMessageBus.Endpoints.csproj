@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A5151E49-1445-4B69-BAE9-4D5445DED4F9}</ProjectGuid>
+    <ProjectGuid>{FE46F683-F9A7-477E-B017-A8E3A1A48E24}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.Endpoints.Msmq</RootNamespace>
-    <AssemblyName>NanoMessageBus.Endpoints.Msmq</AssemblyName>
+    <RootNamespace>NanoMessageBus.Endpoints</RootNamespace>
+    <AssemblyName>NanoMessageBus.Endpoints</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,16 +46,10 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AddressNormalizer.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="MessageBuilder.cs" />
-    <Compile Include="MessageQueueFactory.cs" />
-    <Compile Include="MsmqEndpoint.cs" />
-    <Compile Include="MsmqMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MsmqMessages.resx</DependentUpon>
-    </Compile>
+    <Compile Include="EndpointException.cs" />
+    <Compile Include="IReceiveFromEndpoints.cs" />
+    <Compile Include="ISendToEndpoints.cs" />
+    <Compile Include="ISerializeMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,33 +58,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NanoMessageBus.Endpoints\NanoMessageBus.Endpoints.csproj">
-      <Project>{FE46F683-F9A7-477E-B017-A8E3A1A48E24}</Project>
-      <Name>NanoMessageBus.Endpoints</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
-      <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
-      <Name>NanoMessageBus.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Transport\NanoMessageBus.Transport.csproj">
-      <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
-      <Name>NanoMessageBus.Transport</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
       <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
       <Name>NanoMessageBus</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Messaging" />
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MsmqMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MsmqMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
