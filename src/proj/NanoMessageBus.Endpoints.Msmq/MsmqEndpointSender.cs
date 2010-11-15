@@ -37,7 +37,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
 			using (var envelope = message.BuildMessage(this.serializer))
-				foreach (var recipient in recipients ?? new string[0])
+				foreach (var recipient in recipients ?? new string[] {})
 					this.Send(recipient, envelope);
 		}
 		private void Send(string address, object message)

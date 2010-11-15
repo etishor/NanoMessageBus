@@ -11,7 +11,12 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public static Message BuildMessage(this PhysicalMessage message, ISerializeMessages serializer)
 		{
-			return new Message { Body = serializer.Serialize(message) };
+			// TODO: Label and TimeToBeReceived
+			return new Message
+			{
+				Body = serializer.Serialize(message),
+				Recoverable = message.Durable
+			};
 		}
 	}
 }
