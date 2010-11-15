@@ -47,7 +47,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			try
 			{
 				using (var message = this.inputQueue.Receive(Timeout))
-					return message.BuildPhysicalMessage(this.serializer);
+					return message.BuildMessage(this.serializer);
 			}
 			catch (MessageQueueException e)
 			{

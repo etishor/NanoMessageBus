@@ -6,11 +6,11 @@ namespace NanoMessageBus.Endpoints.Msmq
 	{
 		public static string ToQueueAddress(this MessageQueue queue)
 		{
-			return string.Empty; // TODO: translate \\machine\QueueName to QueueName@machine
+			return string.Empty; // TODO: translate \\machine\QueueName to msqm://machine.domain/queuename
 		}
 		public static string ToQueuePath(this string address)
 		{
-			return string.Empty; // TODO: translate QueueName[@machine] to QueueName@machine
+			return string.Empty; // TODO: translate msmq://machine.domain/queuename to \\machine\$.private\queuename
 		}
 	}
 }

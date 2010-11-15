@@ -9,15 +9,12 @@ namespace NanoMessageBus.Endpoints.Msmq
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
 		private readonly Func<string, MsmqProxy> queueFactory;
 		private readonly ISerializeMessages serializer;
-		private readonly string returnAddress;
 		private bool disposed;
 
-		public MsmqEndpointSender(
-			Func<string, MsmqProxy> queueFactory, ISerializeMessages serializer, string returnAddress)
+		public MsmqEndpointSender(Func<string, MsmqProxy> queueFactory, ISerializeMessages serializer)
 		{
 			this.queueFactory = queueFactory;
 			this.serializer = serializer;
-			this.returnAddress = returnAddress;
 		}
 		~MsmqEndpointSender()
 		{
@@ -39,7 +36,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
-			using (var envelope = message.BuildMsmqMessage(this.serializer, this.returnAddress))
+			using (var envelope = message.BuildMessage(this.serializer))
 				foreach (var recipient in recipients ?? new string[0])
 					this.Send(recipient, envelope);
 		}
