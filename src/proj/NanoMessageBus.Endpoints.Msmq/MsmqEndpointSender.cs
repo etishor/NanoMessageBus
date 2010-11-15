@@ -8,11 +8,11 @@ namespace NanoMessageBus.Endpoints.Msmq
 	public class MsmqEndpointSender : ISendToEndpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
-		private readonly Func<string, MsmqAdapter> queueFactory;
+		private readonly Func<string, MsmqProxy> queueFactory;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
-		public MsmqEndpointSender(Func<string, MsmqAdapter> queueFactory, ISerializeMessages serializer)
+		public MsmqEndpointSender(Func<string, MsmqProxy> queueFactory, ISerializeMessages serializer)
 		{
 			this.queueFactory = queueFactory;
 			this.serializer = serializer;
@@ -37,17 +37,16 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
-			var transactional = (Transaction.Current != null).GetOutboundTransactionType();
 			using (var envelope = message.BuildMsmqMessage(this.serializer))
 				foreach (var recipient in recipients ?? new string[0])
-					this.Send(recipient, envelope, transactional);
+					this.Send(recipient, envelope);
 		}
-		private void Send(string address, object message, MessageQueueTransactionType transactional)
+		private void Send(string address, object message)
 		{
 			try
 			{
 				using (var outboundQueue = this.queueFactory(address))
-					outboundQueue.Send(message, string.Empty, transactional);
+					outboundQueue.Send(message, string.Empty);
 			}
 			catch (MessageQueueException e)
 			{

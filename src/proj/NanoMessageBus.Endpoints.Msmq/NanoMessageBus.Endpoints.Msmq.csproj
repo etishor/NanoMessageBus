@@ -49,7 +49,7 @@
     <Compile Include="AddressNormalizer.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MessageBuilder.cs" />
-    <Compile Include="MsmqAdapter.cs" />
+    <Compile Include="MsmqProxy.cs" />
     <Compile Include="MsmqEndpointReceiver.cs" />
     <Compile Include="MsmqEndpointSender.cs" />
     <Compile Include="MsmqMessages.Designer.cs">

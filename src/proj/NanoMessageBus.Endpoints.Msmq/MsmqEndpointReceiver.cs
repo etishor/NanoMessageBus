@@ -11,24 +11,17 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
 		private static readonly TimeSpan ReceiveMessageTimeout = 2.Seconds();
-		private readonly MessageQueueTransactionType transactionType;
+		private readonly MsmqProxy inputQueue;
 		private readonly ISerializeMessages serializer;
-		private readonly MsmqAdapter inputQueue;
-		private IAsyncResult peekResult;
 		private bool disposed;
 
-		public MsmqEndpointReceiver(bool transactional, ISerializeMessages serializer, MsmqAdapter inputQueue)
+		public MsmqEndpointReceiver(MsmqProxy inputQueue, ISerializeMessages serializer)
 		{
-			this.transactionType = transactional.GetInboundTransactionType();
 			this.serializer = serializer;
 			this.inputQueue = inputQueue;
 
-			if (transactional && !this.inputQueue.Transactional)
-				throw new EndpointException(MsmqMessages.NonTransactionalQueue);
-
-			// http://blogs.msdn.com/b/darioa/archive/2006/09/15/write-your-services-leveraging-existing-thread-pool-technologies.aspx
 			this.inputQueue.PeekCompleted += this.OnPeekCompleted;
-			this.peekResult = this.inputQueue.BeginPeek();
+			this.inputQueue.BeginPeek();
 		}
 		~MsmqEndpointReceiver()
 		{
@@ -52,7 +45,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 				this.disposed = true;
 				this.inputQueue.PeekCompleted -= this.OnPeekCompleted;
-				this.peekResult.AsyncWaitHandle.Dispose();
 				this.inputQueue.Dispose();
 			}
 		}
@@ -63,20 +55,20 @@ namespace NanoMessageBus.Endpoints.Msmq
 			if (handlers != null)
 				handlers(this, EventArgs.Empty);
 
-			this.peekResult = this.inputQueue.BeginPeek();
+			this.inputQueue.BeginPeek();
 		}
 
 		public virtual PhysicalMessage Receive()
 		{
 			try
 			{
-				using (var message = this.inputQueue.Receive(ReceiveMessageTimeout, this.transactionType))
+				using (var message = this.inputQueue.Receive(ReceiveMessageTimeout))
 					return message.BuildPhysicalMessage(this.serializer);
 			}
 			catch (MessageQueueException e)
 			{
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-					return this.inputQueue.MessageNoLongerAvailable();
+					return null;
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 					Log.Fatal(MsmqMessages.AccessDenied, this.inputQueue.QueueName);
