@@ -2,7 +2,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 {
 	using System;
 	using System.Messaging;
-	using System.Transactions;
 	using Logging;
 
 	public class MsmqEndpointSender : ISendToEndpoints
@@ -10,12 +9,15 @@ namespace NanoMessageBus.Endpoints.Msmq
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
 		private readonly Func<string, MsmqProxy> queueFactory;
 		private readonly ISerializeMessages serializer;
+		private readonly string returnAddress;
 		private bool disposed;
 
-		public MsmqEndpointSender(Func<string, MsmqProxy> queueFactory, ISerializeMessages serializer)
+		public MsmqEndpointSender(
+			Func<string, MsmqProxy> queueFactory, ISerializeMessages serializer, string returnAddress)
 		{
 			this.queueFactory = queueFactory;
 			this.serializer = serializer;
+			this.returnAddress = returnAddress;
 		}
 		~MsmqEndpointSender()
 		{
@@ -37,7 +39,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
-			using (var envelope = message.BuildMsmqMessage(this.serializer))
+			using (var envelope = message.BuildMsmqMessage(this.serializer, this.returnAddress))
 				foreach (var recipient in recipients ?? new string[0])
 					this.Send(recipient, envelope);
 		}
@@ -53,7 +55,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 					Log.Fatal(MsmqMessages.AccessDenied, address.ToQueuePath());
 
-				throw;
+				throw new EndpointException(e.Message, e);
 			}
 		}
 	}

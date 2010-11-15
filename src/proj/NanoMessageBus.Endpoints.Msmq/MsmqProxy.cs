@@ -3,13 +3,11 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System;
 	using System.Messaging;
 	using System.Transactions;
-	using Transport;
 
 	public class MsmqProxy : IDisposable
 	{
 		private readonly MessageQueue queue;
 		private readonly MessageQueueTransactionType transactionType;
-		private IAsyncResult peek;
 		private bool disposed;
 
 		public static MsmqProxy OpenRead(string address, bool transactional)
@@ -70,7 +68,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 					return;
 
 				this.disposed = true;
-				this.peek.AsyncWaitHandle.Dispose();
 				this.queue.Dispose();
 			}
 		}
@@ -78,16 +75,6 @@ namespace NanoMessageBus.Endpoints.Msmq
 		public virtual string QueueName
 		{
 			get { return this.queue.QueueName; }
-		}
-
-		public virtual void BeginPeek()
-		{
-			this.peek = this.queue.BeginPeek();
-		}
-		public virtual event PeekCompletedEventHandler PeekCompleted
-		{
-			add { this.queue.PeekCompleted += value; }
-			remove { this.queue.PeekCompleted -= value; }
 		}
 
 		public virtual Message Receive(TimeSpan timeout)

@@ -4,7 +4,6 @@ namespace NanoMessageBus.Endpoints
 
 	public interface IReceiveFromEndpoints : IDisposable
 	{
-		event EventHandler MessageAvailable;
 		PhysicalMessage Receive();
 	}
 }

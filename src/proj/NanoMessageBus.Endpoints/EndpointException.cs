@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Transport
+namespace NanoMessageBus.Endpoints
 {
 	using System;
 	using System.Runtime.Serialization;

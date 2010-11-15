@@ -40,7 +40,8 @@ namespace NanoMessageBus.Endpoints.Msmq
 				return (IDictionary<string, string>)serializer.Deserialize(stream);
 		}
 
-		public static Message BuildMsmqMessage(this PhysicalMessage message, ISerializeMessages serializer)
+		public static Message BuildMsmqMessage(
+			this PhysicalMessage message, ISerializeMessages serializer, string returnAddress)
 		{
 			return new Message(); // TODO
 		}
