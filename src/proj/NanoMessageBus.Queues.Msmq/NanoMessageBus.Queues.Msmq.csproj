@@ -50,8 +50,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="MessageQueueFactory.cs" />
-    <Compile Include="MsmqAdapter1.cs" />
-    <Compile Include="MsmqMessageQueue.cs" />
+    <Compile Include="MsmqAdapter.cs" />
     <Compile Include="MsmqMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

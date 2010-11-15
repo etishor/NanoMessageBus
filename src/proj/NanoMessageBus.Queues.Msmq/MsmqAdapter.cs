@@ -62,6 +62,8 @@ namespace NanoMessageBus.Queues.Msmq
 
 		private void OnPeekCompleted(object sender, PeekCompletedEventArgs e)
 		{
+			// good stuff
+			// http://blogs.msdn.com/b/darioa/archive/2006/09/15/write-your-services-leveraging-existing-thread-pool-technologies.aspx
 			var handlers = this.MessageAvailable;
 			if (handlers != null)
 				handlers(this, EventArgs.Empty);

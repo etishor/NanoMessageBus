@@ -46,9 +46,10 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ITransformOutgoingMessages.cs" />
     <Compile Include="IMessageContext.cs" />
     <Compile Include="IReceiveMessages.cs" />
-    <Compile Include="ITransformMessages.cs" />
+    <Compile Include="ITransformIncomingMessages.cs" />
     <Compile Include="PhysicalMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

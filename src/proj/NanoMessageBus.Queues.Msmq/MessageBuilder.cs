@@ -3,6 +3,7 @@ namespace NanoMessageBus.Queues.Msmq
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Messaging;
 	using Core;
 	using Transport;
@@ -31,19 +32,16 @@ namespace NanoMessageBus.Queues.Msmq
 			return ttl.Ticks == 0 ? DateTime.MaxValue : message.SentTime + message.TimeToBeReceived;
 		}
 
-		private static ICollection LogicalMessages(
-			this Message message, ISerializeMessages serializer)
+		private static ICollection LogicalMessages(this Message message, ISerializeMessages serializer)
 		{
-			var buffer = new byte[message.BodyStream.Length];
 			message.BodyStream.Position = 0;
-			message.BodyStream.Read(buffer, 0, buffer.Length);
-			return (ICollection)serializer.Deserialize(buffer);
+			return (ICollection)serializer.Deserialize(message.BodyStream);
 		}
 
-		private static IDictionary<string, string> Headers(
-			this Message message, ISerializeMessages serializer)
+		private static IDictionary<string, string> Headers(this Message message, ISerializeMessages serializer)
 		{
-			return (IDictionary<string, string>)serializer.Deserialize(message.Extension);
+			using (var stream = new MemoryStream(message.Extension))
+				return (IDictionary<string, string>)serializer.Deserialize(stream);
 		}
 	}
 }
