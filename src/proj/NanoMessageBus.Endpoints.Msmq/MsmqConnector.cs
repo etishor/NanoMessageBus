@@ -4,13 +4,13 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System.Messaging;
 	using System.Transactions;
 
-	public class MsmqProxy : IDisposable
+	public class MsmqConnector : IDisposable
 	{
 		private readonly MessageQueue queue;
 		private readonly MessageQueueTransactionType transactionType;
 		private bool disposed;
 
-		public static MsmqProxy OpenRead(string address, bool transactional)
+		public static MsmqConnector OpenRead(string address, bool transactional)
 		{
 			var queue = Open(address, QueueAccessMode.Receive);
 			queue.MessageReadPropertyFilter.SetAll();
@@ -24,15 +24,15 @@ namespace NanoMessageBus.Endpoints.Msmq
 				throw new EndpointException(MsmqMessages.NonTransactionalQueue);
 			}
 
-			return new MsmqProxy(queue, transactionType);
+			return new MsmqConnector(queue, transactionType);
 		}
-		public static MsmqProxy OpenWrite(string address, bool transactional)
+		public static MsmqConnector OpenWrite(string address, bool transactional)
 		{
 			var queue = Open(address, QueueAccessMode.Send);
 			var transactionType = (transactional && Transaction.Current != null)
 				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
 
-			return new MsmqProxy(queue, transactionType);
+			return new MsmqConnector(queue, transactionType);
 		}
 		private static MessageQueue Open(string address, QueueAccessMode accessMode)
 		{
@@ -42,12 +42,12 @@ namespace NanoMessageBus.Endpoints.Msmq
 			return new MessageQueue(address.ToQueuePath(), accessMode);
 		}
 
-		private MsmqProxy(MessageQueue queue, MessageQueueTransactionType transactionType)
+		private MsmqConnector(MessageQueue queue, MessageQueueTransactionType transactionType)
 		{
 			this.queue = queue;
 			this.transactionType = transactionType;
 		}
-		~MsmqProxy()
+		~MsmqConnector()
 		{
 			this.Dispose(false);
 		}

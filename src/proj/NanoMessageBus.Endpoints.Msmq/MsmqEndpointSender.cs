@@ -7,13 +7,13 @@ namespace NanoMessageBus.Endpoints.Msmq
 	public class MsmqEndpointSender : ISendToEndpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
-		private readonly Func<string, MsmqProxy> queueFactory;
+		private readonly Func<string, MsmqConnector> connectorFactory;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
-		public MsmqEndpointSender(Func<string, MsmqProxy> queueFactory, ISerializeMessages serializer)
+		public MsmqEndpointSender(Func<string, MsmqConnector> connectorFactory, ISerializeMessages serializer)
 		{
-			this.queueFactory = queueFactory;
+			this.connectorFactory = connectorFactory;
 			this.serializer = serializer;
 		}
 		~MsmqEndpointSender()
@@ -44,13 +44,16 @@ namespace NanoMessageBus.Endpoints.Msmq
 		{
 			try
 			{
-				using (var outboundQueue = this.queueFactory(address))
-					outboundQueue.Send(message, string.Empty);
+				using (var connector = this.connectorFactory(address))
+					connector.Send(message, string.Empty);
 			}
 			catch (MessageQueueException e)
 			{
+				if (e.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
+					Log.Fatal(MsmqMessages.QueueNotFound, address);
+
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-					Log.Fatal(MsmqMessages.AccessDenied, address.ToQueuePath());
+					Log.Fatal(MsmqMessages.AccessDenied, address);
 
 				throw new EndpointException(e.Message, e);
 			}

@@ -86,5 +86,14 @@ namespace NanoMessageBus.Endpoints.Msmq {
                 return ResourceManager.GetString("NonTransactionalQueue", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The queue specified, &apos;{0}&apos;, was not found..
+        /// </summary>
+        internal static string QueueNotFound {
+            get {
+                return ResourceManager.GetString("QueueNotFound", resourceCulture);
+            }
+        }
     }
 }

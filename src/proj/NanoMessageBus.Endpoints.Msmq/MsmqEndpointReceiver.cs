@@ -8,14 +8,14 @@ namespace NanoMessageBus.Endpoints.Msmq
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
 		private static readonly TimeSpan Timeout = 2.Seconds();
-		private readonly MsmqProxy inputQueue;
+		private readonly MsmqConnector connector;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
-		public MsmqEndpointReceiver(MsmqProxy inputQueue, ISerializeMessages serializer)
+		public MsmqEndpointReceiver(MsmqConnector connector, ISerializeMessages serializer)
 		{
 			this.serializer = serializer;
-			this.inputQueue = inputQueue;
+			this.connector = connector;
 		}
 		~MsmqEndpointReceiver()
 		{
@@ -32,13 +32,13 @@ namespace NanoMessageBus.Endpoints.Msmq
 			if (this.disposed || !disposing)
 				return;
 
-			lock (this.inputQueue)
+			lock (this.connector)
 			{
 				if (this.disposed)
 					return;
 
 				this.disposed = true;
-				this.inputQueue.Dispose();
+				this.connector.Dispose();
 			}
 		}
 
@@ -46,7 +46,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 		{
 			try
 			{
-				using (var message = this.inputQueue.Receive(Timeout))
+				using (var message = this.connector.Receive(Timeout))
 					return message.BuildMessage(this.serializer);
 			}
 			catch (MessageQueueException e)
@@ -55,7 +55,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 					return null;
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-					Log.Fatal(MsmqMessages.AccessDenied, this.inputQueue.QueueName);
+					Log.Fatal(MsmqMessages.AccessDenied, this.connector.QueueName);
 
 				throw new EndpointException(e.Message, e);
 			}
