@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Queues.Msmq
+namespace NanoMessageBus.Endpoints.Msmq
 {
 	using System.Messaging;
 	using Transport;

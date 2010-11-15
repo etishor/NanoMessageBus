@@ -8,8 +8,8 @@
     <ProjectGuid>{A5151E49-1445-4B69-BAE9-4D5445DED4F9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.Queues.Msmq</RootNamespace>
-    <AssemblyName>NanoMessageBus.Queues.Msmq</AssemblyName>
+    <RootNamespace>NanoMessageBus.Endpoints.Msmq</RootNamespace>
+    <AssemblyName>NanoMessageBus.Endpoints.Msmq</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
