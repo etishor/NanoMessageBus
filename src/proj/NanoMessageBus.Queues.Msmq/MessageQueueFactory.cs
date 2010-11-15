@@ -5,21 +5,22 @@ namespace NanoMessageBus.Queues.Msmq
 
 	internal static class MessageQueueFactory
 	{
-		public static MessageQueue OpenConnection(this string address)
+		public static MessageQueue OpenForReceive(this string address)
+		{
+			var queue = address.Open(QueueAccessMode.Receive);
+			queue.MessageReadPropertyFilter.SetAll();
+			return queue;
+		}
+		public static MessageQueue OpenForSend(this string address)
+		{
+			return address.Open(QueueAccessMode.Send);
+		}
+		private static MessageQueue Open(this string address, QueueAccessMode accessMode)
 		{
 			if (string.IsNullOrEmpty(address))
-				throw new MessagingException(MsmqMessages.MissingQueueAddress);
+				throw new EndpointException(MsmqMessages.MissingQueueAddress);
 
-			return new MessageQueue(address.ToQueuePath())
-			{
-				MessageReadPropertyFilter = BuildFilter()
-			};
-		}
-		private static MessagePropertyFilter BuildFilter()
-		{
-			var filter = new MessagePropertyFilter();
-			filter.SetAll();
-			return filter;
+			return new MessageQueue(address.ToQueuePath(), accessMode);
 		}
 	}
 }

@@ -10,15 +10,13 @@ namespace NanoMessageBus.Queues.Msmq
 
 	internal static class MessageBuilder
 	{
-		public static PhysicalMessage BuildPhysicalMessage(
-			this Message message, MessageQueue queue, ISerializeMessages serializer)
+		public static PhysicalMessage BuildPhysicalMessage(this Message message, ISerializeMessages serializer)
 		{
 			return new PhysicalMessage
 			{
 				MessageId = Guid.Parse(message.Id), // TODO, this should probably come from the serialized payload?
 				CorrelationId = Guid.Parse(message.CorrelationId), // TODO, also from the payload?
 				ReturnAddress = message.ResponseQueue.ToQueueAddress(),
-				DestinationAddress = queue.ToQueueAddress(),
 				Durable = message.Recoverable,
 				Expiration = message.Expiration(),
 				Headers = message.Headers(serializer),
@@ -42,6 +40,11 @@ namespace NanoMessageBus.Queues.Msmq
 		{
 			using (var stream = new MemoryStream(message.Extension))
 				return (IDictionary<string, string>)serializer.Deserialize(stream);
+		}
+
+		public static Message BuildMsmqMessage(this PhysicalMessage message, ISerializeMessages serializer)
+		{
+			return new Message(); // TODO
 		}
 	}
 }

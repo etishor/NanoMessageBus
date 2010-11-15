@@ -46,9 +46,10 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="MessagingException.cs" />
-    <Compile Include="IMessageQueue.cs" />
+    <Compile Include="EndpointException.cs" />
     <Compile Include="IHandleUnitOfWork.cs" />
+    <Compile Include="IReceiveFromEndpoints.cs" />
+    <Compile Include="ISendToEndpoints.cs" />
     <Compile Include="ISerializeMessages.cs" />
     <Compile Include="ITransportMessages.cs" />
     <Compile Include="MessageBusException.cs" />

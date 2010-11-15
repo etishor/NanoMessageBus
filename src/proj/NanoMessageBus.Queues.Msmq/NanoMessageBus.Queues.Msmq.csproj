@@ -50,7 +50,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="MessageQueueFactory.cs" />
-    <Compile Include="MsmqAdapter.cs" />
+    <Compile Include="MsmqEndpoint.cs" />
     <Compile Include="MsmqMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -80,6 +80,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Messaging" />
+    <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MsmqMessages.resx">
