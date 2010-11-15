@@ -19,7 +19,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			return new TimeSpan(0, 0, 0, seconds);
 		}
 
-		public static PhysicalMessage MessageNoLongerAvailable(this MessageQueue queue)
+		public static PhysicalMessage MessageNoLongerAvailable(this MsmqAdapter queue)
 		{
 			return null;
 		}

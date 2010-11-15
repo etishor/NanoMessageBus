@@ -48,7 +48,7 @@
     </Compile>
     <Compile Include="IHandleUnitOfWork.cs" />
     <Compile Include="ITransportMessages.cs" />
-    <Compile Include="MessageBusException.cs" />
+    <Compile Include="MessageTransportException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

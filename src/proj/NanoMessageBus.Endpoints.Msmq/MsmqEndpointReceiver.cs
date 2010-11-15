@@ -13,25 +13,22 @@ namespace NanoMessageBus.Endpoints.Msmq
 		private static readonly TimeSpan ReceiveMessageTimeout = 2.Seconds();
 		private readonly MessageQueueTransactionType transactionType;
 		private readonly ISerializeMessages serializer;
-		private readonly MessageQueue inputQueue;
+		private readonly MsmqAdapter inputQueue;
+		private IAsyncResult peekResult;
 		private bool disposed;
 
-		public MsmqEndpointReceiver(bool transactional, ISerializeMessages serializer, string address)
-			: this(transactional, serializer, address.OpenForReceive())
-		{
-		}
-		public MsmqEndpointReceiver(bool transactional, ISerializeMessages serializer, MessageQueue inputQueue)
+		public MsmqEndpointReceiver(bool transactional, ISerializeMessages serializer, MsmqAdapter inputQueue)
 		{
 			this.transactionType = transactional.GetInboundTransactionType();
 			this.serializer = serializer;
 			this.inputQueue = inputQueue;
 
-			if (this.inputQueue.Transactional && transactional)
+			if (transactional && !this.inputQueue.Transactional)
 				throw new EndpointException(MsmqMessages.NonTransactionalQueue);
 
 			// http://blogs.msdn.com/b/darioa/archive/2006/09/15/write-your-services-leveraging-existing-thread-pool-technologies.aspx
 			this.inputQueue.PeekCompleted += this.OnPeekCompleted;
-			this.inputQueue.BeginPeek();
+			this.peekResult = this.inputQueue.BeginPeek();
 		}
 		~MsmqEndpointReceiver()
 		{
@@ -55,6 +52,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 				this.disposed = true;
 				this.inputQueue.PeekCompleted -= this.OnPeekCompleted;
+				this.peekResult.AsyncWaitHandle.Dispose();
 				this.inputQueue.Dispose();
 			}
 		}
@@ -65,7 +63,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			if (handlers != null)
 				handlers(this, EventArgs.Empty);
 
-			this.inputQueue.BeginPeek();
+			this.peekResult = this.inputQueue.BeginPeek();
 		}
 
 		public virtual PhysicalMessage Receive()
