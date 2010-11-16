@@ -11,20 +11,14 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 			TypeNameHandling = TypeNameHandling.Objects
 		};
 
-		public virtual Stream Serialize(object message)
+		public virtual void Serialize(object message, Stream output)
 		{
-			var stream = new MemoryStream();
-			using (var bsonWriter = new BsonWriter(stream))
-			{
+			using (var bsonWriter = new BsonWriter(output))
 				this.serializer.Serialize(bsonWriter, message);
-				bsonWriter.Flush();
-				stream.Position = 0;
-				return stream;
-			}
 		}
-		public virtual object Deserialize(Stream payload)
+		public virtual object Deserialize(Stream input)
 		{
-			using (var reader = new BsonReader(payload))
+			using (var reader = new BsonReader(input))
 				return this.serializer.Deserialize(reader);
 		}
 	}

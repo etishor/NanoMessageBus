@@ -12,23 +12,19 @@ namespace NanoMessageBus.Endpoints.Serialization
 			this.inner = inner;
 		}
 
-		public virtual Stream Serialize(object message)
+		public virtual void Serialize(object message, Stream output)
 		{
-			using (var serializedStream = this.inner.Serialize(message))
+			using (var serializedStream = new MemoryStream())
 			{
-				var outputStream = new MemoryStream((int)serializedStream.Length);
-
-				using (var compressedStream = new DeflateStream(outputStream, CompressionMode.Compress, true))
+				this.inner.Serialize(message, serializedStream);
+				using (var compressedStream = new DeflateStream(output, CompressionMode.Compress, true))
 					serializedStream.ReadInto(compressedStream);
-
-				outputStream.Position = 0;
-				return outputStream;
 			}
 		}
 
-		public virtual object Deserialize(Stream payload)
+		public virtual object Deserialize(Stream input)
 		{
-			var inflatedStream = new DeflateStream(payload, CompressionMode.Decompress);
+			var inflatedStream = new DeflateStream(input, CompressionMode.Decompress);
 			return this.inner.Deserialize(inflatedStream);
 		}
 	}

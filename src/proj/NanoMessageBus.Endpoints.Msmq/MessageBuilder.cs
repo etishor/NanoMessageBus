@@ -1,5 +1,6 @@
 namespace NanoMessageBus.Endpoints.Msmq
 {
+	using System.IO;
 	using System.Messaging;
 
 	internal static class MessageBuilder
@@ -9,12 +10,12 @@ namespace NanoMessageBus.Endpoints.Msmq
 			return (PhysicalMessage)serializer.Deserialize(message.BodyStream);
 		}
 
-		public static Message BuildMessage(this PhysicalMessage message, ISerializeMessages serializer)
+		public static Message BuildMessage(this PhysicalMessage message, Stream serialized)
 		{
 			// TODO: Label and TimeToBeReceived
 			return new Message
 			{
-				BodyStream = serializer.Serialize(message),
+				BodyStream = serialized,
 				Recoverable = message.Durable
 			};
 		}

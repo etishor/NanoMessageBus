@@ -1,6 +1,7 @@
 namespace NanoMessageBus.Endpoints.Msmq
 {
 	using System;
+	using System.IO;
 	using System.Messaging;
 	using Logging;
 
@@ -36,10 +37,17 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
-			using (var envelope = message.BuildMessage(this.serializer))
-			using (envelope.BodyStream)
+			using (var serializedStream = new MemoryStream())
+			{
+				this.serializer.Serialize(message, serializedStream);
+				this.Send(message.BuildMessage(serializedStream));
+			}
+		}
+		private void Send(Message message, params string[] recipients)
+		{
+			using (message)
 				foreach (var recipient in recipients ?? new string[] { })
-					this.Send(recipient, envelope);
+					this.Send(recipient, message);
 		}
 		private void Send(string address, object message)
 		{

@@ -4,7 +4,7 @@ namespace NanoMessageBus.Endpoints
 
 	public interface ISerializeMessages
 	{
-		Stream Serialize(object message);
-		object Deserialize(Stream payload);
+		void Serialize(object message, Stream output);
+		object Deserialize(Stream input);
 	}
 }

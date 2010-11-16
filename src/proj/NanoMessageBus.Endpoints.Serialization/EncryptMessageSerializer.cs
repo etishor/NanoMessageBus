@@ -14,7 +14,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 			this.inner = inner;
 		}
 
-		public Stream Serialize(object message)
+		public void Serialize(object message, Stream output)
 		{
 			using (var rijndael = new RijndaelManaged())
 			{
@@ -25,31 +25,28 @@ namespace NanoMessageBus.Endpoints.Serialization
 				using (var encryptor = rijndael.CreateEncryptor())
 				using (var workingStream = new MemoryStream())
 				using (var encryptionStream = new CryptoStream(workingStream, encryptor, CryptoStreamMode.Write))
-				using (var serializedStream = this.inner.Serialize(message))
 				{
 					workingStream.Write(rijndael.IV, 0, rijndael.IV.Length);
-
-					serializedStream.ReadInto(encryptionStream);
+					this.inner.Serialize(message, encryptionStream);
 					encryptionStream.Flush();
 					encryptionStream.FlushFinalBlock();
 					workingStream.Flush();
 					workingStream.Position = 0;
-
-					return workingStream.ReadInto(new MemoryStream((int)workingStream.Length));
+					workingStream.ReadInto(output);
 				}
 			}
 		}
 
-		public object Deserialize(Stream payload)
+		public object Deserialize(Stream input)
 		{
 			using (var rijndael = new RijndaelManaged())
 			{
 				rijndael.Key = this.encryptionKey;
-				rijndael.IV = GetInitVectorFromStream(payload, rijndael.IV.Length);
+				rijndael.IV = GetInitVectorFromStream(input, rijndael.IV.Length);
 				rijndael.Mode = CipherMode.CBC;
 
 				using (var decryptor = rijndael.CreateDecryptor())
-				using (var decryptedStream = new CryptoStream(payload, decryptor, CryptoStreamMode.Read))
+				using (var decryptedStream = new CryptoStream(input, decryptor, CryptoStreamMode.Read))
 					return this.inner.Deserialize(decryptedStream);
 			}
 		}

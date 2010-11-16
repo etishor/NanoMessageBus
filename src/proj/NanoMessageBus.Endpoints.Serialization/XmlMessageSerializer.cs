@@ -17,17 +17,14 @@ namespace NanoMessageBus.Endpoints.Serialization
 			this.serializer = new DataContractSerializer(messageEnvelopeType ?? typeof(PhysicalMessage));
 		}
 
-		public virtual Stream Serialize(object message)
+		public virtual void Serialize(object message, Stream output)
 		{
-			var stream = new MemoryStream();
-			this.serializer.WriteObject(stream, message);
-			stream.Position = 0;
-			return stream;
+			this.serializer.WriteObject(output, message);
 		}
 
-		public virtual object Deserialize(Stream payload)
+		public virtual object Deserialize(Stream input)
 		{
-			return this.serializer.ReadObject(payload);
+			return this.serializer.ReadObject(input);
 		}
 	}
 }
