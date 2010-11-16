@@ -46,7 +46,8 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="JsonSerializer.cs" />
+    <Compile Include="BsonMessageSerializer.cs" />
+    <Compile Include="JsonMessageSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

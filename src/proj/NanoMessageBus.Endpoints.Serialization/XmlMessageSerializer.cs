@@ -4,15 +4,15 @@ namespace NanoMessageBus.Endpoints.Serialization
 	using System.IO;
 	using System.Runtime.Serialization;
 
-	public class XmlSerializer : ISerializeMessages
+	public class XmlMessageSerializer : ISerializeMessages
 	{
 		private readonly DataContractSerializer serializer;
 
-		public XmlSerializer()
+		public XmlMessageSerializer()
 			: this(null)
 		{
 		}
-		public XmlSerializer(Type messageEnvelopeType)
+		public XmlMessageSerializer(Type messageEnvelopeType)
 		{
 			this.serializer = new DataContractSerializer(messageEnvelopeType ?? typeof(PhysicalMessage));
 		}
@@ -21,8 +21,10 @@ namespace NanoMessageBus.Endpoints.Serialization
 		{
 			var stream = new MemoryStream();
 			this.serializer.WriteObject(stream, message);
+			stream.Position = 0;
 			return stream;
 		}
+
 		public virtual object Deserialize(Stream payload)
 		{
 			return this.serializer.ReadObject(payload);

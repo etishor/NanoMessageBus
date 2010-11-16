@@ -47,7 +47,8 @@ namespace NanoMessageBus.Endpoints.Msmq
 			try
 			{
 				using (var message = this.connector.Receive(Timeout))
-					return message.BuildMessage(this.serializer);
+					using (message.BodyStream)
+						return message.BuildMessage(this.serializer);
 			}
 			catch (MessageQueueException e)
 			{

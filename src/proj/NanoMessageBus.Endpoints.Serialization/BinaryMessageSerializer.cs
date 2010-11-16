@@ -4,7 +4,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 	using System.Runtime.Serialization;
 	using System.Runtime.Serialization.Formatters.Binary;
 
-	public class BinarySerializer : ISerializeMessages
+	public class BinaryMessageSerializer : ISerializeMessages
 	{
 		private readonly IFormatter formatter = new BinaryFormatter();
 
@@ -12,6 +12,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 		{
 			var stream = new MemoryStream();
 			this.formatter.Serialize(stream, message);
+			stream.Position = 0;
 			return stream;
 		}
 		public virtual object Deserialize(Stream payload)
