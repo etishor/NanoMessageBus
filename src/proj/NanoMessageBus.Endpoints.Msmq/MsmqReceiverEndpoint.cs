@@ -4,20 +4,20 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System.Messaging;
 	using Logging;
 
-	public class MsmqEndpointReceiver : IReceiveFromEndpoints
+	public class MsmqReceiverEndpoint : IReceiveFromEndpoints
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqEndpointReceiver));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
 		private static readonly TimeSpan Timeout = 2.Seconds();
 		private readonly MsmqConnector connector;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
-		public MsmqEndpointReceiver(MsmqConnector connector, ISerializeMessages serializer)
+		public MsmqReceiverEndpoint(MsmqConnector connector, ISerializeMessages serializer)
 		{
 			this.serializer = serializer;
 			this.connector = connector;
 		}
-		~MsmqEndpointReceiver()
+		~MsmqReceiverEndpoint()
 		{
 			this.Dispose(false);
 		}
