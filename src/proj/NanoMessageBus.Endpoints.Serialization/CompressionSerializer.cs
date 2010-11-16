@@ -12,11 +12,11 @@ namespace NanoMessageBus.Endpoints.Serialization
 			this.inner = inner;
 		}
 
-		public Stream Serialize(object message)
+		public virtual Stream Serialize(object message)
 		{
 			return new DeflateStream(this.inner.Serialize(message), CompressionMode.Compress);
 		}
-		public object Deserialize(Stream payload)
+		public virtual object Deserialize(Stream payload)
 		{
 			return this.inner.Deserialize(new DeflateStream(payload, CompressionMode.Decompress));
 		}

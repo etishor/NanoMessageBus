@@ -20,8 +20,17 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 		}
 		public object Deserialize(Stream payload)
 		{
+			var settings = new JsonSerializerSettings
+			{
+				TypeNameHandling = TypeNameHandling.All
+			};
+
 			using (var reader = new StreamReader(payload, Encoding.UTF8))
-				return JsonConvert.DeserializeObject(reader.ReadToEnd());
+			{
+				var json = reader.ReadToEnd();
+				var deserialized = JsonConvert.DeserializeObject(json, typeof(PhysicalMessage), settings);
+				return deserialized;
+			}
 		}
 	}
 }

@@ -8,13 +8,13 @@ namespace NanoMessageBus.Endpoints.Serialization
 	{
 		private readonly IFormatter formatter = new BinaryFormatter();
 
-		public Stream Serialize(object message)
+		public virtual Stream Serialize(object message)
 		{
 			var stream = new MemoryStream();
 			this.formatter.Serialize(stream, message);
 			return stream;
 		}
-		public object Deserialize(Stream payload)
+		public virtual object Deserialize(Stream payload)
 		{
 			return this.formatter.Deserialize(payload);
 		}
