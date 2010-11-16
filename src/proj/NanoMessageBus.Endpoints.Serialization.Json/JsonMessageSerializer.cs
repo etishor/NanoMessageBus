@@ -7,7 +7,7 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 	{
 		private readonly JsonSerializer serializer = new JsonSerializer
 		{
-			TypeNameHandling = TypeNameHandling.All
+			TypeNameHandling = TypeNameHandling.Objects
 		};
 
 		public virtual Stream Serialize(object message)

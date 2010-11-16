@@ -1,7 +1,6 @@
 namespace NanoMessageBus
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 
 	[Serializable]
@@ -14,7 +13,7 @@ namespace NanoMessageBus
 			DateTime expiration,
 			bool durable,
 			IDictionary<string, string> headers,
-			ICollection logicalMessages)
+			ICollection<object> logicalMessages)
 		{
 			this.MessageId = messageId;
 			this.CorrelationId = correlationId;
@@ -31,6 +30,6 @@ namespace NanoMessageBus
 		public DateTime Expiration { get; private set; }
 		public bool Durable { get; private set; }
 		public IDictionary<string, string> Headers { get; private set; }
-		public ICollection LogicalMessages { get; private set; }
+		public ICollection<object> LogicalMessages { get; private set; }
 	}
 }
