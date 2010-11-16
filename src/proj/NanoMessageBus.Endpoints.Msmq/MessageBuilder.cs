@@ -14,7 +14,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			// TODO: Label and TimeToBeReceived
 			return new Message
 			{
-				Body = serializer.Serialize(message),
+				BodyStream = serializer.Serialize(message),
 				Recoverable = message.Durable
 			};
 		}
