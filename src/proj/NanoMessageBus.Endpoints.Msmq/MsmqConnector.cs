@@ -10,15 +10,15 @@ namespace NanoMessageBus.Endpoints.Msmq
 		private readonly MessageQueueTransactionType transactionType;
 		private bool disposed;
 
-		public static MsmqConnector OpenRead(string address, bool transactional)
+		public static MsmqConnector OpenRead(string address, bool enlist)
 		{
 			var queue = Open(address, QueueAccessMode.Receive);
 			queue.MessageReadPropertyFilter.SetAll();
 
-			var transactionType = transactional
+			var transactionType = enlist
 				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.None;
 
-			if (transactional && !queue.Transactional)
+			if (enlist && !queue.Transactional)
 			{
 				queue.Dispose();
 				throw new EndpointException(MsmqMessages.NonTransactionalQueue);
@@ -26,10 +26,10 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 			return new MsmqConnector(queue, transactionType);
 		}
-		public static MsmqConnector OpenWrite(string address, bool transactional)
+		public static MsmqConnector OpenWrite(string address, bool enlist)
 		{
 			var queue = Open(address, QueueAccessMode.Send);
-			var transactionType = (transactional && Transaction.Current != null)
+			var transactionType = (enlist && Transaction.Current != null)
 				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
 
 			return new MsmqConnector(queue, transactionType);
