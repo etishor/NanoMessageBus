@@ -16,8 +16,8 @@ namespace NanoMessageBus.Core
 		private readonly IEnumerable<ITransformIncomingMessages> transformers;
 		private readonly IEnumerable<IHandleMessages<PhysicalMessage>> handlers;
 		private bool disposed;
-		private bool skip;
 		public PhysicalMessage Current { get; private set; }
+		public bool Continue { get; private set; }
 
 		public RoutingMessageReceiver(
 			IDisposable container,
@@ -31,6 +31,7 @@ namespace NanoMessageBus.Core
 			this.handlers = handlers;
 			this.transport = transport;
 			this.unitOfWork = unitOfWork;
+			this.Continue = true;
 		}
 		~RoutingMessageReceiver()
 		{
@@ -49,6 +50,7 @@ namespace NanoMessageBus.Core
 
 			Log.Debug(CoreDiagnostics.DisposingMessageReceiver);
 			this.disposed = true;
+			this.Continue = false;
 			this.container.Dispose();
 		}
 
@@ -57,10 +59,10 @@ namespace NanoMessageBus.Core
 			Log.Debug(CoreDiagnostics.DeferringMessage);
 			this.transport.Send(this.Current, LocalEndpoint);
 		}
-		public virtual void Skip()
+		public virtual void Stop()
 		{
 			Log.Debug(CoreDiagnostics.SkippingRemainingHandlers);
-			this.skip = true;
+			this.Continue = false;
 		}
 
 		public virtual void Receive(PhysicalMessage message)
@@ -87,7 +89,7 @@ namespace NanoMessageBus.Core
 		}
 		private void RouteMessageToHandler(IHandleMessages<PhysicalMessage> handler)
 		{
-			if (this.skip)
+			if (!this.Continue)
 				return;
 
 			Log.Verbose(CoreDiagnostics.RoutingMessageToHandler, handler.GetType());

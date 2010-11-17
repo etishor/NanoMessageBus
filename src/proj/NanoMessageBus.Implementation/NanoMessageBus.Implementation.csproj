@@ -44,6 +44,7 @@
     </Compile>
     <Compile Include="Core\RoutingMessageReceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutingMessageHandler.cs" />
     <Compile Include="Transports\ExtensionMethods.cs" />
     <Compile Include="Transports\MessageQueueTransport.cs" />
     <Compile Include="Transports\TransportDiagnostics1.Designer.cs">
