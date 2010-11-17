@@ -48,6 +48,11 @@
     </Compile>
     <Compile Include="BsonMessageSerializer.cs" />
     <Compile Include="JsonMessageSerializer.cs" />
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,16 +64,27 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\lib\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NanoMessageBus.Endpoints\NanoMessageBus.Endpoints.csproj">
       <Project>{FE46F683-F9A7-477E-B017-A8E3A1A48E24}</Project>
       <Name>NanoMessageBus.Endpoints</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
+      <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
+      <Name>NanoMessageBus.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
       <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
       <Name>NanoMessageBus</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -124,6 +124,24 @@ namespace NanoMessageBus.Endpoints.Msmq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Physical message &apos;{0}&apos; contains a logical message of type &apos;{1}&apos;..
+        /// </summary>
+        internal static string PhysicalMessageContains {
+            get {
+                return ResourceManager.GetString("PhysicalMessageContains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing to send physical message &apos;{0}&apos; which contains {1} logical messages..
+        /// </summary>
+        internal static string PreparingMessageToSend {
+            get {
+                return ResourceManager.GetString("PreparingMessageToSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The queue specified, &apos;{0}&apos;, was not found..
         /// </summary>
         internal static string QueueNotFound {

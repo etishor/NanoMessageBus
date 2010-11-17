@@ -37,12 +37,20 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
+			LogMessage(message);
 			using (var serializedStream = new MemoryStream())
 			{
 				this.serializer.Serialize(message, serializedStream);
 				this.Send(message.BuildMessage(serializedStream));
 			}
 		}
+		private static void LogMessage(PhysicalMessage message)
+		{
+			Log.Debug(MsmqMessages.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
+			foreach (var logicalMessage in message.LogicalMessages)
+				Log.Verbose(MsmqMessages.PhysicalMessageContains, message.MessageId, logicalMessage.GetType().FullName);
+		}
+
 		private void Send(Message message, params string[] recipients)
 		{
 			using (message)

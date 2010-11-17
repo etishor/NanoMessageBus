@@ -1,10 +1,12 @@
 namespace NanoMessageBus.Endpoints.Serialization.Json
 {
 	using System.IO;
+	using Logging;
 	using Newtonsoft.Json;
 
 	public class JsonMessageSerializer : ISerializeMessages
 	{
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(JsonMessageSerializer));
 		private readonly JsonSerializer serializer = new JsonSerializer
 		{
 			TypeNameHandling = TypeNameHandling.Objects
@@ -12,6 +14,7 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 
 		public virtual void Serialize(object message, Stream output)
 		{
+			Log.Verbose(Messages.Serializing, message.GetType());
 			var streamWriter = new StreamWriter(output);
 			var jsonWriter = new JsonTextWriter(streamWriter);
 			this.serializer.Serialize(jsonWriter, message);
@@ -20,6 +23,7 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 		}
 		public virtual object Deserialize(Stream input)
 		{
+			Log.Verbose(Messages.Deserializing, input.Length);
 			using (var streamReader = new StreamReader(input))
 			using (var jsonReader = new JsonTextReader(streamReader))
 				return this.serializer.Deserialize(jsonReader);

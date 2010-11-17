@@ -117,37 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccessDenied" xml:space="preserve">
-    <value>The account under which the current process is executing does not have permission to access the queue specified, '{0}'.</value>
+  <data name="Deserializing" xml:space="preserve">
+    <value>Deserializing stream of length '{0}'.</value>
   </data>
-  <data name="AttemptingToReceiveMessage" xml:space="preserve">
-    <value>Attempting to receive a message from the endpoint '{0}'.</value>
-  </data>
-  <data name="DisposingQueue" xml:space="preserve">
-    <value>Disposing the endpoint '{0}</value>
-  </data>
-  <data name="MissingQueueAddress" xml:space="preserve">
-    <value>A message queue address was not given and is required.</value>
-  </data>
-  <data name="NonTransactionalQueue" xml:space="preserve">
-    <value>The message queue specified, '{0}', is not a transactional queue and could not be opened in transactional mode.</value>
-  </data>
-  <data name="OpeningQueueForReceive" xml:space="preserve">
-    <value>Opening endpoint '{0}' for receive with enlistment '{1}'</value>
-  </data>
-  <data name="OpeningQueueForSend" xml:space="preserve">
-    <value>Opening endpoint '{0}' for transmission with enlistment '{1}'</value>
-  </data>
-  <data name="PhysicalMessageContains" xml:space="preserve">
-    <value>Physical message '{0}' contains a logical message of type '{1}'.</value>
-  </data>
-  <data name="PreparingMessageToSend" xml:space="preserve">
-    <value>Preparing to send physical message '{0}' which contains {1} logical messages.</value>
-  </data>
-  <data name="QueueNotFound" xml:space="preserve">
-    <value>The queue specified, '{0}', was not found.</value>
-  </data>
-  <data name="SendingMessage" xml:space="preserve">
-    <value>Sending a message to the endpoint '{0}'.</value>
+  <data name="Serializing" xml:space="preserve">
+    <value>Serializing message of type '{0}'.</value>
   </data>
 </root>
