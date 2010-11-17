@@ -4,6 +4,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System.IO;
 	using System.Messaging;
 	using Logging;
+	using Serialization;
 
 	public class MsmqSenderEndpoint : ISendToEndpoints
 	{

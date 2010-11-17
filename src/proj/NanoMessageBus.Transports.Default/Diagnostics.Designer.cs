@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NanoMessageBus.MessageQueueTransport {
+namespace NanoMessageBus.Transports {
     using System;
     
     

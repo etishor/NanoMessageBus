@@ -1,16 +1,14 @@
-namespace NanoMessageBus.MessageQueueTransport
+namespace NanoMessageBus.Transports
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Threading;
 	using Core;
 	using Endpoints;
 	using Logging;
-	using Transports;
 
-	public class DefaultTransport : ITransportMessages
+	public class EndpointTransport : ITransportMessages
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(DefaultTransport));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(EndpointTransport));
 		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
 		private readonly IReceiveFromEndpoints receiverEndpoint;
 		private readonly ISendToEndpoints senderEndpoint;
@@ -19,7 +17,7 @@ namespace NanoMessageBus.MessageQueueTransport
 		private bool started;
 		private bool disposed;
 
-		public DefaultTransport(
+		public EndpointTransport(
 			IReceiveFromEndpoints receiverEndpoint,
 			ISendToEndpoints senderEndpoint,
 			Func<IReceiveMessages> messageReceiver,
@@ -30,7 +28,7 @@ namespace NanoMessageBus.MessageQueueTransport
 			this.senderEndpoint = senderEndpoint;
 			this.maxThreads = maxThreads;
 		}
-		~DefaultTransport()
+		~EndpointTransport()
 		{
 			this.Dispose(false);
 		}

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NanoMessageBus.Endpoints.Serialization {
+namespace NanoMessageBus.Serialization {
     using System;
     
     

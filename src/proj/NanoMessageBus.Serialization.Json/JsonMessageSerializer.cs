@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Endpoints.Serialization.Json
+namespace NanoMessageBus.Serialization
 {
 	using System.IO;
 	using Logging;

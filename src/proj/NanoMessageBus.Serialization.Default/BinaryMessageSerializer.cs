@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Endpoints.Serialization
+namespace NanoMessageBus.Serialization
 {
 	using System.IO;
 	using System.Runtime.Serialization;

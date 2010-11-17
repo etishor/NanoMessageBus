@@ -3,6 +3,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 	using System;
 	using System.Messaging;
 	using Logging;
+	using Serialization;
 
 	public class MsmqReceiverEndpoint : IReceiveFromEndpoints
 	{

@@ -1,4 +1,4 @@
-namespace NanoMessageBus.MessageQueueTransport
+namespace NanoMessageBus.Transports
 {
 	using System;
 	using System.Threading;

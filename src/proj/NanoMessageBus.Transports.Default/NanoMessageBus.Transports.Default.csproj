@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2E659CAC-6DDB-4800-90AB-13AE068CE407}</ProjectGuid>
+    <ProjectGuid>{0B7E5F49-A71F-4CA5-B106-EEB5E17BACBF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.Endpoints.Serialization.Json</RootNamespace>
-    <AssemblyName>NanoMessageBus.Endpoints.Serialization.Json</AssemblyName>
+    <RootNamespace>NanoMessageBus.Transports</RootNamespace>
+    <AssemblyName>NanoMessageBus.Transports.Default</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,14 +46,15 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BsonMessageSerializer.cs" />
-    <Compile Include="JsonMessageSerializer.cs" />
+    <Compile Include="EndpointTransport.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Diagnostics.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Diagnostics.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkerThread.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\CustomDictionary.xml">
@@ -61,20 +62,29 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\lib\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\NanoMessageBus.Core\NanoMessageBus.Core.csproj">
+      <Project>{A2D7EDF7-FA67-43E3-AA34-C7483508A5F1}</Project>
+      <Name>NanoMessageBus.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Endpoints\NanoMessageBus.Endpoints.csproj">
+      <Project>{FE46F683-F9A7-477E-B017-A8E3A1A48E24}</Project>
+      <Name>NanoMessageBus.Endpoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
-      <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
-      <Name>NanoMessageBus.Serialization</Name>
+    <ProjectReference Include="..\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj">
+      <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
+      <Name>NanoMessageBus.Transports</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
+      <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
+      <Name>NanoMessageBus</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Diagnostics.resx">
