@@ -48,6 +48,7 @@
     </Compile>
     <Compile Include="LogFactory.cs" />
     <Compile Include="ILog.cs" />
+    <Compile Include="NullLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
