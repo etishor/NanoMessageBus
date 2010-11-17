@@ -14,7 +14,7 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 
 		public virtual void Serialize(object message, Stream output)
 		{
-			Log.Verbose(Messages.Serializing, message.GetType());
+			Log.Verbose(Diagnostics.Serializing, message.GetType());
 			var streamWriter = new StreamWriter(output);
 			var jsonWriter = new JsonTextWriter(streamWriter);
 			this.serializer.Serialize(jsonWriter, message);
@@ -23,7 +23,7 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 		}
 		public virtual object Deserialize(Stream input)
 		{
-			Log.Verbose(Messages.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.Length);
 			using (var streamReader = new StreamReader(input))
 			using (var jsonReader = new JsonTextReader(streamReader))
 				return this.serializer.Deserialize(jsonReader);

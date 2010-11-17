@@ -18,7 +18,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 
 		public void Serialize(object message, Stream output)
 		{
-			Log.Verbose(Messages.Serializing, message.GetType());
+			Log.Verbose(Diagnostics.Serializing, message.GetType());
 
 			using (var rijndael = new RijndaelManaged())
 			{
@@ -43,7 +43,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 
 		public object Deserialize(Stream input)
 		{
-			Log.Verbose(Messages.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.Length);
 
 			using (var rijndael = new RijndaelManaged())
 			{

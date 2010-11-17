@@ -48,7 +48,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			{
 				var message = this.connector.Receive(Timeout);
 
-				Log.Info(Messages.MessageReceived, message.BodyStream.Length, this.connector.QueueName);
+				Log.Info(Diagnostics.MessageReceived, message.BodyStream.Length, this.connector.QueueName);
 
 				using (message)
 				using (message.BodyStream)
@@ -58,12 +58,12 @@ namespace NanoMessageBus.Endpoints.Msmq
 			{
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
 				{
-					Log.Verbose(Messages.NoMessageAvailable, this.connector.QueueName);
+					Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.QueueName);
 					return null;
 				}
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-					Log.Fatal(Messages.AccessDenied, this.connector.QueueName);
+					Log.Fatal(Diagnostics.AccessDenied, this.connector.QueueName);
 
 				throw new EndpointException(e.Message, e);
 			}

@@ -12,12 +12,12 @@ namespace NanoMessageBus.Endpoints.Serialization
 
 		public virtual void Serialize(object message, Stream output)
 		{
-			Log.Verbose(Messages.Serializing, message.GetType());
+			Log.Verbose(Diagnostics.Serializing, message.GetType());
 			this.formatter.Serialize(output, message);
 		}
 		public virtual object Deserialize(Stream input)
 		{
-			Log.Verbose(Messages.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.Length);
 			return this.formatter.Deserialize(input);
 		}
 	}

@@ -16,7 +16,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 
 		public virtual void Serialize(object message, Stream output)
 		{
-			Log.Verbose(Messages.Serializing, message.GetType());
+			Log.Verbose(Diagnostics.Serializing, message.GetType());
 			using (var serializedStream = new MemoryStream())
 			{
 				this.inner.Serialize(message, serializedStream);
@@ -27,7 +27,7 @@ namespace NanoMessageBus.Endpoints.Serialization
 
 		public virtual object Deserialize(Stream input)
 		{
-			Log.Verbose(Messages.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.Length);
 			var inflatedStream = new DeflateStream(input, CompressionMode.Decompress);
 			return this.inner.Deserialize(inflatedStream);
 		}

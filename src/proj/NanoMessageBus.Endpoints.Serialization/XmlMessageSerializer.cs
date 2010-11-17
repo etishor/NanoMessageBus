@@ -17,18 +17,18 @@ namespace NanoMessageBus.Endpoints.Serialization
 		public XmlMessageSerializer(Type messageEnvelopeType)
 		{
 			var envelopeType = messageEnvelopeType ?? typeof(PhysicalMessage);
-			Log.Debug(Messages.DefaultEnvelope, envelopeType);
+			Log.Debug(Diagnostics.DefaultEnvelope, envelopeType);
 			this.serializer = new DataContractSerializer(envelopeType);
 		}
 
 		public virtual void Serialize(object message, Stream output)
 		{
-			Log.Verbose(Messages.Serializing, message.GetType());
+			Log.Verbose(Diagnostics.Serializing, message.GetType());
 			this.serializer.WriteObject(output, message);
 		}
 		public virtual object Deserialize(Stream input)
 		{
-			Log.Verbose(Messages.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.Length);
 			return this.serializer.ReadObject(input);
 		}
 	}

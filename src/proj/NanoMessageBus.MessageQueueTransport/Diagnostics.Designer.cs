@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NanoMessageBus.Endpoints.Serialization.Json {
+namespace NanoMessageBus.MessageQueueTransport {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace NanoMessageBus.Endpoints.Serialization.Json {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Messages {
+    internal class Diagnostics {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Messages() {
+        internal Diagnostics() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NanoMessageBus.Endpoints.Serialization.Json {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Endpoints.Serialization.Json.Messages", typeof(Messages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.MessageQueueTransport.Diagnostics", typeof(Diagnostics).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,38 @@ namespace NanoMessageBus.Endpoints.Serialization.Json {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deserializing stream of length &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Disposing transport..
         /// </summary>
-        internal static string Deserializing {
+        internal static string DisposingTransport {
             get {
-                return ResourceManager.GetString("Deserializing", resourceCulture);
+                return ResourceManager.GetString("DisposingTransport", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Serializing message of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Sending a message to the endpoint..
         /// </summary>
-        internal static string Serializing {
+        internal static string SendingMessage {
             get {
-                return ResourceManager.GetString("Serializing", resourceCulture);
+                return ResourceManager.GetString("SendingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting up {0} worker threads..
+        /// </summary>
+        internal static string StartingWorkerThreads {
+            get {
+                return ResourceManager.GetString("StartingWorkerThreads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopping all {0} worker threads..
+        /// </summary>
+        internal static string StoppingWorkers {
+            get {
+                return ResourceManager.GetString("StoppingWorkers", resourceCulture);
             }
         }
     }

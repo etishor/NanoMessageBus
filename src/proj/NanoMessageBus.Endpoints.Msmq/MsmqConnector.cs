@@ -20,14 +20,14 @@ namespace NanoMessageBus.Endpoints.Msmq
 			var transactionType = enlist
 				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.None;
 
-			Log.Info(Messages.OpeningQueueForReceive, address, transactionType);
+			Log.Info(Diagnostics.OpeningQueueForReceive, address, transactionType);
 
 			if (!enlist || queue.Transactional)
 				return new MsmqConnector(queue, transactionType);
 
 			queue.Dispose();
-			Log.Error(Messages.NonTransactionalQueue);
-			throw new EndpointException(Messages.NonTransactionalQueue);
+			Log.Error(Diagnostics.NonTransactionalQueue);
+			throw new EndpointException(Diagnostics.NonTransactionalQueue);
 		}
 		public static MsmqConnector OpenSend(string address, bool enlist)
 		{
@@ -35,7 +35,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			var transactionType = (enlist && Transaction.Current != null)
 				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
 
-			Log.Info(Messages.OpeningQueueForSend, address, transactionType);
+			Log.Info(Diagnostics.OpeningQueueForSend, address, transactionType);
 			return new MsmqConnector(queue, transactionType);
 		}
 		private static MessageQueue Open(string address, QueueAccessMode accessMode)
@@ -43,8 +43,8 @@ namespace NanoMessageBus.Endpoints.Msmq
 			if (!string.IsNullOrEmpty(address))
 				return new MessageQueue(address.ToQueuePath(), accessMode);
 
-			Log.Error(Messages.MissingQueueAddress);
-			throw new EndpointException(Messages.MissingQueueAddress);
+			Log.Error(Diagnostics.MissingQueueAddress);
+			throw new EndpointException(Diagnostics.MissingQueueAddress);
 		}
 
 		private MsmqConnector(MessageQueue queue, MessageQueueTransactionType transactionType)
@@ -72,7 +72,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 				if (this.disposed)
 					return;
 
-				Log.Debug(Messages.DisposingQueue, this.QueueName);
+				Log.Debug(Diagnostics.DisposingQueue, this.QueueName);
 
 				this.disposed = true;
 				this.queue.Dispose();
@@ -86,13 +86,13 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual Message Receive(TimeSpan timeout)
 		{
-			Log.Verbose(Messages.AttemptingToReceiveMessage, this.QueueName);
+			Log.Verbose(Diagnostics.AttemptingToReceiveMessage, this.QueueName);
 			return this.queue.Receive(timeout, this.transactionType);
 		}
 
 		public virtual void Send(object message, string label)
 		{
-			Log.Verbose(Messages.SendingMessage, this.QueueName);
+			Log.Verbose(Diagnostics.SendingMessage, this.QueueName);
 			this.queue.Send(message, label, this.transactionType);
 		}
 	}

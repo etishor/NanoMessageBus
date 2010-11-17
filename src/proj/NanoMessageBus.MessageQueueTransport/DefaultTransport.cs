@@ -5,10 +5,12 @@ namespace NanoMessageBus.MessageQueueTransport
 	using System.Threading;
 	using Core;
 	using Endpoints;
+	using Logging;
 	using Transport;
 
 	public class DefaultTransport : ITransportMessages
 	{
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(DefaultTransport));
 		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
 		private readonly IReceiveFromEndpoints receiverEndpoint;
 		private readonly ISendToEndpoints senderEndpoint;
@@ -43,14 +45,18 @@ namespace NanoMessageBus.MessageQueueTransport
 			if (this.disposed || !disposing)
 				return;
 
-			this.Stop();
 			this.disposed = true;
+
+			Log.Info(Diagnostics.DisposingTransport);
+			this.Stop();
 		}
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
 			if (message.IsPopulated())
 				this.senderEndpoint.Send(message, recipients);
+
+			Log.Debug(Diagnostics.SendingMessage);
 
 			this.senderEndpoint.Send(message, recipients);
 		}
@@ -67,6 +73,7 @@ namespace NanoMessageBus.MessageQueueTransport
 
 				this.started = true;
 
+				Log.Info(Diagnostics.StartingWorkerThreads, this.maxThreads);
 				while (this.workers.Count < this.maxThreads)
 					this.AddWorkerThread().Start();
 			}
@@ -89,6 +96,8 @@ namespace NanoMessageBus.MessageQueueTransport
 					return;
 
 				this.started = false;
+
+				Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
 
 				foreach (var worker in this.workers)
 					worker.Dispose();

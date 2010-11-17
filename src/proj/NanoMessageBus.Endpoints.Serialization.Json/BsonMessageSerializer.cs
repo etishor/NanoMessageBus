@@ -15,13 +15,13 @@ namespace NanoMessageBus.Endpoints.Serialization.Json
 
 		public virtual void Serialize(object message, Stream output)
 		{
-			Log.Verbose(Messages.Serializing, message.GetType());
+			Log.Verbose(Diagnostics.Serializing, message.GetType());
 			using (var bsonWriter = new BsonWriter(output))
 				this.serializer.Serialize(bsonWriter, message);
 		}
 		public virtual object Deserialize(Stream input)
 		{
-			Log.Verbose(Messages.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.Length);
 			using (var reader = new BsonReader(input))
 				return this.serializer.Deserialize(reader);
 		}
