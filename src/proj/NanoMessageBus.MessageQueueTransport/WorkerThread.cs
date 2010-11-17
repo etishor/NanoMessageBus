@@ -21,9 +21,10 @@ namespace NanoMessageBus.MessageQueueTransport
 			this.messageReceiver = messageReceiver;
 			this.thread = new Thread(this.BeginReceive)
 			{
-				Name = Diagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId),
 				IsBackground = true
 			};
+
+			this.thread.Name = Diagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId);
 		}
 		~WorkerThread()
 		{

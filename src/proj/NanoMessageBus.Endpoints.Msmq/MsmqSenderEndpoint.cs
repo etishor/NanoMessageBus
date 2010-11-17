@@ -41,7 +41,7 @@ namespace NanoMessageBus.Endpoints.Msmq
 			using (var serializedStream = new MemoryStream())
 			{
 				this.serializer.Serialize(message, serializedStream);
-				this.Send(message.BuildMessage(serializedStream));
+				this.Send(message.BuildMessage(serializedStream), recipients);
 			}
 		}
 		private static void LogMessage(PhysicalMessage message)
