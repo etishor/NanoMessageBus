@@ -74,9 +74,9 @@
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Transport\NanoMessageBus.Transport.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj">
       <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
-      <Name>NanoMessageBus.Transport</Name>
+      <Name>NanoMessageBus.Transports</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
       <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>

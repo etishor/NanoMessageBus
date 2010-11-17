@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus", "proj\Nano
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Core", "proj\NanoMessageBus.Core\NanoMessageBus.Core.csproj", "{A2D7EDF7-FA67-43E3-AA34-C7483508A5F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Transport", "proj\NanoMessageBus.Transport\NanoMessageBus.Transport.csproj", "{83C0E14D-0C49-4726-B329-5E2E7B0B7681}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Transports", "proj\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj", "{83C0E14D-0C49-4726-B329-5E2E7B0B7681}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Logging", "proj\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj", "{9C04BE79-85E3-45BB-8827-B5390C7E803E}"
 EndProject

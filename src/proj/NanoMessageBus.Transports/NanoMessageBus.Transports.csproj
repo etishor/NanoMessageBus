@@ -8,8 +8,8 @@
     <ProjectGuid>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.Transport</RootNamespace>
-    <AssemblyName>NanoMessageBus.Transport</AssemblyName>
+    <RootNamespace>NanoMessageBus.Transports</RootNamespace>
+    <AssemblyName>NanoMessageBus.Transports</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

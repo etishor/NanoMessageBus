@@ -6,7 +6,7 @@ namespace NanoMessageBus.MessageQueueTransport
 	using Core;
 	using Endpoints;
 	using Logging;
-	using Transport;
+	using Transports;
 
 	public class DefaultTransport : ITransportMessages
 	{
