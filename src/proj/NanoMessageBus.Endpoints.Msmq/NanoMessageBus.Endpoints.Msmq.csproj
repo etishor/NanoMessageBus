@@ -73,6 +73,10 @@
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
+      <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
+      <Name>NanoMessageBus.Serialization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
       <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
       <Name>NanoMessageBus</Name>
