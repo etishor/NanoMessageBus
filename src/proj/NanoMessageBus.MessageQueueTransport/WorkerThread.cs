@@ -19,7 +19,7 @@ namespace NanoMessageBus.MessageQueueTransport
 		{
 			this.receiver = receiver;
 			this.messageReceiver = messageReceiver;
-			this.thread = new Thread(this.Process)
+			this.thread = new Thread(this.BeginReceive)
 			{
 				Name = Diagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId),
 				IsBackground = true
@@ -40,7 +40,7 @@ namespace NanoMessageBus.MessageQueueTransport
 			if (this.disposed || !disposing)
 				return;
 
-			Log.Info(Diagnostics.StoppingWorkerThread, this.thread.Name);
+			Log.Info(Diagnostics.StoppingWorker, this.thread.Name);
 
 			this.started = false;
 			this.disposed = true;
@@ -58,12 +58,12 @@ namespace NanoMessageBus.MessageQueueTransport
 
 				this.started = true;
 
-				Log.Info(Diagnostics.StartingWorkerThread, this.thread.Name);
+				Log.Info(Diagnostics.StartingWorker, this.thread.Name);
 				if (!this.thread.IsAlive)
 					this.thread.Start();
 			}
 		}
-		protected virtual void Process()
+		protected virtual void BeginReceive()
 		{
 			while (this.started)
 				this.Receive();

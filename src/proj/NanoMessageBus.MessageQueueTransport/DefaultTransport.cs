@@ -73,7 +73,7 @@ namespace NanoMessageBus.MessageQueueTransport
 
 				this.started = true;
 
-				Log.Info(Diagnostics.StartingWorkerThreads, this.maxThreads);
+				Log.Info(Diagnostics.InitializingWorkers, this.maxThreads);
 				while (this.workers.Count < this.maxThreads)
 					this.AddWorkerThread().Start();
 			}
