@@ -70,6 +70,24 @@ namespace NanoMessageBus.Endpoints.Msmq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempting to receive a message from the endpoint &apos;{0}&apos;..
+        /// </summary>
+        internal static string AttemptingToReceiveMessage {
+            get {
+                return ResourceManager.GetString("AttemptingToReceiveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disposing the endpoint &apos;{0}.
+        /// </summary>
+        internal static string DisposingQueue {
+            get {
+                return ResourceManager.GetString("DisposingQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A message queue address was not given and is required..
         /// </summary>
         internal static string MissingQueueAddress {
@@ -88,11 +106,38 @@ namespace NanoMessageBus.Endpoints.Msmq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opening endpoint &apos;{0}&apos; for receive with enlistment &apos;{1}&apos;.
+        /// </summary>
+        internal static string OpeningQueueForReceive {
+            get {
+                return ResourceManager.GetString("OpeningQueueForReceive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opening endpoint &apos;{0}&apos; for transmission with enlistment &apos;{1}&apos;.
+        /// </summary>
+        internal static string OpeningQueueForSend {
+            get {
+                return ResourceManager.GetString("OpeningQueueForSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The queue specified, &apos;{0}&apos;, was not found..
         /// </summary>
         internal static string QueueNotFound {
             get {
                 return ResourceManager.GetString("QueueNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending a message to the endpoint &apos;{0}&apos;..
+        /// </summary>
+        internal static string SendingMessage {
+            get {
+                return ResourceManager.GetString("SendingMessage", resourceCulture);
             }
         }
     }
