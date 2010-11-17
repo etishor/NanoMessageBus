@@ -1,6 +1,8 @@
 namespace NanoMessageBus.Core
 {
-	public interface IReceiveMessages : IMessageContext
+	using System;
+
+	public interface IReceiveMessages : IMessageContext, IDisposable
 	{
 		void Receive(PhysicalMessage message);
 	}

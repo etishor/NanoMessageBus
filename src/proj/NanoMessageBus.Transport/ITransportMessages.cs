@@ -1,7 +1,12 @@
 namespace NanoMessageBus.Transport
 {
-	public interface ITransportMessages
+	using System;
+
+	public interface ITransportMessages : IDisposable
 	{
-		void Send(PhysicalMessage envelope, params string[] recipientAddress);
+		void Start();
+		void Stop();
+
+		void Send(PhysicalMessage message, params string[] recipients);
 	}
 }
