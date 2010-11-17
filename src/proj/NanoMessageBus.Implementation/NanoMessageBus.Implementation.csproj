@@ -42,6 +42,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoreDiagnostics.resx</DependentUpon>
     </Compile>
+    <Compile Include="Core\LocalMessageDispatcher.cs" />
     <Compile Include="Core\RoutingMessageReceiver.cs" />
     <Compile Include="Core\TransactionScopeUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

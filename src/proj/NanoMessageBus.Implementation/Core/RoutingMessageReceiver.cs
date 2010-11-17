@@ -14,7 +14,7 @@ namespace NanoMessageBus.Core
 		private readonly IHandleUnitOfWork unitOfWork;
 		private readonly ITransportMessages transport;
 		private readonly IEnumerable<ITransformIncomingMessages> transformers;
-		private readonly IEnumerable<IHandleMessages<PhysicalMessage>> handlers;
+		private readonly IDispatchMessages messageRouter;
 		private bool disposed;
 		public PhysicalMessage Current { get; private set; }
 		public bool Continue { get; private set; }
@@ -24,13 +24,13 @@ namespace NanoMessageBus.Core
 			IHandleUnitOfWork unitOfWork,
 			ITransportMessages transport,
 			IEnumerable<ITransformIncomingMessages> transformers,
-			IEnumerable<IHandleMessages<PhysicalMessage>> handlers)
+			IDispatchMessages messageRouter)
 		{
 			this.container = container;
-			this.transformers = transformers;
-			this.handlers = handlers;
-			this.transport = transport;
 			this.unitOfWork = unitOfWork;
+			this.transport = transport;
+			this.transformers = transformers;
+			this.messageRouter = messageRouter;
 			this.Continue = true;
 		}
 		~RoutingMessageReceiver()
@@ -58,6 +58,7 @@ namespace NanoMessageBus.Core
 		{
 			Log.Debug(CoreDiagnostics.DeferringMessage);
 			this.transport.Send(this.Current, LocalEndpoint);
+			this.Stop();
 		}
 		public virtual void Stop()
 		{
@@ -68,7 +69,9 @@ namespace NanoMessageBus.Core
 		public virtual void Receive(PhysicalMessage message)
 		{
 			this.Current = this.TransformMessage(message);
-			this.RouteMessage();
+
+			Log.Verbose(CoreDiagnostics.RoutingMessagesToHandlers);
+			this.messageRouter.Dispatch(this.Current);
 
 			Log.Debug(CoreDiagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();
@@ -79,21 +82,6 @@ namespace NanoMessageBus.Core
 			return this.transformers.Aggregate(
 				message,
 				(current, transformer) => (PhysicalMessage)transformer.Transform(current));
-		}
-
-		private void RouteMessage()
-		{
-			Log.Verbose(CoreDiagnostics.RoutingMessagesToHandlers);
-			foreach (var handler in this.handlers)
-				this.RouteMessageToHandler(handler);
-		}
-		private void RouteMessageToHandler(IHandleMessages<PhysicalMessage> handler)
-		{
-			if (!this.Continue)
-				return;
-
-			Log.Verbose(CoreDiagnostics.RoutingMessageToHandler, handler.GetType());
-			handler.Handle(this.Current);
 		}
 	}
 }
