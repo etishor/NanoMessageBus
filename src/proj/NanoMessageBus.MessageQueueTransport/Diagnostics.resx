@@ -117,16 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DispatchingToReceiver" xml:space="preserve">
+    <value>Worker thread '{0}' received a message; dispatching the message to receiver of type '{1}'.</value>
+  </data>
   <data name="DisposingTransport" xml:space="preserve">
     <value>Disposing transport.</value>
   </data>
+  <data name="MessageProcessed" xml:space="preserve">
+    <value>Worker thread '{0}' has processed the message successfully.</value>
+  </data>
   <data name="SendingMessage" xml:space="preserve">
     <value>Sending a message to the endpoint.</value>
+  </data>
+  <data name="StartingWorkerThread" xml:space="preserve">
+    <value>Worker thread '{0}' is starting execution and awaiting new work.</value>
   </data>
   <data name="StartingWorkerThreads" xml:space="preserve">
     <value>Starting up {0} worker threads.</value>
   </data>
   <data name="StoppingWorkers" xml:space="preserve">
     <value>Stopping all {0} worker threads.</value>
+  </data>
+  <data name="StoppingWorkerThread" xml:space="preserve">
+    <value>Worker thread '{0}' is stopping executing of new work.</value>
+  </data>
+  <data name="WorkerThreadName" xml:space="preserve">
+    <value>Worker {0}</value>
   </data>
 </root>

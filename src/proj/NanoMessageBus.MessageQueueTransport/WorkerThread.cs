@@ -4,9 +4,11 @@ namespace NanoMessageBus.MessageQueueTransport
 	using System.Threading;
 	using Core;
 	using Endpoints;
+	using Logging;
 
 	public class WorkerThread
 	{
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(WorkerThread));
 		private readonly IReceiveFromEndpoints receiver;
 		private readonly Func<IReceiveMessages> messageReceiver;
 		private readonly Thread thread;
@@ -19,7 +21,7 @@ namespace NanoMessageBus.MessageQueueTransport
 			this.messageReceiver = messageReceiver;
 			this.thread = new Thread(this.Process)
 			{
-				Name = string.Format("Worker {0}", this.thread.ManagedThreadId),
+				Name = Diagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId),
 				IsBackground = true
 			};
 		}
@@ -38,21 +40,31 @@ namespace NanoMessageBus.MessageQueueTransport
 			if (this.disposed || !disposing)
 				return;
 
+			Log.Info(Diagnostics.StoppingWorkerThread, this.thread.Name);
+
 			this.started = false;
 			this.disposed = true;
 		}
 
 		public virtual void Start()
 		{
+			if (this.started)
+				return;
+
 			lock (this.thread)
 			{
+				if (this.started)
+					return;
+
+				this.started = true;
+
+				Log.Info(Diagnostics.StartingWorkerThread, this.thread.Name);
 				if (!this.thread.IsAlive)
 					this.thread.Start();
 			}
 		}
 		protected virtual void Process()
 		{
-			this.started = true;
 			while (this.started)
 				this.Receive();
 		}
@@ -63,7 +75,12 @@ namespace NanoMessageBus.MessageQueueTransport
 				return;
 
 			using (var handler = this.messageReceiver())
+			{
+				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, handler.GetType());
 				handler.Receive(message);
+			}
+
+			Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
 		}
 	}
 }

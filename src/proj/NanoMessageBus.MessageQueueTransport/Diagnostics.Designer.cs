@@ -61,6 +61,15 @@ namespace NanoMessageBus.MessageQueueTransport {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; received a message; dispatching the message to receiver of type &apos;{1}&apos;..
+        /// </summary>
+        internal static string DispatchingToReceiver {
+            get {
+                return ResourceManager.GetString("DispatchingToReceiver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disposing transport..
         /// </summary>
         internal static string DisposingTransport {
@@ -70,11 +79,29 @@ namespace NanoMessageBus.MessageQueueTransport {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; has processed the message successfully..
+        /// </summary>
+        internal static string MessageProcessed {
+            get {
+                return ResourceManager.GetString("MessageProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sending a message to the endpoint..
         /// </summary>
         internal static string SendingMessage {
             get {
                 return ResourceManager.GetString("SendingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is starting execution and awaiting new work..
+        /// </summary>
+        internal static string StartingWorkerThread {
+            get {
+                return ResourceManager.GetString("StartingWorkerThread", resourceCulture);
             }
         }
         
@@ -93,6 +120,24 @@ namespace NanoMessageBus.MessageQueueTransport {
         internal static string StoppingWorkers {
             get {
                 return ResourceManager.GetString("StoppingWorkers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is stopping executing of new work..
+        /// </summary>
+        internal static string StoppingWorkerThread {
+            get {
+                return ResourceManager.GetString("StoppingWorkerThread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker {0}.
+        /// </summary>
+        internal static string WorkerThreadName {
+            get {
+                return ResourceManager.GetString("WorkerThreadName", resourceCulture);
             }
         }
     }
