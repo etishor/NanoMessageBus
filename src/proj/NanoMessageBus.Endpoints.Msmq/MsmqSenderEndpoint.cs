@@ -46,9 +46,9 @@ namespace NanoMessageBus.Endpoints.Msmq
 		}
 		private static void LogMessage(PhysicalMessage message)
 		{
-			Log.Debug(MsmqMessages.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
+			Log.Debug(Messages.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
 			foreach (var logicalMessage in message.LogicalMessages)
-				Log.Verbose(MsmqMessages.PhysicalMessageContains, message.MessageId, logicalMessage.GetType().FullName);
+				Log.Verbose(Messages.PhysicalMessageContains, message.MessageId, logicalMessage.GetType().FullName);
 		}
 
 		private void Send(Message message, params string[] recipients)
@@ -67,10 +67,10 @@ namespace NanoMessageBus.Endpoints.Msmq
 			catch (MessageQueueException e)
 			{
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
-					Log.Fatal(MsmqMessages.QueueNotFound, address);
+					Log.Error(Messages.QueueNotFound, address);
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-					Log.Fatal(MsmqMessages.AccessDenied, address);
+					Log.Fatal(Messages.AccessDenied, address);
 
 				throw new EndpointException(e.Message, e);
 			}

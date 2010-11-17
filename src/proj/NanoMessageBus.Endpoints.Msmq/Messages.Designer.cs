@@ -22,14 +22,14 @@ namespace NanoMessageBus.Endpoints.Msmq {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class MsmqMessages {
+    internal class Messages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal MsmqMessages() {
+        internal Messages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NanoMessageBus.Endpoints.Msmq {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Endpoints.Msmq.MsmqMessages", typeof(MsmqMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Endpoints.Msmq.Messages", typeof(Messages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,11 +88,29 @@ namespace NanoMessageBus.Endpoints.Msmq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A message of length {0} bytes was received from endpoint &apos;{1}&apos;..
+        /// </summary>
+        internal static string MessageReceived {
+            get {
+                return ResourceManager.GetString("MessageReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A message queue address was not given and is required..
         /// </summary>
         internal static string MissingQueueAddress {
             get {
                 return ResourceManager.GetString("MissingQueueAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No message was available to be received from endpoint &apos;{0}&apos;..
+        /// </summary>
+        internal static string NoMessageAvailable {
+            get {
+                return ResourceManager.GetString("NoMessageAvailable", resourceCulture);
             }
         }
         

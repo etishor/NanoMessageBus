@@ -126,8 +126,14 @@
   <data name="DisposingQueue" xml:space="preserve">
     <value>Disposing the endpoint '{0}</value>
   </data>
+  <data name="MessageReceived" xml:space="preserve">
+    <value>A message of length {0} bytes was received from endpoint '{1}'.</value>
+  </data>
   <data name="MissingQueueAddress" xml:space="preserve">
     <value>A message queue address was not given and is required.</value>
+  </data>
+  <data name="NoMessageAvailable" xml:space="preserve">
+    <value>No message was available to be received from endpoint '{0}'.</value>
   </data>
   <data name="NonTransactionalQueue" xml:space="preserve">
     <value>The message queue specified, '{0}', is not a transactional queue and could not be opened in transactional mode.</value>
