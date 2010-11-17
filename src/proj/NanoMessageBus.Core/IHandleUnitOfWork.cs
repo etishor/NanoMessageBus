@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Transport
+namespace NanoMessageBus.Core
 {
 	using System;
 

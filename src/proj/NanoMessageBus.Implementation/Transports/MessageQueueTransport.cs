@@ -6,9 +6,9 @@ namespace NanoMessageBus.Transports
 	using Endpoints;
 	using Logging;
 
-	public class EndpointTransport : ITransportMessages
+	public class MessageQueueTransport : ITransportMessages
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(EndpointTransport));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageQueueTransport));
 		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
 		private readonly IReceiveFromEndpoints receiverEndpoint;
 		private readonly ISendToEndpoints senderEndpoint;
@@ -17,7 +17,7 @@ namespace NanoMessageBus.Transports
 		private bool started;
 		private bool disposed;
 
-		public EndpointTransport(
+		public MessageQueueTransport(
 			IReceiveFromEndpoints receiverEndpoint,
 			ISendToEndpoints senderEndpoint,
 			Func<IReceiveMessages> messageReceiver,
@@ -28,7 +28,7 @@ namespace NanoMessageBus.Transports
 			this.senderEndpoint = senderEndpoint;
 			this.maxThreads = maxThreads;
 		}
-		~EndpointTransport()
+		~MessageQueueTransport()
 		{
 			this.Dispose(false);
 		}
@@ -45,7 +45,7 @@ namespace NanoMessageBus.Transports
 
 			this.disposed = true;
 
-			Log.Info(Diagnostics.DisposingTransport);
+			Log.Info(TransportDiagnostics.DisposingTransport);
 			this.Stop();
 		}
 
@@ -54,7 +54,7 @@ namespace NanoMessageBus.Transports
 			if (message.IsPopulated())
 				this.senderEndpoint.Send(message, recipients);
 
-			Log.Debug(Diagnostics.SendingMessage);
+			Log.Debug(TransportDiagnostics.SendingMessage);
 
 			this.senderEndpoint.Send(message, recipients);
 		}
@@ -71,7 +71,7 @@ namespace NanoMessageBus.Transports
 
 				this.started = true;
 
-				Log.Info(Diagnostics.InitializingWorkers, this.maxThreads);
+				Log.Info(TransportDiagnostics.InitializingWorkers, this.maxThreads);
 				while (this.workers.Count < this.maxThreads)
 					this.AddWorkerThread().Start();
 			}
@@ -95,7 +95,7 @@ namespace NanoMessageBus.Transports
 
 				this.started = false;
 
-				Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
+				Log.Info(TransportDiagnostics.StoppingWorkers, this.workers.Count);
 
 				foreach (var worker in this.workers)
 					worker.Dispose();
