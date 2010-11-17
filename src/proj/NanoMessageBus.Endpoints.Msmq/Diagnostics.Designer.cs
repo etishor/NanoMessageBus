@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NanoMessageBus.Endpoints.Msmq {
+namespace NanoMessageBus.Endpoints {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace NanoMessageBus.Endpoints.Msmq {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Endpoints.Msmq.Diagnostics", typeof(Diagnostics).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Endpoints.Diagnostics", typeof(Diagnostics).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -8,7 +8,7 @@
     <ProjectGuid>{2ECF1F4C-57CC-4A00-A489-152D149D00AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.SubscriptionStorage.SqlEngine</RootNamespace>
+    <RootNamespace>NanoMessageBus.SubscriptionStorage</RootNamespace>
     <AssemblyName>NanoMessageBus.SubscriptionStorage.SqlEngine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

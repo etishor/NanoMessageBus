@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Endpoints.Msmq
+namespace NanoMessageBus.Endpoints
 {
 	using System;
 	using System.IO;
@@ -38,21 +38,18 @@ namespace NanoMessageBus.Endpoints.Msmq
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
-			LogMessage(message);
+			Log.Debug(Diagnostics.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
+			foreach (var logicalMessage in message.LogicalMessages)
+				Log.Verbose(Diagnostics.PhysicalMessageContains, message.MessageId, logicalMessage.GetType().FullName);
+
 			using (var serializedStream = new MemoryStream())
 			{
 				this.serializer.Serialize(message, serializedStream);
 				this.Send(message.BuildMessage(serializedStream), recipients);
 			}
 		}
-		private static void LogMessage(PhysicalMessage message)
-		{
-			Log.Debug(Diagnostics.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
-			foreach (var logicalMessage in message.LogicalMessages)
-				Log.Verbose(Diagnostics.PhysicalMessageContains, message.MessageId, logicalMessage.GetType().FullName);
-		}
 
-		private void Send(Message message, params string[] recipients)
+		private void Send(IDisposable message, params string[] recipients)
 		{
 			using (message)
 				foreach (var recipient in recipients ?? new string[] { })

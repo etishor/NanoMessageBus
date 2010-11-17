@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Endpoints.Msmq
+namespace NanoMessageBus.Endpoints
 {
 	using System;
 

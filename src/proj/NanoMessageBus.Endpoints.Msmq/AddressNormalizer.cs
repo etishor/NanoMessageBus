@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Endpoints.Msmq
+namespace NanoMessageBus.Endpoints
 {
 	internal static class AddressNormalizer
 	{

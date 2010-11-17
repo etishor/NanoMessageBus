@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Logging.Log4Net
+namespace NanoMessageBus.Logging
 {
 	using System;
 
