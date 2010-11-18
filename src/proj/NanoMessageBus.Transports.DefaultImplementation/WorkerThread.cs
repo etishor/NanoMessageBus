@@ -24,7 +24,7 @@ namespace NanoMessageBus.Transports
 				IsBackground = true
 			};
 
-			this.thread.Name = TransportDiagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId);
+			this.thread.Name = Diagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId);
 		}
 		~WorkerThread()
 		{
@@ -41,7 +41,7 @@ namespace NanoMessageBus.Transports
 			if (this.disposed || !disposing)
 				return;
 
-			Log.Info(TransportDiagnostics.StoppingWorker, this.thread.Name);
+			Log.Info(Diagnostics.StoppingWorker, this.thread.Name);
 
 			this.started = false;
 			this.disposed = true;
@@ -59,7 +59,7 @@ namespace NanoMessageBus.Transports
 
 				this.started = true;
 
-				Log.Info(TransportDiagnostics.StartingWorker, this.thread.Name);
+				Log.Info(Diagnostics.StartingWorker, this.thread.Name);
 				if (!this.thread.IsAlive)
 					this.thread.Start();
 			}
@@ -77,11 +77,11 @@ namespace NanoMessageBus.Transports
 
 			using (var handler = this.messageReceiver())
 			{
-				Log.Info(TransportDiagnostics.DispatchingToReceiver, this.thread.Name, handler.GetType());
+				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, handler.GetType());
 				handler.Receive(message);
 			}
 
-			Log.Info(TransportDiagnostics.MessageProcessed, this.thread.Name);
+			Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
 		}
 	}
 }

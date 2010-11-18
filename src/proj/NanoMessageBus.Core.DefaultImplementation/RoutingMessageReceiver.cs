@@ -48,7 +48,7 @@ namespace NanoMessageBus.Core
 			if (this.disposed || !disposing)
 				return;
 
-			Log.Debug(CoreDiagnostics.DisposingMessageReceiver);
+			Log.Debug(Diagnostics.DisposingMessageReceiver);
 			this.disposed = true;
 			this.Continue = false;
 			this.container.Dispose();
@@ -56,13 +56,13 @@ namespace NanoMessageBus.Core
 
 		public virtual void Defer()
 		{
-			Log.Debug(CoreDiagnostics.DeferringMessage);
+			Log.Debug(Diagnostics.DeferringMessage);
 			this.transport.Send(this.Current, LocalEndpoint);
 			this.Stop();
 		}
 		public virtual void Stop()
 		{
-			Log.Debug(CoreDiagnostics.SkippingRemainingHandlers);
+			Log.Debug(Diagnostics.SkippingRemainingHandlers);
 			this.Continue = false;
 		}
 
@@ -70,15 +70,15 @@ namespace NanoMessageBus.Core
 		{
 			this.Current = this.TransformMessage(message);
 
-			Log.Verbose(CoreDiagnostics.RoutingMessagesToHandlers);
-			this.messageRouter.Dispatch(this.Current);
+			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
+			this.messageRouter.Dispatch(this.Current, this);
 
-			Log.Debug(CoreDiagnostics.CommittingUnitOfWork);
+			Log.Debug(Diagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();
 		}
 		private PhysicalMessage TransformMessage(PhysicalMessage message)
 		{
-			Log.Verbose(CoreDiagnostics.PerformingTransformations);
+			Log.Verbose(Diagnostics.PerformingTransformations);
 			return this.transformers.Aggregate(
 				message,
 				(current, transformer) => (PhysicalMessage)transformer.Transform(current));

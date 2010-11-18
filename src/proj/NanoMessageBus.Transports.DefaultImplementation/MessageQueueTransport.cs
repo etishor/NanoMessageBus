@@ -45,7 +45,7 @@ namespace NanoMessageBus.Transports
 
 			this.disposed = true;
 
-			Log.Info(TransportDiagnostics.DisposingTransport);
+			Log.Info(Diagnostics.DisposingTransport);
 			this.Stop();
 		}
 
@@ -54,7 +54,7 @@ namespace NanoMessageBus.Transports
 			if (message.IsPopulated())
 				this.senderEndpoint.Send(message, recipients);
 
-			Log.Debug(TransportDiagnostics.SendingMessage);
+			Log.Debug(Diagnostics.SendingMessage);
 
 			this.senderEndpoint.Send(message, recipients);
 		}
@@ -71,7 +71,7 @@ namespace NanoMessageBus.Transports
 
 				this.started = true;
 
-				Log.Info(TransportDiagnostics.InitializingWorkers, this.maxThreads);
+				Log.Info(Diagnostics.InitializingWorkers, this.maxThreads);
 				while (this.workers.Count < this.maxThreads)
 					this.AddWorkerThread().Start();
 			}
@@ -95,7 +95,7 @@ namespace NanoMessageBus.Transports
 
 				this.started = false;
 
-				Log.Info(TransportDiagnostics.StoppingWorkers, this.workers.Count);
+				Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
 
 				foreach (var worker in this.workers)
 					worker.Dispose();

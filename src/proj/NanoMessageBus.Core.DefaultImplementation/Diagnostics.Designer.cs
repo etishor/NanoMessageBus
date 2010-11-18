@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NanoMessageBus.Transports {
+namespace NanoMessageBus.Core {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace NanoMessageBus.Transports {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TransportDiagnostics {
+    internal class Diagnostics {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TransportDiagnostics() {
+        internal Diagnostics() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NanoMessageBus.Transports {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Transports.TransportDiagnostics", typeof(TransportDiagnostics).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Core.Diagnostics", typeof(Diagnostics).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,83 +61,65 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; received a message; dispatching the message to receiver of type &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Committing unit of work..
         /// </summary>
-        internal static string DispatchingToReceiver {
+        internal static string CommittingUnitOfWork {
             get {
-                return ResourceManager.GetString("DispatchingToReceiver", resourceCulture);
+                return ResourceManager.GetString("CommittingUnitOfWork", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disposing transport..
+        ///   Looks up a localized string similar to Deferring message to a later point..
         /// </summary>
-        internal static string DisposingTransport {
+        internal static string DeferringMessage {
             get {
-                return ResourceManager.GetString("DisposingTransport", resourceCulture);
+                return ResourceManager.GetString("DeferringMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Initializing {0} worker threads..
+        ///   Looks up a localized string similar to Disposing message receiver..
         /// </summary>
-        internal static string InitializingWorkers {
+        internal static string DisposingMessageReceiver {
             get {
-                return ResourceManager.GetString("InitializingWorkers", resourceCulture);
+                return ResourceManager.GetString("DisposingMessageReceiver", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; has processed the message successfully..
+        ///   Looks up a localized string similar to Performing transformations on message..
         /// </summary>
-        internal static string MessageProcessed {
+        internal static string PerformingTransformations {
             get {
-                return ResourceManager.GetString("MessageProcessed", resourceCulture);
+                return ResourceManager.GetString("PerformingTransformations", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sending a message to the endpoint..
+        ///   Looks up a localized string similar to Routing message to configured handlers..
         /// </summary>
-        internal static string SendingMessage {
+        internal static string RoutingMessagesToHandlers {
             get {
-                return ResourceManager.GetString("SendingMessage", resourceCulture);
+                return ResourceManager.GetString("RoutingMessagesToHandlers", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is starting execution and awaiting new work..
+        ///   Looks up a localized string similar to Routing message to handler of type &apos;{0}&apos;..
         /// </summary>
-        internal static string StartingWorker {
+        internal static string RoutingMessageToHandler {
             get {
-                return ResourceManager.GetString("StartingWorker", resourceCulture);
+                return ResourceManager.GetString("RoutingMessageToHandler", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is stopping executing of new work..
+        ///   Looks up a localized string similar to Skipping remaining handlers..
         /// </summary>
-        internal static string StoppingWorker {
+        internal static string SkippingRemainingHandlers {
             get {
-                return ResourceManager.GetString("StoppingWorker", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Stopping all {0} worker threads..
-        /// </summary>
-        internal static string StoppingWorkers {
-            get {
-                return ResourceManager.GetString("StoppingWorkers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Worker {0}.
-        /// </summary>
-        internal static string WorkerThreadName {
-            get {
-                return ResourceManager.GetString("WorkerThreadName", resourceCulture);
+                return ResourceManager.GetString("SkippingRemainingHandlers", resourceCulture);
             }
         }
     }
