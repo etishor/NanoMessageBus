@@ -33,6 +33,7 @@ SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Core\bin\%TARGET_CO
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Endpoints\bin\%TARGET_CONFIG%\NanoMessageBus.Endpoints.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.SubscriptionStorage\bin\%TARGET_CONFIG%\NanoMessageBus.SubscriptionStorage.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Transports\bin\%TARGET_CONFIG%\NanoMessageBus.Transports.dll"
 REM Implementation
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.DefaultImplementation.dll"
