@@ -53,7 +53,7 @@
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MessageBuilder.cs" />
-    <Compile Include="MessageSender.cs" />
+    <Compile Include="MessageBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +69,10 @@
     <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage\NanoMessageBus.SubscriptionStorage.csproj">
+      <Project>{2787552C-88AE-4CED-A3F3-C0AD78754E63}</Project>
+      <Name>NanoMessageBus.SubscriptionStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj">
       <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
@@ -86,6 +90,7 @@
     <EmbeddedResource Include="Diagnostics.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -61,29 +61,38 @@ namespace NanoMessageBus {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No receipients found for messages of type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to No receipients found for messages of type &apos;{0}&apos;, dropping message..
         /// </summary>
-        internal static string NoRecipientsFound {
+        internal static string DroppingMessage {
             get {
-                return ResourceManager.GetString("NoRecipientsFound", resourceCulture);
+                return ResourceManager.GetString("DroppingMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replying {0} message(s) provided back to return address &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Publishing message(s) to registered subscribers..
         /// </summary>
-        internal static string ReplyingToReturnAddress {
+        internal static string Publishing {
             get {
-                return ResourceManager.GetString("ReplyingToReturnAddress", resourceCulture);
+                return ResourceManager.GetString("Publishing", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sending {0} message(s) to registered endpoints..
+        ///   Looks up a localized string similar to Replying back to &apos;{0}&apos;..
         /// </summary>
-        internal static string SendingMessages {
+        internal static string Replying {
             get {
-                return ResourceManager.GetString("SendingMessages", resourceCulture);
+                return ResourceManager.GetString("Replying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending message(s) to configured endpoints..
+        /// </summary>
+        internal static string SendingMessage {
+            get {
+                return ResourceManager.GetString("SendingMessage", resourceCulture);
             }
         }
     }

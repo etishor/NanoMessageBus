@@ -47,6 +47,7 @@
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IHandleMessages.cs" />
+    <Compile Include="IMessageContext.cs" />
     <Compile Include="ISendMessages.cs" />
     <Compile Include="IPublishMessages.cs" />
     <Compile Include="PhysicalMessage.cs" />

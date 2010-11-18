@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NoRecipientsFound" xml:space="preserve">
-    <value>No receipients found for messages of type '{0}'.</value>
+  <data name="DroppingMessage" xml:space="preserve">
+    <value>No receipients found for messages of type '{0}', dropping message.</value>
   </data>
-  <data name="SendingMessages" xml:space="preserve">
-    <value>Sending {0} message(s) to registered endpoints.</value>
-  </data>
-  <data name="ReplyingToReturnAddress" xml:space="preserve">
-    <value>Replying {0} message(s) provided back to return address '{1}'.</value>
-  </data>
+	<data name="SendingMessage">
+		<value xml:space="preserve">Sending message(s) to configured endpoints.</value>
+	</data>
+	<data name="Replying">
+		<value><![CDATA[Replying back to '{0}'.]]></value>
+	</data>
+	<data name="Publishing">
+		<value xml:space="preserve">Publishing message(s) to registered subscribers.</value>
+	</data>
 </root>

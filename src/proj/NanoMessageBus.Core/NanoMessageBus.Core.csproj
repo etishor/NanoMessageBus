@@ -48,7 +48,6 @@
     </Compile>
     <Compile Include="IHandleUnitOfWork.cs" />
     <Compile Include="ITransformOutgoingMessages.cs" />
-    <Compile Include="IMessageContext.cs" />
     <Compile Include="IReceiveMessages.cs" />
     <Compile Include="ITransformIncomingMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

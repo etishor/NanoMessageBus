@@ -1,4 +1,4 @@
-namespace NanoMessageBus.Core
+namespace NanoMessageBus
 {
 	public interface IMessageContext
 	{
