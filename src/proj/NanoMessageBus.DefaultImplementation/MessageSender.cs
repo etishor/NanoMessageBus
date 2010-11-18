@@ -29,35 +29,28 @@ namespace NanoMessageBus
 			if (!messages.HasMessages())
 				return;
 
+			Log.Debug(Diagnostics.SendingMessages, messages.Length);
+
 			this.transport.Send(
 				messages.BuildPhysicalMessage(this.context),
 				this.GetRecipients(messages));
 		}
 		private string[] GetRecipients(IEnumerable<object> messages)
 		{
-			ICollection<string> addresses = new LinkedList<string>();
+			var firstMessage = messages.First(x => x != null);
+			IEnumerable<string> recipientsForMessageType;
+			if (!this.recipients.TryGetValue(firstMessage.GetType(), out recipientsForMessageType))
+				Log.Warn(Diagnostics.NoRecipientsFound, firstMessage.GetType());
 
-			foreach (var message in messages)
-			{
-				IEnumerable<string> recipientsForMessageType = null;
-				if (!this.recipients.TryGetValue(message.GetType(), out recipientsForMessageType))
-				{
-					Log.Warn("No receipients found for messages of type '{0}'.", message.GetType());
-					continue;
-				}
-
-				foreach (var recipient in recipientsForMessageType)
-					addresses.Add(recipient);
-			}
-
-			Log.Verbose("Found '{0}' recipients for the messages provided.", addresses.Count);
-			return addresses.ToArray();
+			return new List<string>(recipientsForMessageType).ToArray();
 		}
 
 		public virtual void Reply(params object[] messages)
 		{
 			if (!messages.HasMessages())
 				return;
+
+			Log.Debug(Diagnostics.ReplyingToReturnAddress, messages.Length, this.context.Current.ReturnAddress);
 
 			this.transport.Send(
 				messages.BuildPhysicalMessage(this.context),
