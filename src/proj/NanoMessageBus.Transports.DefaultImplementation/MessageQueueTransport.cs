@@ -51,11 +51,10 @@ namespace NanoMessageBus.Transports
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
-			if (message.IsPopulated())
-				this.senderEndpoint.Send(message, recipients);
+			if (!message.IsPopulated())
+				return;
 
 			Log.Debug(Diagnostics.SendingMessage);
-
 			this.senderEndpoint.Send(message, recipients);
 		}
 
