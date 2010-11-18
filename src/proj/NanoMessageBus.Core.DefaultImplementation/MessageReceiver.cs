@@ -15,8 +15,6 @@ namespace NanoMessageBus.Core
 		private readonly IEnumerable<ITransformIncomingMessages> messageTransformers;
 		private readonly ITrackMessageHandlers handlerTable;
 		private bool disposed;
-		public PhysicalMessage Current { get; private set; }
-		public bool Continue { get; private set; }
 
 		public MessageReceiver(
 			IDisposable childContainer,
@@ -52,6 +50,9 @@ namespace NanoMessageBus.Core
 			this.Continue = false;
 			this.childContainer.Dispose();
 		}
+
+		public virtual PhysicalMessage Current { get; private set; }
+		public virtual bool Continue { get; private set; }
 
 		public virtual void Defer()
 		{

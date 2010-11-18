@@ -48,7 +48,6 @@ namespace NanoMessageBus.Endpoints
 				this.Send(message.BuildMessage(serializedStream), recipients);
 			}
 		}
-
 		private void Send(IDisposable message, params string[] recipients)
 		{
 			using (message)

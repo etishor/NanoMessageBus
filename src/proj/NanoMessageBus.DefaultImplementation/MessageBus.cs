@@ -27,7 +27,7 @@ namespace NanoMessageBus
 			this.subscriptions = subscriptions;
 		}
 
-		public void Send(params object[] messages)
+		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
 			this.Dispatch(
@@ -36,7 +36,7 @@ namespace NanoMessageBus
 				type => this.recipients.GetRecipients(type));
 		}
 
-		public void Reply(params object[] messages)
+		public virtual void Reply(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Replying, this.context.Current.ReturnAddress);
 			this.Dispatch(
@@ -45,7 +45,7 @@ namespace NanoMessageBus
 				type => new[] { this.context.Current.ReturnAddress });
 		}
 
-		public void Publish(params object[] messages)
+		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
 			this.Dispatch(
