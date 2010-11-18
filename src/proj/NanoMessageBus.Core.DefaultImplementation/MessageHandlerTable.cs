@@ -5,19 +5,19 @@ namespace NanoMessageBus.Core
 	using System.Linq;
 	using Logging;
 
-	public class LocalRoutingTable<TContainer> : IHoldRoutingTables
+	public class MessageHandlerTable<TContainer> : ITrackMessageHandlers
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(LocalRoutingTable<TContainer>));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageHandlerTable<TContainer>));
 		private static readonly IDictionary<Type, ICollection<Func<TContainer, IHandleMessages>>> Routes =
 			new Dictionary<Type, ICollection<Func<TContainer, IHandleMessages>>>();
 		private readonly TContainer childContainer;
 
-		public LocalRoutingTable(TContainer childContainer)
+		public MessageHandlerTable(TContainer childContainer)
 		{
 			this.childContainer = childContainer;
 		}
 
-		public static void Register<TMessage>(Func<TContainer, IHandleMessages<TMessage>> route)
+		public static void RegisterHandler<TMessage>(Func<TContainer, IHandleMessages<TMessage>> route)
 			where TMessage : class
 		{
 			var key = typeof(TMessage);
@@ -28,18 +28,21 @@ namespace NanoMessageBus.Core
 				if (!Routes.TryGetValue(key, out routes))
 					Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages>>();
 
-				// TODO: log
+				Log.Debug(Diagnostics.RegisteringHandler, typeof(TMessage));
 				routes.Add(c => new MessageHandler<TMessage>(route(c)));
 			}
 		}
 
-		public virtual IEnumerable<IHandleMessages> GetRoutes(Type messageType)
+		public virtual IEnumerable<IHandleMessages> GetHandlers(Type messageType)
 		{
 			ICollection<Func<TContainer, IHandleMessages>> routeCallbacks;
 			if (!Routes.TryGetValue(messageType, out routeCallbacks))
-				return new IHandleMessages[] { }; // TODO: log
+			{
+				Log.Warn(Diagnostics.NoRegisteredHandlersFound, messageType);
+				return new IHandleMessages[] { };
+			}
 
-			// TODO: log
+			Log.Verbose(Diagnostics.GettingHandlers, messageType);
 			return routeCallbacks.Select(route => route(this.childContainer));
 		}
 

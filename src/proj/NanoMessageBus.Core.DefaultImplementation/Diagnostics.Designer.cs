@@ -88,6 +88,15 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Getting registered handlers for messages of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string GettingHandlers {
+            get {
+                return ResourceManager.GetString("GettingHandlers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Handling of logical message of type &apos;{0}&apos; completed by handler of &apos;{1}&apos;..
         /// </summary>
         internal static string HandlerCompleted {
@@ -115,6 +124,15 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No registered handlers found for messages of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string NoRegisteredHandlersFound {
+            get {
+                return ResourceManager.GetString("NoRegisteredHandlersFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logical message is originally of type &apos;{0}&apos;..
         /// </summary>
         internal static string OriginalLogicalMessageType {
@@ -129,6 +147,15 @@ namespace NanoMessageBus.Core {
         internal static string PerformingTransformations {
             get {
                 return ResourceManager.GetString("PerformingTransformations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registering handler for messages of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string RegisteringHandler {
+            get {
+                return ResourceManager.GetString("RegisteringHandler", resourceCulture);
             }
         }
         

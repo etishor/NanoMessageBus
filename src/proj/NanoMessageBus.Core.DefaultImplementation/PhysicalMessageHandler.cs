@@ -5,20 +5,20 @@ namespace NanoMessageBus.Core
 	using System.Linq;
 	using Logging;
 
-	public class RoutingMessageHandler : IHandleMessages<PhysicalMessage>
+	public class PhysicalMessageHandler : IHandleMessages<PhysicalMessage>
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(RoutingMessageHandler));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(PhysicalMessageHandler));
 		private readonly Func<Type, IEnumerable<ITransformIncomingMessages>> transformers;
-		private readonly IHoldRoutingTables routingTable;
+		private readonly ITrackMessageHandlers handlerTable;
 		private readonly IMessageContext context;
 
-		public RoutingMessageHandler(
+		public PhysicalMessageHandler(
 			Func<Type, IEnumerable<ITransformIncomingMessages>> transformers,
-			IHoldRoutingTables routingTable,
+			ITrackMessageHandlers handlerTable,
 			IMessageContext context)
 		{
 			this.transformers = transformers;
-			this.routingTable = routingTable;
+			this.handlerTable = handlerTable;
 			this.context = context;
 		}
 
@@ -51,7 +51,7 @@ namespace NanoMessageBus.Core
 		{
 			Log.Debug(Diagnostics.RoutingLogicalMessageToHandlers, message.GetType());
 
-			var handlers = this.routingTable.GetRoutes(message.GetType());
+			var handlers = this.handlerTable.GetHandlers(message.GetType());
 			foreach (var handler in handlers.TakeWhile(handler => this.context.Continue))
 				handler.Handle(message);
 

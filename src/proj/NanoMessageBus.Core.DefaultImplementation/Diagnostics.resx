@@ -159,4 +159,13 @@
   <data name="HandlerCompleted" xml:space="preserve">
     <value>Handling of logical message of type '{0}' completed by handler of '{1}'.</value>
   </data>
+  <data name="RegisteringHandler" xml:space="preserve">
+    <value>Registering handler for messages of type '{0}'.</value>
+  </data>
+  <data name="GettingHandlers" xml:space="preserve">
+    <value>Getting registered handlers for messages of type '{0}'.</value>
+  </data>
+  <data name="NoRegisteredHandlersFound" xml:space="preserve">
+    <value>No registered handlers found for messages of type '{0}'.</value>
+  </data>
 </root>

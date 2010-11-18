@@ -1,6 +1,6 @@
 namespace NanoMessageBus
 {
-	public interface IHandleMessages<in T>
+	public interface IHandleMessages<T>
 	{
 		void Handle(T message);
 	}

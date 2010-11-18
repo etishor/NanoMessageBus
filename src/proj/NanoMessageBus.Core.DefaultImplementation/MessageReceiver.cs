@@ -6,34 +6,33 @@ namespace NanoMessageBus.Core
 	using Logging;
 	using Transports;
 
-	public class RoutingMessageReceiver : IReceiveMessages
+	public class MessageReceiver : IReceiveMessages
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(RoutingMessageReceiver));
-		private const string LocalEndpoint = "";
-		private readonly IDisposable container;
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageReceiver));
+		private readonly IDisposable childContainer;
 		private readonly IHandleUnitOfWork unitOfWork;
-		private readonly ITransportMessages transport;
-		private readonly IEnumerable<ITransformIncomingMessages> transformers;
-		private readonly IHoldRoutingTables routingTable;
+		private readonly ITransportMessages messageTransport;
+		private readonly IEnumerable<ITransformIncomingMessages> messageTransformers;
+		private readonly ITrackMessageHandlers handlerTable;
 		private bool disposed;
 		public PhysicalMessage Current { get; private set; }
 		public bool Continue { get; private set; }
 
-		public RoutingMessageReceiver(
-			IDisposable container,
+		public MessageReceiver(
+			IDisposable childContainer,
 			IHandleUnitOfWork unitOfWork,
-			ITransportMessages transport,
-			IEnumerable<ITransformIncomingMessages> transformers,
-			IHoldRoutingTables routingTable)
+			ITransportMessages messageTransport,
+			IEnumerable<ITransformIncomingMessages> messageTransformers,
+			ITrackMessageHandlers handlerTable)
 		{
-			this.container = container;
+			this.childContainer = childContainer;
 			this.unitOfWork = unitOfWork;
-			this.transport = transport;
-			this.transformers = transformers;
-			this.routingTable = routingTable;
+			this.messageTransport = messageTransport;
+			this.messageTransformers = messageTransformers;
+			this.handlerTable = handlerTable;
 			this.Continue = true;
 		}
-		~RoutingMessageReceiver()
+		~MessageReceiver()
 		{
 			this.Dispose(false);
 		}
@@ -51,13 +50,13 @@ namespace NanoMessageBus.Core
 			Log.Debug(Diagnostics.DisposingMessageReceiver);
 			this.disposed = true;
 			this.Continue = false;
-			this.container.Dispose();
+			this.childContainer.Dispose();
 		}
 
 		public virtual void Defer()
 		{
 			Log.Debug(Diagnostics.DeferringMessage);
-			this.transport.Send(this.Current, LocalEndpoint);
+			this.messageTransport.Send(this.Current);
 			this.Stop();
 		}
 		public virtual void Stop()
@@ -78,7 +77,7 @@ namespace NanoMessageBus.Core
 		private PhysicalMessage TransformMessage(PhysicalMessage message)
 		{
 			Log.Verbose(Diagnostics.PerformingTransformations);
-			return this.transformers.Aggregate(
+			return this.messageTransformers.Aggregate(
 				message,
 				(current, transformer) => (PhysicalMessage)transformer.Transform(current));
 		}
@@ -86,15 +85,9 @@ namespace NanoMessageBus.Core
 		{
 			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
 
-			var routes = this.routingTable.GetRoutes(this.Current.GetType());
-			foreach (var route in routes)
-			{
-				if (!this.Continue)
-					return;
-
-				// todo: log
+			var routes = this.handlerTable.GetHandlers(this.Current.GetType());
+			foreach (var route in routes.TakeWhile(route => this.Continue))
 				route.Handle(this.Current);
-			}
 		}
 	}
 }
