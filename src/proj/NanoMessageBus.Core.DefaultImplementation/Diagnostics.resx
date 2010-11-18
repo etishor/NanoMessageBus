@@ -138,4 +138,25 @@
   <data name="SkippingRemainingHandlers" xml:space="preserve">
     <value>Skipping remaining handlers.</value>
   </data>
+  <data name="LogicalMessageCount" xml:space="preserve">
+    <value>Physical message contains {0} logical messages.</value>
+  </data>
+  <data name="LogicalMessageHandled" xml:space="preserve">
+    <value>Logical message of type '{0}' has been handled.</value>
+  </data>
+  <data name="OriginalLogicalMessageType" xml:space="preserve">
+    <value>Logical message is originally of type '{0}'.</value>
+  </data>
+  <data name="RoutingLogicalMessageToHandler" xml:space="preserve">
+    <value>Routing logical message of type '{0}' to registered handler of type '{1}'.</value>
+  </data>
+  <data name="RoutingLogicalMessageToHandlers" xml:space="preserve">
+    <value>Routing logical message of type '{0}' to registered handlers.</value>
+  </data>
+  <data name="TransformedLogicalMessageType" xml:space="preserve">
+    <value>Logical message transformed into type '{0}'.</value>
+  </data>
+  <data name="HandlerCompleted" xml:space="preserve">
+    <value>Handling of logical message of type '{0}' completed by handler of '{1}'.</value>
+  </data>
 </root>

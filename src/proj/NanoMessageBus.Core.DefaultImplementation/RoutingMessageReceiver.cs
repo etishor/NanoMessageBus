@@ -14,7 +14,7 @@ namespace NanoMessageBus.Core
 		private readonly IHandleUnitOfWork unitOfWork;
 		private readonly ITransportMessages transport;
 		private readonly IEnumerable<ITransformIncomingMessages> transformers;
-		private readonly IDispatchMessages messageRouter;
+		private readonly IHoldRoutingTables routingTable;
 		private bool disposed;
 		public PhysicalMessage Current { get; private set; }
 		public bool Continue { get; private set; }
@@ -24,13 +24,13 @@ namespace NanoMessageBus.Core
 			IHandleUnitOfWork unitOfWork,
 			ITransportMessages transport,
 			IEnumerable<ITransformIncomingMessages> transformers,
-			IDispatchMessages messageRouter)
+			IHoldRoutingTables routingTable)
 		{
 			this.container = container;
 			this.unitOfWork = unitOfWork;
 			this.transport = transport;
 			this.transformers = transformers;
-			this.messageRouter = messageRouter;
+			this.routingTable = routingTable;
 			this.Continue = true;
 		}
 		~RoutingMessageReceiver()
@@ -70,8 +70,7 @@ namespace NanoMessageBus.Core
 		{
 			this.Current = this.TransformMessage(message);
 
-			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
-			this.messageRouter.Dispatch(this.Current, this);
+			this.RouteMessagesToHandlers();
 
 			Log.Debug(Diagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();
@@ -82,6 +81,20 @@ namespace NanoMessageBus.Core
 			return this.transformers.Aggregate(
 				message,
 				(current, transformer) => (PhysicalMessage)transformer.Transform(current));
+		}
+		private void RouteMessagesToHandlers()
+		{
+			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
+
+			var routes = this.routingTable.GetRoutes(this.Current.GetType());
+			foreach (var route in routes)
+			{
+				if (!this.Continue)
+					return;
+
+				// todo: log
+				route.Handle(this.Current);
+			}
 		}
 	}
 }

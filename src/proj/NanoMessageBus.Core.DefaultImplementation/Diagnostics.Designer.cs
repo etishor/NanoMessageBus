@@ -88,11 +88,65 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Handling of logical message of type &apos;{0}&apos; completed by handler of &apos;{1}&apos;..
+        /// </summary>
+        internal static string HandlerCompleted {
+            get {
+                return ResourceManager.GetString("HandlerCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical message contains {0} logical messages..
+        /// </summary>
+        internal static string LogicalMessageCount {
+            get {
+                return ResourceManager.GetString("LogicalMessageCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical message of type &apos;{0}&apos; has been handled..
+        /// </summary>
+        internal static string LogicalMessageHandled {
+            get {
+                return ResourceManager.GetString("LogicalMessageHandled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical message is originally of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string OriginalLogicalMessageType {
+            get {
+                return ResourceManager.GetString("OriginalLogicalMessageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Performing transformations on message..
         /// </summary>
         internal static string PerformingTransformations {
             get {
                 return ResourceManager.GetString("PerformingTransformations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Routing logical message of type &apos;{0}&apos; to registered handler of type &apos;{1}&apos;..
+        /// </summary>
+        internal static string RoutingLogicalMessageToHandler {
+            get {
+                return ResourceManager.GetString("RoutingLogicalMessageToHandler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Routing logical message of type &apos;{0}&apos; to registered handlers..
+        /// </summary>
+        internal static string RoutingLogicalMessageToHandlers {
+            get {
+                return ResourceManager.GetString("RoutingLogicalMessageToHandlers", resourceCulture);
             }
         }
         
@@ -120,6 +174,15 @@ namespace NanoMessageBus.Core {
         internal static string SkippingRemainingHandlers {
             get {
                 return ResourceManager.GetString("SkippingRemainingHandlers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical message transformed into type &apos;{0}&apos;..
+        /// </summary>
+        internal static string TransformedLogicalMessageType {
+            get {
+                return ResourceManager.GetString("TransformedLogicalMessageType", resourceCulture);
             }
         }
     }

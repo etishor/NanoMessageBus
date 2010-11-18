@@ -2,52 +2,60 @@ namespace NanoMessageBus.Core
 {
 	using System;
 	using System.Collections.Generic;
-	using Core;
+	using System.Linq;
 	using Logging;
 
 	public class RoutingMessageHandler : IHandleMessages<PhysicalMessage>
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(RoutingMessageHandler));
 		private readonly Func<Type, IEnumerable<ITransformIncomingMessages>> transformers;
-		private readonly Func<Type, IEnumerable<IHandleMessages<object>>> handlers;
+		private readonly IHoldRoutingTables routingTable;
 		private readonly IMessageContext context;
 
 		public RoutingMessageHandler(
 			Func<Type, IEnumerable<ITransformIncomingMessages>> transformers,
-			Func<Type, IEnumerable<IHandleMessages<object>>> handlers,
+			IHoldRoutingTables routingTable,
 			IMessageContext context)
 		{
-			// TODO: logging
-			// TODO: generics vs delegates
-
 			this.transformers = transformers;
+			this.routingTable = routingTable;
 			this.context = context;
-			this.handlers = handlers;
 		}
 
 		public virtual void Handle(PhysicalMessage message)
 		{
+			Log.Debug(Diagnostics.LogicalMessageCount, message.LogicalMessages.Count);
 			foreach (var logicalMessage in message.LogicalMessages)
 				this.Handle(logicalMessage);
 		}
 		private void Handle(object message)
 		{
-			if (!this.context.Continue)
+			message = this.TransformMessage(message);
+			if (message == null)
 				return;
+
+			this.RouteLogicalMessageToHandlers(message);
+		}
+		private object TransformMessage(object message)
+		{
+			Log.Verbose(Diagnostics.OriginalLogicalMessageType, message.GetType());
 
 			foreach (var transformer in this.transformers(message.GetType()))
 				message = transformer.Transform(message);
 
-			if (message == null)
-				return;
+			Log.Debug(Diagnostics.TransformedLogicalMessageType, message == null ? null : message.GetType());
 
-			foreach (var handler in this.handlers(message.GetType()))
-				this.RouteToHandler(handler, message);
+			return message;
 		}
-		private void RouteToHandler(IHandleMessages<object> handler, object message)
+		private void RouteLogicalMessageToHandlers(object message)
 		{
-			if (this.context.Continue)
+			Log.Debug(Diagnostics.RoutingLogicalMessageToHandlers, message.GetType());
+
+			var handlers = this.routingTable.GetRoutes(message.GetType());
+			foreach (var handler in handlers.TakeWhile(handler => this.context.Continue))
 				handler.Handle(message);
+
+			Log.Debug(Diagnostics.LogicalMessageHandled, message.GetType());
 		}
 	}
 }
