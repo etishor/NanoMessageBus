@@ -52,17 +52,11 @@ namespace NanoMessageBus.Transports
 			if (this.started)
 				return;
 
-			lock (this.thread)
-			{
-				if (this.started)
-					return;
+			this.started = true;
 
-				this.started = true;
-
-				Log.Info(Diagnostics.StartingWorker, this.thread.Name);
-				if (!this.thread.IsAlive)
-					this.thread.Start();
-			}
+			Log.Info(Diagnostics.StartingWorker, this.thread.Name);
+			if (!this.thread.IsAlive)
+				this.thread.Start();
 		}
 		protected virtual void BeginReceive()
 		{

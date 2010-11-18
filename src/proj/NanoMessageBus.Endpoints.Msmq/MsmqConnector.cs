@@ -67,16 +67,10 @@ namespace NanoMessageBus.Endpoints
 			if (this.disposed || !disposing)
 				return;
 
-			lock (this.queue)
-			{
-				if (this.disposed)
-					return;
+			this.disposed = true;
 
-				Log.Debug(Diagnostics.DisposingQueue, this.QueueName);
-
-				this.disposed = true;
-				this.queue.Dispose();
-			}
+			Log.Debug(Diagnostics.DisposingQueue, this.QueueName);
+			this.queue.Dispose();
 		}
 
 		public virtual string QueueName

@@ -64,17 +64,11 @@ namespace NanoMessageBus.Transports
 			if (this.started)
 				return;
 
-			lock (this.workers)
-			{
-				if (this.started)
-					return;
+			this.started = true;
 
-				this.started = true;
-
-				Log.Info(Diagnostics.InitializingWorkers, this.maxThreads);
-				while (this.workers.Count < this.maxThreads)
-					this.AddWorkerThread().Start();
-			}
+			Log.Info(Diagnostics.InitializingWorkers, this.maxThreads);
+			while (this.workers.Count < this.maxThreads)
+				this.AddWorkerThread().Start();
 		}
 		protected virtual WorkerThread AddWorkerThread()
 		{
@@ -88,20 +82,14 @@ namespace NanoMessageBus.Transports
 			if (!this.started)
 				return;
 
-			lock (this.workers)
-			{
-				if (!this.started)
-					return;
+			this.started = false;
 
-				this.started = false;
+			Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
 
-				Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
+			foreach (var worker in this.workers)
+				worker.Dispose();
 
-				foreach (var worker in this.workers)
-					worker.Dispose();
-
-				this.workers.Clear();
-			}
+			this.workers.Clear();
 		}
 	}
 }

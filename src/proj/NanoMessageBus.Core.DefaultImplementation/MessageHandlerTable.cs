@@ -22,15 +22,12 @@ namespace NanoMessageBus.Core
 		{
 			var key = typeof(TMessage);
 
-			lock (Routes)
-			{
-				ICollection<Func<TContainer, IHandleMessages>> routes;
-				if (!Routes.TryGetValue(key, out routes))
-					Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages>>();
+			ICollection<Func<TContainer, IHandleMessages>> routes;
+			if (!Routes.TryGetValue(key, out routes))
+				Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages>>();
 
-				Log.Debug(Diagnostics.RegisteringHandler, typeof(TMessage));
-				routes.Add(c => new MessageHandler<TMessage>(route(c)));
-			}
+			Log.Debug(Diagnostics.RegisteringHandler, typeof(TMessage));
+			routes.Add(c => new MessageHandler<TMessage>(route(c)));
 		}
 
 		public virtual IEnumerable<IHandleMessages> GetHandlers(Type messageType)

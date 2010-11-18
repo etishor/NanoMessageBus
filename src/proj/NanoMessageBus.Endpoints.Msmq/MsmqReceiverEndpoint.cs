@@ -33,14 +33,8 @@ namespace NanoMessageBus.Endpoints
 			if (this.disposed || !disposing)
 				return;
 
-			lock (this.connector)
-			{
-				if (this.disposed)
-					return;
-
-				this.disposed = true;
-				this.connector.Dispose();
-			}
+			this.disposed = true;
+			this.connector.Dispose();
 		}
 
 		public virtual PhysicalMessage Receive()
