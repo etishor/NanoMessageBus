@@ -39,7 +39,7 @@ namespace NanoMessageBus.Serialization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Endpoints.Serialization.Json.Diagnostics", typeof(Diagnostics).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NanoMessageBus.Serialization.Diagnostics", typeof(Diagnostics).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -27,12 +27,14 @@ echo Testing
 echo Merging
 mkdir output\bin
 SET FILES_TO_MERGE=
+REM Contract
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus\bin\%TARGET_CONFIG%\NanoMessageBus.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Core\bin\%TARGET_CONFIG%\NanoMessageBus.Core.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Endpoints\bin\%TARGET_CONFIG%\NanoMessageBus.Endpoints.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Transports\bin\%TARGET_CONFIG%\NanoMessageBus.Transports.dll"
+REM Implementation
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Core.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Core.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.DefaultImplementation.dll"
