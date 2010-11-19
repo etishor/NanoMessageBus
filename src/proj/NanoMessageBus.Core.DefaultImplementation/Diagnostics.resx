@@ -123,17 +123,11 @@
   <data name="DeferringMessage" xml:space="preserve">
     <value>Deferring message to a later point.</value>
   </data>
-  <data name="DisposingMessageReceiver" xml:space="preserve">
-    <value>Disposing message receiver.</value>
-  </data>
-  <data name="PerformingTransformations" xml:space="preserve">
-    <value>Performing transformations on message.</value>
+  <data name="DisposingMessageRouter" xml:space="preserve">
+    <value>Disposing message router.</value>
   </data>
   <data name="RoutingMessagesToHandlers" xml:space="preserve">
     <value>Routing message to configured handlers.</value>
-  </data>
-  <data name="RoutingMessageToHandler" xml:space="preserve">
-    <value>Routing message to handler of type '{0}'.</value>
   </data>
   <data name="SkippingRemainingHandlers" xml:space="preserve">
     <value>Skipping remaining handlers.</value>
@@ -144,17 +138,11 @@
   <data name="LogicalMessageHandled" xml:space="preserve">
     <value>Logical message of type '{0}' has been handled.</value>
   </data>
-  <data name="OriginalLogicalMessageType" xml:space="preserve">
-    <value>Logical message is originally of type '{0}'.</value>
-  </data>
   <data name="RoutingLogicalMessageToHandler" xml:space="preserve">
     <value>Routing logical message of type '{0}' to registered handler of type '{1}'.</value>
   </data>
   <data name="RoutingLogicalMessageToHandlers" xml:space="preserve">
     <value>Routing logical message of type '{0}' to registered handlers.</value>
-  </data>
-  <data name="TransformedLogicalMessageType" xml:space="preserve">
-    <value>Logical message transformed into type '{0}'.</value>
   </data>
   <data name="HandlerCompleted" xml:space="preserve">
     <value>Handling of logical message of type '{0}' completed by handler of '{1}'.</value>

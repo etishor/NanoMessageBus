@@ -41,7 +41,7 @@ namespace NanoMessageBus.Core
 			if (this.disposed || !disposing)
 				return;
 
-			Log.Debug(Diagnostics.DisposingMessageReceiver);
+			Log.Debug(Diagnostics.DisposingMessageRouter);
 			this.disposed = true;
 			this.Continue = false;
 			this.childContainer.Dispose();

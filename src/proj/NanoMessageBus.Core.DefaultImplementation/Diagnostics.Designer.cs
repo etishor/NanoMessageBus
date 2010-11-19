@@ -79,11 +79,11 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disposing message receiver..
+        ///   Looks up a localized string similar to Disposing message router..
         /// </summary>
-        internal static string DisposingMessageReceiver {
+        internal static string DisposingMessageRouter {
             get {
-                return ResourceManager.GetString("DisposingMessageReceiver", resourceCulture);
+                return ResourceManager.GetString("DisposingMessageRouter", resourceCulture);
             }
         }
         
@@ -133,24 +133,6 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical message is originally of type &apos;{0}&apos;..
-        /// </summary>
-        internal static string OriginalLogicalMessageType {
-            get {
-                return ResourceManager.GetString("OriginalLogicalMessageType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Performing transformations on message..
-        /// </summary>
-        internal static string PerformingTransformations {
-            get {
-                return ResourceManager.GetString("PerformingTransformations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Registering handler for messages of type &apos;{0}&apos;..
         /// </summary>
         internal static string RegisteringHandler {
@@ -187,29 +169,11 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Routing message to handler of type &apos;{0}&apos;..
-        /// </summary>
-        internal static string RoutingMessageToHandler {
-            get {
-                return ResourceManager.GetString("RoutingMessageToHandler", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Skipping remaining handlers..
         /// </summary>
         internal static string SkippingRemainingHandlers {
             get {
                 return ResourceManager.GetString("SkippingRemainingHandlers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logical message transformed into type &apos;{0}&apos;..
-        /// </summary>
-        internal static string TransformedLogicalMessageType {
-            get {
-                return ResourceManager.GetString("TransformedLogicalMessageType", resourceCulture);
             }
         }
     }
