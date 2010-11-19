@@ -26,8 +26,9 @@ echo Testing
 
 echo Merging
 mkdir output\bin
+
+REM Contract/Interface
 SET FILES_TO_MERGE=
-REM Contract
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus\bin\%TARGET_CONFIG%\NanoMessageBus.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Core\bin\%TARGET_CONFIG%\NanoMessageBus.Core.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Endpoints\bin\%TARGET_CONFIG%\NanoMessageBus.Endpoints.dll"
@@ -44,15 +45,21 @@ SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Endpoints.Msmq\bin\
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.SubscriptionStorage.SqlEngine\bin\%TARGET_CONFIG%\NanoMessageBus.SubscriptionStorage.SqlEngine.dll"
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.dll %FILES_TO_MERGE%
 
+REM Serializers.Json
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.Json.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\Newtonsoft.Json.dll"
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Serialization.Json.dll %FILES_TO_MERGE%
 
-echo Copying
-copy "src\proj\NanoMessageBus.Logging.Log4Net\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.Log4Net.*" "output\bin"
+REM Logging.log4net
+SET FILES_TO_MERGE=
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.Log4net\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.Log4net.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.dll"
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Logging.Log4net.dll %FILES_TO_MERGE%
 copy "src\proj\NanoMessageBus.Logging.Log4Net\bin\%TARGET_CONFIG%\log4net.*" "output\bin"
 
+echo Copying
 mkdir output\doc
 copy "doc\license.txt" "output\doc\NanoMessageBus License.txt"
 copy "lib\Log4net\log4net.license.txt" "output\doc\log4net License.txt"
