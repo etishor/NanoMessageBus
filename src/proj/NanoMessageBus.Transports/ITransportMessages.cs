@@ -4,8 +4,8 @@ namespace NanoMessageBus.Transports
 
 	public interface ITransportMessages : IDisposable
 	{
-		void Start();
-		void Stop();
+		void StartListening();
+		void StopListening();
 
 		void Send(PhysicalMessage message, params string[] recipients);
 	}

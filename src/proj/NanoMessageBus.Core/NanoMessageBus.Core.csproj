@@ -47,9 +47,7 @@
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IHandleUnitOfWork.cs" />
-    <Compile Include="ITransformOutgoingMessages.cs" />
-    <Compile Include="IReceiveMessages.cs" />
-    <Compile Include="ITransformIncomingMessages.cs" />
+    <Compile Include="IRouteMessagesToHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

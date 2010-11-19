@@ -10,12 +10,12 @@ namespace NanoMessageBus.Transports
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(WorkerThread));
 		private readonly IReceiveFromEndpoints receiver;
-		private readonly Func<IReceiveMessages> messageReceiver;
+		private readonly Func<IRouteMessagesToHandlers> messageReceiver;
 		private readonly Thread thread;
 		private bool started;
 		private bool disposed;
 
-		public WorkerThread(IReceiveFromEndpoints receiver, Func<IReceiveMessages> messageReceiver)
+		public WorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> messageReceiver)
 		{
 			this.receiver = receiver;
 			this.messageReceiver = messageReceiver;
@@ -72,7 +72,7 @@ namespace NanoMessageBus.Transports
 			using (var handler = this.messageReceiver())
 			{
 				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, handler.GetType());
-				handler.Receive(message);
+				handler.Route(message);
 			}
 
 			Log.Info(Diagnostics.MessageProcessed, this.thread.Name);

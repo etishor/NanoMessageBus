@@ -8,8 +8,8 @@ namespace NanoMessageBus.Core
 	public class MessageHandlerTable<TContainer> : ITrackMessageHandlers
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageHandlerTable<TContainer>));
-		private static readonly IDictionary<Type, ICollection<Func<TContainer, IHandleMessages>>> Routes =
-			new Dictionary<Type, ICollection<Func<TContainer, IHandleMessages>>>();
+		private static readonly IDictionary<Type, ICollection<Func<TContainer, IHandleMessages<object>>>> Routes =
+			new Dictionary<Type, ICollection<Func<TContainer, IHandleMessages<object>>>>();
 		private readonly TContainer childContainer;
 
 		public MessageHandlerTable(TContainer childContainer)
@@ -22,28 +22,28 @@ namespace NanoMessageBus.Core
 		{
 			var key = typeof(TMessage);
 
-			ICollection<Func<TContainer, IHandleMessages>> routes;
+			ICollection<Func<TContainer, IHandleMessages<object>>> routes;
 			if (!Routes.TryGetValue(key, out routes))
-				Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages>>();
+				Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages<object>>>();
 
 			Log.Debug(Diagnostics.RegisteringHandler, typeof(TMessage));
 			routes.Add(c => new MessageHandler<TMessage>(route(c)));
 		}
 
-		public virtual IEnumerable<IHandleMessages> GetHandlers(Type messageType)
+		public virtual IEnumerable<IHandleMessages<object>> GetHandlers(Type messageType)
 		{
-			ICollection<Func<TContainer, IHandleMessages>> routeCallbacks;
+			ICollection<Func<TContainer, IHandleMessages<object>>> routeCallbacks;
 			if (!Routes.TryGetValue(messageType, out routeCallbacks))
 			{
 				Log.Warn(Diagnostics.NoRegisteredHandlersFound, messageType);
-				return new IHandleMessages[] { };
+				return new IHandleMessages<object>[] { };
 			}
 
 			Log.Verbose(Diagnostics.GettingHandlers, messageType);
 			return routeCallbacks.Select(route => route(this.childContainer));
 		}
 
-		private class MessageHandler<TMessage> : IHandleMessages where TMessage : class
+		private class MessageHandler<TMessage> : IHandleMessages<object> where TMessage : class
 		{
 			private readonly IHandleMessages<TMessage> handler;
 

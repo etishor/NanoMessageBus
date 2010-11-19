@@ -1,36 +1,32 @@
 namespace NanoMessageBus.Core
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using Logging;
 	using Transports;
 
-	public class MessageReceiver : IReceiveMessages
+	public class MessageRouter : IRouteMessagesToHandlers
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageReceiver));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageRouter));
 		private readonly IDisposable childContainer;
 		private readonly IHandleUnitOfWork unitOfWork;
 		private readonly ITransportMessages messageTransport;
-		private readonly IEnumerable<ITransformIncomingMessages> messageTransformers;
 		private readonly ITrackMessageHandlers handlerTable;
 		private bool disposed;
 
-		public MessageReceiver(
+		public MessageRouter(
 			IDisposable childContainer,
 			IHandleUnitOfWork unitOfWork,
 			ITransportMessages messageTransport,
-			IEnumerable<ITransformIncomingMessages> messageTransformers,
 			ITrackMessageHandlers handlerTable)
 		{
 			this.childContainer = childContainer;
 			this.unitOfWork = unitOfWork;
 			this.messageTransport = messageTransport;
-			this.messageTransformers = messageTransformers;
 			this.handlerTable = handlerTable;
 			this.Continue = true;
 		}
-		~MessageReceiver()
+		~MessageRouter()
 		{
 			this.Dispose(false);
 		}
@@ -66,29 +62,18 @@ namespace NanoMessageBus.Core
 			this.Continue = false;
 		}
 
-		public virtual void Receive(PhysicalMessage message)
+		public virtual void Route(PhysicalMessage message)
 		{
-			this.Current = this.TransformMessage(message);
+			this.Current = message;
 
-			this.RouteMessagesToHandlers();
-
-			Log.Debug(Diagnostics.CommittingUnitOfWork);
-			this.unitOfWork.Complete();
-		}
-		private PhysicalMessage TransformMessage(PhysicalMessage message)
-		{
-			Log.Verbose(Diagnostics.PerformingTransformations);
-			return this.messageTransformers.Aggregate(
-				message,
-				(current, transformer) => (PhysicalMessage)transformer.Transform(current));
-		}
-		private void RouteMessagesToHandlers()
-		{
 			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
 
 			var routes = this.handlerTable.GetHandlers(this.Current.GetType());
 			foreach (var route in routes.TakeWhile(route => this.Continue))
 				route.Handle(this.Current);
+
+			Log.Debug(Diagnostics.CommittingUnitOfWork);
+			this.unitOfWork.Complete();
 		}
 	}
 }

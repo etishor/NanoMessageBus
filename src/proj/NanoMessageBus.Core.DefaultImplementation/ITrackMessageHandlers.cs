@@ -5,6 +5,6 @@ namespace NanoMessageBus.Core
 
 	public interface ITrackMessageHandlers
 	{
-		IEnumerable<IHandleMessages> GetHandlers(Type message);
+		IEnumerable<IHandleMessages<object>> GetHandlers(Type message);
 	}
 }

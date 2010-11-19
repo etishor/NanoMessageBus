@@ -10,22 +10,22 @@ namespace NanoMessageBus.Transports
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageQueueTransport));
 		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
-		private readonly IReceiveFromEndpoints receiverEndpoint;
-		private readonly ISendToEndpoints senderEndpoint;
-		private readonly Func<IReceiveMessages> messageReceiver;
+		private readonly IReceiveFromEndpoints receiver;
+		private readonly ISendToEndpoints sender;
+		private readonly Func<IRouteMessagesToHandlers> router;
 		private readonly int maxThreads;
 		private bool started;
 		private bool disposed;
 
 		public MessageQueueTransport(
-			IReceiveFromEndpoints receiverEndpoint,
-			ISendToEndpoints senderEndpoint,
-			Func<IReceiveMessages> messageReceiver,
+			IReceiveFromEndpoints receiver,
+			ISendToEndpoints sender,
+			Func<IRouteMessagesToHandlers> router,
 			int maxThreads)
 		{
-			this.receiverEndpoint = receiverEndpoint;
-			this.messageReceiver = messageReceiver;
-			this.senderEndpoint = senderEndpoint;
+			this.receiver = receiver;
+			this.router = router;
+			this.sender = sender;
 			this.maxThreads = maxThreads;
 		}
 		~MessageQueueTransport()
@@ -46,7 +46,7 @@ namespace NanoMessageBus.Transports
 			this.disposed = true;
 
 			Log.Info(Diagnostics.DisposingTransport);
-			this.Stop();
+			this.StopListening();
 		}
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
@@ -55,10 +55,10 @@ namespace NanoMessageBus.Transports
 				return;
 
 			Log.Debug(Diagnostics.SendingMessage);
-			this.senderEndpoint.Send(message, recipients);
+			this.sender.Send(message, recipients);
 		}
 
-		public virtual void Start()
+		public virtual void StartListening()
 		{
 			if (this.started)
 				return;
@@ -71,12 +71,12 @@ namespace NanoMessageBus.Transports
 		}
 		protected virtual WorkerThread AddWorkerThread()
 		{
-			var worker = new WorkerThread(this.receiverEndpoint, this.messageReceiver);
+			var worker = new WorkerThread(this.receiver, this.router);
 			this.workers.Add(worker);
 			return worker;
 		}
 
-		public virtual void Stop()
+		public virtual void StopListening()
 		{
 			if (!this.started)
 				return;
