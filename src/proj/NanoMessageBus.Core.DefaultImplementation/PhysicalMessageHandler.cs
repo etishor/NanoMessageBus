@@ -30,7 +30,7 @@ namespace NanoMessageBus.Core
 			Log.Debug(Diagnostics.RoutingLogicalMessageToHandlers, message.GetType());
 
 			var handlers = this.handlerTable.GetHandlers(message.GetType());
-			foreach (var handler in handlers.TakeWhile(handler => this.context.Continue))
+			foreach (var handler in handlers.TakeWhile(handler => this.context.ContinueProcessing))
 				handler.Handle(message);
 
 			Log.Debug(Diagnostics.LogicalMessageHandled, message.GetType());

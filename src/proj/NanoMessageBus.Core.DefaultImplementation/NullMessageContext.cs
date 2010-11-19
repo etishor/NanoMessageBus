@@ -7,17 +7,17 @@ namespace NanoMessageBus.Core
 		private static readonly PhysicalMessage NullMessage =
 			new PhysicalMessage(Guid.Empty, Guid.Empty, string.Empty, DateTime.MinValue, false, null, null);
 
-		public void Defer()
+		public void DeferMessage()
 		{
 		}
-		public void Drop()
+		public void DropMessage()
 		{
 		}
-		public PhysicalMessage Current
+		public PhysicalMessage CurrentMessage
 		{
 			get { return NullMessage; }
 		}
-		public bool Continue
+		public bool ContinueProcessing
 		{
 			get { return false; }
 		}

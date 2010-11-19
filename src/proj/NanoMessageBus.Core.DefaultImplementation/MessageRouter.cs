@@ -24,7 +24,7 @@ namespace NanoMessageBus.Core
 			this.unitOfWork = unitOfWork;
 			this.messageTransport = messageTransport;
 			this.handlerTable = handlerTable;
-			this.Continue = true;
+			this.ContinueProcessing = true;
 		}
 		~MessageRouter()
 		{
@@ -43,34 +43,34 @@ namespace NanoMessageBus.Core
 
 			Log.Debug(Diagnostics.DisposingMessageRouter);
 			this.disposed = true;
-			this.Continue = false;
+			this.ContinueProcessing = false;
 			this.childContainer.Dispose();
 		}
 
-		public virtual PhysicalMessage Current { get; private set; }
-		public virtual bool Continue { get; private set; }
+		public virtual PhysicalMessage CurrentMessage { get; private set; }
+		public virtual bool ContinueProcessing { get; private set; }
 
-		public virtual void Defer()
+		public virtual void DeferMessage()
 		{
 			Log.Debug(Diagnostics.DeferringMessage);
-			this.messageTransport.Send(this.Current);
-			this.Drop();
+			this.messageTransport.Send(this.CurrentMessage);
+			this.DropMessage();
 		}
-		public virtual void Drop()
+		public virtual void DropMessage()
 		{
 			Log.Debug(Diagnostics.SkippingRemainingHandlers);
-			this.Continue = false;
+			this.ContinueProcessing = false;
 		}
 
 		public virtual void Route(PhysicalMessage message)
 		{
-			this.Current = message;
+			this.CurrentMessage = message;
 
 			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
 
-			var routes = this.handlerTable.GetHandlers(this.Current.GetType());
-			foreach (var route in routes.TakeWhile(route => this.Continue))
-				route.Handle(this.Current);
+			var routes = this.handlerTable.GetHandlers(this.CurrentMessage.GetType());
+			foreach (var route in routes.TakeWhile(route => this.ContinueProcessing))
+				route.Handle(this.CurrentMessage);
 
 			Log.Debug(Diagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();

@@ -38,11 +38,11 @@ namespace NanoMessageBus
 
 		public virtual void Reply(params object[] messages)
 		{
-			Log.Debug(Diagnostics.Replying, this.context.Current.ReturnAddress);
+			Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
 			this.Dispatch(
 				messages,
-				populated => populated.BuildPhysicalMessage(this.context.Current.CorrelationId),
-				type => new[] { this.context.Current.ReturnAddress });
+				populated => populated.BuildPhysicalMessage(this.context.CurrentMessage.CorrelationId),
+				type => new[] { this.context.CurrentMessage.ReturnAddress });
 		}
 
 		public virtual void Publish(params object[] messages)
