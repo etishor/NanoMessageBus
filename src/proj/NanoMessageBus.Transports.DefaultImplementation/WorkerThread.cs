@@ -65,17 +65,16 @@ namespace NanoMessageBus.Transports
 		}
 		protected virtual void Receive()
 		{
-			var message = this.receiver.Receive();
-			if (!message.IsPopulated())
-				return;
-
 			using (var router = this.routerFactory())
 			{
+				var message = this.receiver.Receive();
+				if (!message.IsPopulated())
+					return;
+
 				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, router.GetType());
 				router.Route(message);
+				Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
 			}
-
-			Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
 		}
 	}
 }
