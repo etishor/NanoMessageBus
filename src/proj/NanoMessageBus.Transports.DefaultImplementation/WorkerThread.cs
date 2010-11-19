@@ -10,15 +10,15 @@ namespace NanoMessageBus.Transports
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(WorkerThread));
 		private readonly IReceiveFromEndpoints receiver;
-		private readonly Func<IRouteMessagesToHandlers> messageReceiver;
+		private readonly Func<IRouteMessagesToHandlers> routerFactory;
 		private readonly Thread thread;
 		private bool started;
 		private bool disposed;
 
-		public WorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> messageReceiver)
+		public WorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> routerFactory)
 		{
 			this.receiver = receiver;
-			this.messageReceiver = messageReceiver;
+			this.routerFactory = routerFactory;
 			this.thread = new Thread(this.BeginReceive)
 			{
 				IsBackground = true
@@ -69,10 +69,10 @@ namespace NanoMessageBus.Transports
 			if (!message.IsPopulated())
 				return;
 
-			using (var handler = this.messageReceiver())
+			using (var router = this.routerFactory())
 			{
-				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, handler.GetType());
-				handler.Route(message);
+				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, router.GetType());
+				router.Route(message);
 			}
 
 			Log.Info(Diagnostics.MessageProcessed, this.thread.Name);

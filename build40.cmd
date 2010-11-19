@@ -48,7 +48,6 @@ bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform
 REM Serializers.Json
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.Json.dll"
-SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\Newtonsoft.Json.dll"
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Serialization.Json.dll %FILES_TO_MERGE%
 

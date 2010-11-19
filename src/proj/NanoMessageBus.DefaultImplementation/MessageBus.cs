@@ -56,23 +56,23 @@ namespace NanoMessageBus
 
 		private void Dispatch(
 			IEnumerable<object> messages,
-			Func<IEnumerable<object>, PhysicalMessage> getMessage,
-			Func<Type, IEnumerable<string>> getRecipients)
+			Func<IEnumerable<object>, PhysicalMessage> buildMessage,
+			Func<Type, IEnumerable<string>> getMessageRecipients)
 		{
-			var populated = messages.PopulatedMessagesOnly();
-			if (!populated.HasAny())
+			var logicalMessages = messages.PopulatedMessagesOnly();
+			if (!logicalMessages.HasAny())
 				return;
 
-			var primaryMessageType = populated.First().GetType();
-			var addresses = getRecipients(primaryMessageType).ToArray();
+			var primaryLogicalMessageType = logicalMessages.First().GetType();
+			var addresses = getMessageRecipients(primaryLogicalMessageType).ToArray();
 
 			if (addresses.Length == 0)
 			{
-				Log.Warn(Diagnostics.DroppingMessage, primaryMessageType);
+				Log.Warn(Diagnostics.DroppingMessage, primaryLogicalMessageType);
 				return;
 			}
 
-			this.transport.Send(getMessage(populated), addresses);
+			this.transport.Send(buildMessage(logicalMessages), addresses);
 		}
 	}
 }
