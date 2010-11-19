@@ -5,6 +5,6 @@ namespace NanoMessageBus
 		PhysicalMessage Current { get; }
 		bool Continue { get; }
 		void Defer();
-		void Stop();
+		void Drop();
 	}
 }

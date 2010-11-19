@@ -54,9 +54,9 @@ namespace NanoMessageBus.Core
 		{
 			Log.Debug(Diagnostics.DeferringMessage);
 			this.messageTransport.Send(this.Current);
-			this.Stop();
+			this.Drop();
 		}
-		public virtual void Stop()
+		public virtual void Drop()
 		{
 			Log.Debug(Diagnostics.SkippingRemainingHandlers);
 			this.Continue = false;

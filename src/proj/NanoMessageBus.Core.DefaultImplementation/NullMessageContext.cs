@@ -10,7 +10,7 @@ namespace NanoMessageBus.Core
 		public void Defer()
 		{
 		}
-		public void Stop()
+		public void Drop()
 		{
 		}
 		public PhysicalMessage Current
@@ -19,7 +19,7 @@ namespace NanoMessageBus.Core
 		}
 		public bool Continue
 		{
-			get { return true; }
+			get { return false; }
 		}
 	}
 }
