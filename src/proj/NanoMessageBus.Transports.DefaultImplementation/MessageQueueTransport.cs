@@ -2,6 +2,7 @@ namespace NanoMessageBus.Transports
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Threading;
 	using Core;
 	using Endpoints;
 	using Logging;
@@ -9,12 +10,14 @@ namespace NanoMessageBus.Transports
 	public class MessageQueueTransport : ITransportMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageQueueTransport));
+		private static readonly TimeSpan KillDelay = new TimeSpan(0, 0, 0, 2, 250); // 2.25 seconds
 		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
 		private readonly IReceiveFromEndpoints receiver;
 		private readonly ISendToEndpoints sender;
 		private readonly Func<IRouteMessagesToHandlers> router;
 		private readonly int maxThreads;
 		private bool started;
+		private bool stopping;
 		private bool disposed;
 
 		public MessageQueueTransport(
@@ -47,6 +50,7 @@ namespace NanoMessageBus.Transports
 
 			Log.Info(Diagnostics.DisposingTransport);
 			this.StopListening();
+			Log.Info(Diagnostics.TransportDisposed);
 		}
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
@@ -78,17 +82,29 @@ namespace NanoMessageBus.Transports
 
 		public virtual void StopListening()
 		{
-			if (!this.started)
+			if (this.stopping || !this.started)
 				return;
 
-			this.started = false;
-
-			Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
-
-			foreach (var worker in this.workers)
-				worker.Dispose();
-
+			this.stopping = true;
+			this.StopWorkerThreads();
+			this.KillWorkerThreads();
 			this.workers.Clear();
+			this.stopping = false;
+
+			this.started = false;
+		}
+
+		private void StopWorkerThreads()
+		{
+			Log.Info(Diagnostics.StoppingWorkers, this.workers.Count);
+			foreach (var worker in this.workers)
+				worker.Stop();
+		}
+		private void KillWorkerThreads()
+		{
+			Thread.Sleep(KillDelay); // TODO: more efficient way if all threads have already exited.
+			foreach (var worker in this.workers)
+				worker.Kill();
 		}
 	}
 }

@@ -13,7 +13,6 @@ namespace NanoMessageBus.Transports
 		private readonly Func<IRouteMessagesToHandlers> routerFactory;
 		private readonly Thread thread;
 		private bool started;
-		private bool disposed;
 
 		public WorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> routerFactory)
 		{
@@ -25,26 +24,6 @@ namespace NanoMessageBus.Transports
 			};
 
 			this.thread.Name = Diagnostics.WorkerThreadName.FormatWith(this.thread.ManagedThreadId);
-		}
-		~WorkerThread()
-		{
-			this.Dispose(false);
-		}
-
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-			this.Dispose(true);
-		}
-		protected virtual void Dispose(bool disposing)
-		{
-			if (this.disposed || !disposing)
-				return;
-
-			Log.Info(Diagnostics.StoppingWorker, this.thread.Name);
-
-			this.started = false;
-			this.disposed = true;
 		}
 
 		public virtual void Start()
@@ -58,6 +37,23 @@ namespace NanoMessageBus.Transports
 			if (!this.thread.IsAlive)
 				this.thread.Start();
 		}
+		public virtual void Stop()
+		{
+			if (!this.started)
+				return;
+
+			Log.Info(Diagnostics.StoppingWorkerThread, this.thread.Name);
+			this.started = false;
+		}
+		public virtual void Kill()
+		{
+			if (!this.thread.IsAlive)
+				return;
+
+			Log.Info(Diagnostics.KillingWorkerThread, this.thread.Name);
+			this.thread.Abort();
+		}
+
 		protected virtual void BeginReceive()
 		{
 			while (this.started)

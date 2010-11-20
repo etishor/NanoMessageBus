@@ -88,6 +88,15 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Killing worker thread &apos;{0}&apos;..
+        /// </summary>
+        internal static string KillingWorkerThread {
+            get {
+                return ResourceManager.GetString("KillingWorkerThread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; has processed the message successfully..
         /// </summary>
         internal static string MessageProcessed {
@@ -115,20 +124,29 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is stopping executing of new work..
-        /// </summary>
-        internal static string StoppingWorker {
-            get {
-                return ResourceManager.GetString("StoppingWorker", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Stopping all {0} worker threads..
         /// </summary>
         internal static string StoppingWorkers {
             get {
                 return ResourceManager.GetString("StoppingWorkers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is stopping executing of new work..
+        /// </summary>
+        internal static string StoppingWorkerThread {
+            get {
+                return ResourceManager.GetString("StoppingWorkerThread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The transport has been disposed and all active worker threads stopped..
+        /// </summary>
+        internal static string TransportDisposed {
+            get {
+                return ResourceManager.GetString("TransportDisposed", resourceCulture);
             }
         }
         
