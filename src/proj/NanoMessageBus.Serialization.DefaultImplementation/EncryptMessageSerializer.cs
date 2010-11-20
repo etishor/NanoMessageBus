@@ -12,6 +12,7 @@ namespace NanoMessageBus.Serialization
 
 		public EncryptMessageSerializer(ISerializeMessages inner, byte[] encryptionKey)
 		{
+			// TODO: assert length of key
 			this.encryptionKey = encryptionKey;
 			this.inner = inner;
 		}
