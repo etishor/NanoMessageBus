@@ -59,7 +59,7 @@ namespace NanoMessageBus.Endpoints
 			try
 			{
 				using (var connector = this.connectorFactory(address))
-					connector.Send(message, string.Empty);
+					connector.Send(message);
 			}
 			catch (MessageQueueException e)
 			{

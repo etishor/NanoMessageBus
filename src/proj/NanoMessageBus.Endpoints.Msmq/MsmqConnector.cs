@@ -84,10 +84,10 @@ namespace NanoMessageBus.Endpoints
 			return this.queue.Receive(timeout, this.transactionType);
 		}
 
-		public virtual void Send(object message, string label)
+		public virtual void Send(object message)
 		{
 			Log.Verbose(Diagnostics.SendingMessage, this.QueueName);
-			this.queue.Send(message, label, this.transactionType);
+			this.queue.Send(message, this.transactionType);
 		}
 	}
 }
