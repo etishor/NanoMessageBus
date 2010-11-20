@@ -51,7 +51,7 @@ namespace NanoMessageBus
 			this.Dispatch(
 				messages,
 				populated => populated.BuildPhysicalMessage(),
-				type => this.subscriptions.GetSubscribers(type));
+				type => this.subscriptions.GetSubscribers(new[] { type }));
 		}
 
 		private void Dispatch(

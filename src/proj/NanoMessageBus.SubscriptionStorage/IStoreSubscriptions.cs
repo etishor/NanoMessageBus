@@ -7,6 +7,6 @@ namespace NanoMessageBus.SubscriptionStorage
 	{
 		void Subscribe(string address, IEnumerable<Type> messageTypes, DateTime expiration);
 		void Unsubscribe(string address, IEnumerable<Type> messageTypes);
-		IEnumerable<string> GetSubscribers(Type messageType);
+		ICollection<string> GetSubscribers(IEnumerable<Type> messageTypes);
 	}
 }
