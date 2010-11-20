@@ -58,5 +58,8 @@
       <Link>Properties\CustomDictionary.xml</Link>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
