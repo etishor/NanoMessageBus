@@ -6,7 +6,7 @@ namespace NanoMessageBus
 
 	internal static class ExtensionMethods
 	{
-		public static IList<object> PopulatedMessagesOnly(this IEnumerable<object> messages)
+		public static IEnumerable<object> PopulatedMessagesOnly(this IEnumerable<object> messages)
 		{
 			messages = messages ?? new object[] { };
 			return messages.Where(x => x != null).ToList();
@@ -16,7 +16,7 @@ namespace NanoMessageBus
 			return null != messages && messages.Where(x => x != null).Any();
 		}
 
-		public static IEnumerable<string> GetRecipients(
+		public static ICollection<string> GetRecipients(
 			this IDictionary<Type, IEnumerable<string>> recipients, Type primaryMessageType)
 		{
 			IEnumerable<string> recipientsForMessageType;

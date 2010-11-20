@@ -57,22 +57,22 @@ namespace NanoMessageBus
 		private void Dispatch(
 			IEnumerable<object> messages,
 			Func<IEnumerable<object>, PhysicalMessage> buildMessage,
-			Func<Type, IEnumerable<string>> getMessageRecipients)
+			Func<Type, ICollection<string>> getMessageRecipients)
 		{
 			var logicalMessages = messages.PopulatedMessagesOnly();
 			if (!logicalMessages.HasAny())
 				return;
 
 			var primaryLogicalMessageType = logicalMessages.First().GetType();
-			var addresses = getMessageRecipients(primaryLogicalMessageType).ToArray();
+			var addresses = getMessageRecipients(primaryLogicalMessageType);
 
-			if (addresses.Length == 0)
+			if (addresses.Count == 0)
 			{
 				Log.Warn(Diagnostics.DroppingMessage, primaryLogicalMessageType);
 				return;
 			}
 
-			this.transport.Send(buildMessage(logicalMessages), addresses);
+			this.transport.Send(buildMessage(logicalMessages), addresses.ToArray());
 		}
 	}
 }
