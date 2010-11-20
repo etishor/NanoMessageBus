@@ -1,1 +1,0 @@
-@CALL build40.cmd Release v3.5 v2
