@@ -45,6 +45,7 @@ namespace NanoMessageBus.Core
 
 			Log.Debug(Diagnostics.DisposingMessageRouter);
 			this.ContinueProcessing = false;
+			this.unitOfWork.Dispose();
 			this.childContainer.Dispose();
 		}
 
