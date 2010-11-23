@@ -39,29 +39,36 @@ SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Transports\bin\%TAR
 REM Implementation
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Core.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Core.DefaultImplementation.dll"
-SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.DefaultImplementation.dll"
-SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Transports.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Transports.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Endpoints.Msmq\bin\%TARGET_CONFIG%\NanoMessageBus.Endpoints.Msmq.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.Console\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.Console.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.SubscriptionStorage.SqlEngine\bin\%TARGET_CONFIG%\NanoMessageBus.SubscriptionStorage.SqlEngine.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Transports.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Transports.DefaultImplementation.dll"
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.dll %FILES_TO_MERGE%
 
-REM Serializers.Json
+REM - Serialization -
+mkdir output\bin\serialization
+
+REM Json
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.Json.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.Json\bin\%TARGET_CONFIG%\Newtonsoft.Json.dll"
-bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Serialization.Json.dll %FILES_TO_MERGE%
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/serialization/NanoMessageBus.Serialization.Json.dll %FILES_TO_MERGE%
 
-REM Logging.log4net
+REM - Logging -
+mkdir output\bin\logging
+
+REM log4net
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.Log4net\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.Log4net.dll"
-bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Logging.Log4net.dll %FILES_TO_MERGE%
-copy "src\proj\NanoMessageBus.Logging.Log4Net\bin\%TARGET_CONFIG%\log4net.*" "output\bin"
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/logging/NanoMessageBus.Logging.Log4net.dll %FILES_TO_MERGE%
+copy "src\proj\NanoMessageBus.Logging.Log4Net\bin\%TARGET_CONFIG%\log4net.*" "output\bin\logging"
 
-REM Logging.NLog
+REM NLog
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.NLog\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.NLog.dll"
-bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Logging.NLog.dll %FILES_TO_MERGE%
-copy "src\proj\NanoMessageBus.Logging.NLog\bin\%TARGET_CONFIG%\NLog.*" "output\bin"
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/logging/NanoMessageBus.Logging.NLog.dll %FILES_TO_MERGE%
+copy "src\proj\NanoMessageBus.Logging.NLog\bin\%TARGET_CONFIG%\NLog.*" "output\bin\logging"
 
 echo Copying
 mkdir output\doc

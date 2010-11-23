@@ -83,7 +83,7 @@ namespace NanoMessageBus.Endpoints
 			catch (MessageQueueException e)
 			{
 				lock (this.activeConnections)
-					DisposeConnection(address);
+					this.DisposeConnection(address);
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					Log.Error(Diagnostics.QueueNotFound, address);
