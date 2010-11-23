@@ -52,16 +52,18 @@ namespace NanoMessageBus.Endpoints
 			catch (MessageQueueException e)
 			{
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-				{
-					Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.QueueName);
-					return null;
-				}
+					return this.NoMessageAvailable();
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 					Log.Fatal(Diagnostics.AccessDenied, this.connector.QueueName);
 
 				throw new EndpointException(e.Message, e);
 			}
+		}
+		private PhysicalMessage NoMessageAvailable()
+		{
+			Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.QueueName);
+			return null;
 		}
 	}
 }
