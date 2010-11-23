@@ -54,9 +54,14 @@ bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /t
 REM Logging.log4net
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.Log4net\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.Log4net.dll"
-SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.dll"
-bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /internalize /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Logging.Log4net.dll %FILES_TO_MERGE%
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Logging.Log4net.dll %FILES_TO_MERGE%
 copy "src\proj\NanoMessageBus.Logging.Log4Net\bin\%TARGET_CONFIG%\log4net.*" "output\bin"
+
+REM Logging.NLog
+SET FILES_TO_MERGE=
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.NLog\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.NLog.dll"
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.Logging.NLog.dll %FILES_TO_MERGE%
+copy "src\proj\NanoMessageBus.Logging.NLog\bin\%TARGET_CONFIG%\NLog.*" "output\bin"
 
 echo Copying
 mkdir output\doc
