@@ -38,8 +38,8 @@ namespace NanoMessageBus.Transports
 
 		public void Dispose()
 		{
-			GC.SuppressFinalize(this);
 			this.Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 		protected virtual void Dispose(bool disposing)
 		{
