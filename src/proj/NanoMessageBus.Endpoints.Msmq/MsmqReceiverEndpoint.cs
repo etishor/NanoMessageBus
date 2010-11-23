@@ -8,7 +8,7 @@ namespace NanoMessageBus.Endpoints
 	public class MsmqReceiverEndpoint : IReceiveFromEndpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
-		private static readonly TimeSpan Timeout = 2.Seconds();
+		private static readonly TimeSpan Timeout = 500.Milliseconds();
 		private readonly MsmqConnector connector;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;

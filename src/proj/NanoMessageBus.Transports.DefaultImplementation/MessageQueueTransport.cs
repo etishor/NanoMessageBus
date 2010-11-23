@@ -10,7 +10,7 @@ namespace NanoMessageBus.Transports
 	public class MessageQueueTransport : ITransportMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageQueueTransport));
-		private static readonly TimeSpan KillDelay = new TimeSpan(0, 0, 0, 2, 250); // 2.25 seconds
+		private static readonly TimeSpan KillDelay = 750.Milliseconds();
 		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
 		private readonly IReceiveFromEndpoints receiver;
 		private readonly ISendToEndpoints sender;

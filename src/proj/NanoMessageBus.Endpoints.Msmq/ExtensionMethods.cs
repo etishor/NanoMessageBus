@@ -4,9 +4,9 @@ namespace NanoMessageBus.Endpoints
 
 	internal static class ExtensionMethods
 	{
-		public static TimeSpan Seconds(this int seconds)
+		public static TimeSpan Milliseconds(this int milliseconds)
 		{
-			return new TimeSpan(0, 0, 0, seconds);
+			return new TimeSpan(0, 0, 0, 0, milliseconds);
 		}
 	}
 }
