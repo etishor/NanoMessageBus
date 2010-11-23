@@ -10,14 +10,14 @@ namespace NanoMessageBus.Endpoints
 	public class MsmqSenderEndpoint : ISendToEndpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
-		private readonly IDictionary<string, MsmqConnector> activeConnections;
+		private readonly IDictionary<string, MsmqConnector> activeConnectors;
 		private readonly Func<string, MsmqConnector> connectorFactory;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
 		public MsmqSenderEndpoint(Func<string, MsmqConnector> connectorFactory, ISerializeMessages serializer)
 		{
-			this.activeConnections = new Dictionary<string, MsmqConnector>();
+			this.activeConnectors = new Dictionary<string, MsmqConnector>();
 			this.connectorFactory = connectorFactory;
 			this.serializer = serializer;
 		}
@@ -36,24 +36,15 @@ namespace NanoMessageBus.Endpoints
 			if (this.disposed || !disposing)
 				return;
 
-			lock (this.activeConnections)
+			lock (this.activeConnectors)
 			{
 				this.disposed = true;
 
-				foreach (var address in this.activeConnections.Keys)
-					this.DisposeConnection(address);
+				foreach (var connector in this.activeConnectors.Values)
+					connector.Dispose();
 
-				this.activeConnections.Clear();
+				this.activeConnectors.Clear();
 			}
-		}
-		private void DisposeConnection(string address)
-		{
-			MsmqConnector connector;
-			if (!this.activeConnections.TryGetValue(address, out connector))
-				return;
-
-			connector.Dispose();
-			this.activeConnections.Remove(address);
 		}
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
@@ -78,12 +69,11 @@ namespace NanoMessageBus.Endpoints
 		{
 			try
 			{
-				this.GetConnection(address).Send(message);
+				this.OpenConnector(address).Send(message);
 			}
 			catch (MessageQueueException e)
 			{
-				lock (this.activeConnections)
-					this.DisposeConnection(address);
+				this.RemoveConnection(address);
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					Log.Error(Diagnostics.QueueNotFound, address);
@@ -94,21 +84,33 @@ namespace NanoMessageBus.Endpoints
 				throw new EndpointException(e.Message, e);
 			}
 		}
-		private MsmqConnector GetConnection(string address)
+		private MsmqConnector OpenConnector(string address)
 		{
 			MsmqConnector connector;
-			if (this.activeConnections.TryGetValue(address, out connector))
+			if (this.activeConnectors.TryGetValue(address, out connector))
 				return connector;
 
-			lock (this.activeConnections)
+			lock (this.activeConnectors)
 			{
 				if (this.disposed)
 					throw new ObjectDisposedException(Diagnostics.EndpointAlreadyDisposed);
 
-				if (!this.activeConnections.TryGetValue(address, out connector))
-					this.activeConnections[address] = connector = this.connectorFactory(address);
+				if (!this.activeConnectors.TryGetValue(address, out connector))
+					this.activeConnectors[address] = connector = this.connectorFactory(address);
 
 				return connector;
+			}
+		}
+		private void RemoveConnection(string address)
+		{
+			lock (this.activeConnectors)
+			{
+				MsmqConnector connector;
+				if (!this.activeConnectors.TryGetValue(address, out connector))
+					return;
+
+				connector.Dispose();
+				this.activeConnectors.Remove(address);	
 			}
 		}
 	}
