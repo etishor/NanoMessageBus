@@ -6,15 +6,15 @@ namespace NanoMessageBus.Transports
 	using Endpoints;
 	using Logging;
 
-	public class WorkerThread
+	public class MessageReceiverWorkerThread : IReceiveMessages
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(WorkerThread));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageReceiverWorkerThread));
 		private readonly IReceiveFromEndpoints receiver;
 		private readonly Func<IRouteMessagesToHandlers> routerFactory;
 		private readonly Thread thread;
 		private bool started;
 
-		public WorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> routerFactory)
+		public MessageReceiverWorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> routerFactory)
 		{
 			this.receiver = receiver;
 			this.routerFactory = routerFactory;
@@ -45,12 +45,12 @@ namespace NanoMessageBus.Transports
 			Log.Info(Diagnostics.StoppingWorkerThread, this.thread.Name);
 			this.started = false;
 		}
-		public virtual void Kill()
+		public virtual void Abort()
 		{
 			if (!this.thread.IsAlive)
 				return;
 
-			Log.Info(Diagnostics.KillingWorkerThread, this.thread.Name);
+			Log.Info(Diagnostics.AbortingWorkerThread, this.thread.Name);
 			this.thread.Abort();
 		}
 

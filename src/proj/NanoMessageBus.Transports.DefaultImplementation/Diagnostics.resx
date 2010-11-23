@@ -136,7 +136,7 @@
     <value>Initializing {0} worker threads.</value>
   </data>
   <data name="StoppingWorkers" xml:space="preserve">
-    <value>Stopping all {0} worker threads.</value>
+    <value>Stopping all {0} worker thread(s).</value>
   </data>
   <data name="StoppingWorkerThread" xml:space="preserve">
     <value>Worker thread '{0}' is stopping executing of new work.</value>
@@ -144,8 +144,8 @@
   <data name="WorkerThreadName" xml:space="preserve">
     <value>Worker {0}</value>
   </data>
-  <data name="KillingWorkerThread" xml:space="preserve">
-    <value>Killing worker thread '{0}'.</value>
+  <data name="AbortingWorkerThread" xml:space="preserve">
+    <value>Aborting worker thread '{0}'.</value>
   </data>
   <data name="TransportDisposed" xml:space="preserve">
     <value>The transport has been disposed and all active worker threads stopped.</value>

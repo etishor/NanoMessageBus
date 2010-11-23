@@ -3,7 +3,6 @@ namespace NanoMessageBus.Transports
 	using System;
 	using System.Collections.Generic;
 	using System.Threading;
-	using Core;
 	using Endpoints;
 	using Logging;
 
@@ -11,23 +10,20 @@ namespace NanoMessageBus.Transports
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageQueueTransport));
 		private static readonly TimeSpan KillDelay = 750.Milliseconds();
-		private readonly ICollection<WorkerThread> workers = new LinkedList<WorkerThread>();
-		private readonly IReceiveFromEndpoints receiver;
+		private readonly ICollection<IReceiveMessages> workers = new LinkedList<IReceiveMessages>();
+		private readonly Func<IReceiveMessages> receiverFactory;
 		private readonly ISendToEndpoints sender;
-		private readonly Func<IRouteMessagesToHandlers> router;
 		private readonly int maxThreads;
 		private bool started;
 		private bool stopping;
 		private bool disposed;
 
 		public MessageQueueTransport(
-			IReceiveFromEndpoints receiver,
+			Func<IReceiveMessages> receiverFactory,
 			ISendToEndpoints sender,
-			Func<IRouteMessagesToHandlers> router,
 			int maxThreads)
 		{
-			this.receiver = receiver;
-			this.router = router;
+			this.receiverFactory = receiverFactory;
 			this.sender = sender;
 			this.maxThreads = maxThreads;
 		}
@@ -73,9 +69,9 @@ namespace NanoMessageBus.Transports
 			while (this.workers.Count < this.maxThreads)
 				this.AddWorkerThread().Start();
 		}
-		protected virtual WorkerThread AddWorkerThread()
+		protected virtual IReceiveMessages AddWorkerThread()
 		{
-			var worker = new WorkerThread(this.receiver, this.router);
+			var worker = this.receiverFactory();
 			this.workers.Add(worker);
 			return worker;
 		}
@@ -104,7 +100,7 @@ namespace NanoMessageBus.Transports
 		{
 			Thread.Sleep(KillDelay); // TODO: more efficient way if all threads have already exited.
 			foreach (var worker in this.workers)
-				worker.Kill();
+				worker.Abort();
 		}
 	}
 }

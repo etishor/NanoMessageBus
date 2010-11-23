@@ -61,6 +61,15 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aborting worker thread &apos;{0}&apos;..
+        /// </summary>
+        internal static string AbortingWorkerThread {
+            get {
+                return ResourceManager.GetString("AbortingWorkerThread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; received a message; dispatching the message to receiver of type &apos;{1}&apos;..
         /// </summary>
         internal static string DispatchingToReceiver {
@@ -84,15 +93,6 @@ namespace NanoMessageBus.Transports {
         internal static string InitializingWorkers {
             get {
                 return ResourceManager.GetString("InitializingWorkers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Killing worker thread &apos;{0}&apos;..
-        /// </summary>
-        internal static string KillingWorkerThread {
-            get {
-                return ResourceManager.GetString("KillingWorkerThread", resourceCulture);
             }
         }
         
@@ -124,7 +124,7 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stopping all {0} worker threads..
+        ///   Looks up a localized string similar to Stopping all {0} worker thread(s)..
         /// </summary>
         internal static string StoppingWorkers {
             get {

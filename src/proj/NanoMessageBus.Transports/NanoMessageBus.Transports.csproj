@@ -46,6 +46,7 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IReceiveMessages.cs" />
     <Compile Include="ITransportMessages.cs" />
     <Compile Include="MessageTransportException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
