@@ -118,10 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DefaultEnvelope" xml:space="preserve">
-    <value>Default envelope type is '{0}'.</value>
+    <value>Default physical message type is '{0}'.</value>
   </data>
   <data name="Deserializing" xml:space="preserve">
     <value>Deserializing stream of length '{0}'.</value>
+  </data>
+  <data name="InvalidEncryptionKey" xml:space="preserve">
+    <value>The encryption key provided is invalid.  It must be a non-null byte array containing exactly 16 bytes.</value>
   </data>
   <data name="Serializing" xml:space="preserve">
     <value>Serializing message of type '{0}'.</value>

@@ -61,7 +61,7 @@ namespace NanoMessageBus.Serialization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default envelope type is &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Default physical message type is &apos;{0}&apos;..
         /// </summary>
         internal static string DefaultEnvelope {
             get {
@@ -75,6 +75,15 @@ namespace NanoMessageBus.Serialization {
         internal static string Deserializing {
             get {
                 return ResourceManager.GetString("Deserializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The encryption key provided is invalid.  It must be a non-null byte array containing exactly 16 bytes..
+        /// </summary>
+        internal static string InvalidEncryptionKey {
+            get {
+                return ResourceManager.GetString("InvalidEncryptionKey", resourceCulture);
             }
         }
         

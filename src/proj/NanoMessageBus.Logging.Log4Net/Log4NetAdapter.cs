@@ -1,6 +1,7 @@
 namespace NanoMessageBus.Logging
 {
 	using System;
+	using log4net.Core;
 
 	public class Log4NetAdapter : ILog
 	{
@@ -18,7 +19,6 @@ namespace NanoMessageBus.Logging
 
 		public virtual void Verbose(string message, params object[] values)
 		{
-			// TODO: use verbose if possible
 			if (this.log.IsDebugEnabled)
 				this.log.DebugFormat(message, values);
 		}

@@ -1,5 +1,6 @@
 namespace NanoMessageBus.Serialization
 {
+	using System;
 	using System.IO;
 	using System.Security.Cryptography;
 	using Logging;
@@ -7,12 +8,15 @@ namespace NanoMessageBus.Serialization
 	public class EncryptMessageSerializer : ISerializeMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(EncryptMessageSerializer));
+		private const int KeyLength = 16; // bytes
 		private readonly ISerializeMessages inner;
 		private readonly byte[] encryptionKey;
 
 		public EncryptMessageSerializer(ISerializeMessages inner, byte[] encryptionKey)
 		{
-			// TODO: assert length of key
+			if (!encryptionKey.KeyIsValid(KeyLength))
+				throw new ArgumentException(Diagnostics.InvalidEncryptionKey, "encryptionKey");
+
 			this.encryptionKey = encryptionKey;
 			this.inner = inner;
 		}
