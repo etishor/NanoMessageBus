@@ -9,6 +9,7 @@ namespace NanoMessageBus.Logging
 			LogFactory.BuildLogger = type => new ConsoleLogAdapter(type);
 		}
 
+		private static readonly object Sync = new object();
 		private readonly Type typeToLog;
 		private readonly ConsoleColor originalColor = Console.ForegroundColor;
 
@@ -44,9 +45,12 @@ namespace NanoMessageBus.Logging
 
 		private void Log(ConsoleColor color, string message, params object[] values)
 		{
-			Console.ForegroundColor = color;
-			Console.Write(message.FormatMessage(this.typeToLog, values));
-			Console.ForegroundColor = this.originalColor;
+			lock (Sync)
+			{
+				Console.ForegroundColor = color;
+				Console.Write(message.FormatMessage(this.typeToLog, values));
+				Console.ForegroundColor = this.originalColor;
+			}
 		}
 	}
 }

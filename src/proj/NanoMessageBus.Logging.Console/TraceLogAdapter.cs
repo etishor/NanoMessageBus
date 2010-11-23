@@ -10,6 +10,7 @@ namespace NanoMessageBus.Logging
 			LogFactory.BuildLogger = type => new TraceLogAdapter(type);
 		}
 
+		private static readonly object Sync = new object();
 		private readonly Type typeToLog;
 
 		public TraceLogAdapter(Type typeToLog)
@@ -44,11 +45,13 @@ namespace NanoMessageBus.Logging
 
 		private void DebugWindow(string category, string message, params object[] values)
 		{
-			System.Diagnostics.Debug.WriteLine(category, message.FormatMessage(this.typeToLog, values));
+			lock (Sync)
+				System.Diagnostics.Debug.WriteLine(category, message.FormatMessage(this.typeToLog, values));
 		}
 		private void TraceWindow(string category, string message, params object[] values)
 		{
-			Trace.Write(category, message.FormatMessage(this.typeToLog, values));
+			lock (Sync)
+				Trace.Write(category, message.FormatMessage(this.typeToLog, values));
 		}
 	}
 }
