@@ -70,11 +70,11 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; received a message; dispatching the message to receiver of type &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; received a message; dispatching the message to message router of type &apos;{1}&apos;..
         /// </summary>
-        internal static string DispatchingToReceiver {
+        internal static string DispatchingToRouter {
             get {
-                return ResourceManager.GetString("DispatchingToReceiver", resourceCulture);
+                return ResourceManager.GetString("DispatchingToRouter", resourceCulture);
             }
         }
         

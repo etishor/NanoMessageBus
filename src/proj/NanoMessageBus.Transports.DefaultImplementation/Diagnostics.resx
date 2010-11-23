@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DispatchingToReceiver" xml:space="preserve">
-    <value>Worker thread '{0}' received a message; dispatching the message to receiver of type '{1}'.</value>
+  <data name="DispatchingToRouter" xml:space="preserve">
+    <value>Worker thread '{0}' received a message; dispatching the message to message router of type '{1}'.</value>
   </data>
   <data name="DisposingTransport" xml:space="preserve">
     <value>Disposing transport.</value>

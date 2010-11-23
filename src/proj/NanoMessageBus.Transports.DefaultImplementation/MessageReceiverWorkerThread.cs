@@ -14,7 +14,8 @@ namespace NanoMessageBus.Transports
 		private readonly Thread thread;
 		private bool started;
 
-		public MessageReceiverWorkerThread(IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> routerFactory)
+		public MessageReceiverWorkerThread(
+			IReceiveFromEndpoints receiver, Func<IRouteMessagesToHandlers> routerFactory)
 		{
 			this.receiver = receiver;
 			this.routerFactory = routerFactory;
@@ -64,13 +65,17 @@ namespace NanoMessageBus.Transports
 			using (var router = this.routerFactory())
 			{
 				var message = this.receiver.Receive();
-				if (!message.IsPopulated())
-					return;
-
-				Log.Info(Diagnostics.DispatchingToReceiver, this.thread.Name, router.GetType());
-				router.Route(message);
-				Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
+				this.RouteToHandlers(router, message);
 			}
+		}
+		private void RouteToHandlers(IRouteMessagesToHandlers router, PhysicalMessage message)
+		{
+			if (!message.IsPopulated())
+				return;
+
+			Log.Info(Diagnostics.DispatchingToRouter, this.thread.Name, router.GetType());
+			router.Route(message);
+			Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
 		}
 	}
 }
