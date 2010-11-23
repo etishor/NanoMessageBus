@@ -126,6 +126,9 @@
   <data name="DisposingQueue" xml:space="preserve">
     <value>Disposing the endpoint '{0}</value>
   </data>
+  <data name="EndpointAlreadyDisposed" xml:space="preserve">
+    <value>This endpoint has already been disposed.</value>
+  </data>
   <data name="MessageReceived" xml:space="preserve">
     <value>A message of length {0} bytes was received from endpoint '{1}'.</value>
   </data>

@@ -1,6 +1,7 @@
 namespace NanoMessageBus.Endpoints
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Messaging;
 	using Logging;
@@ -9,12 +10,14 @@ namespace NanoMessageBus.Endpoints
 	public class MsmqSenderEndpoint : ISendToEndpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
+		private readonly IDictionary<string, MsmqConnector> activeConnections;
 		private readonly Func<string, MsmqConnector> connectorFactory;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
 		public MsmqSenderEndpoint(Func<string, MsmqConnector> connectorFactory, ISerializeMessages serializer)
 		{
+			this.activeConnections = new Dictionary<string, MsmqConnector>();
 			this.connectorFactory = connectorFactory;
 			this.serializer = serializer;
 		}
@@ -33,14 +36,31 @@ namespace NanoMessageBus.Endpoints
 			if (this.disposed || !disposing)
 				return;
 
-			this.disposed = true;
+			lock (this.activeConnections)
+			{
+				this.disposed = true;
+
+				foreach (var address in this.activeConnections.Keys)
+					this.DisposeConnection(address);
+
+				this.activeConnections.Clear();
+			}
+		}
+		private void DisposeConnection(string address)
+		{
+			MsmqConnector connector;
+			if (!this.activeConnections.TryGetValue(address, out connector))
+				return;
+
+			connector.Dispose();
+			this.activeConnections.Remove(address);
 		}
 
 		public virtual void Send(PhysicalMessage message, params string[] recipients)
 		{
 			Log.Debug(Diagnostics.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
-			foreach (var logicalMessage in message.LogicalMessages)
-				Log.Verbose(Diagnostics.PhysicalMessageContains, message.MessageId, logicalMessage.GetType().FullName);
+			foreach (var msg in message.LogicalMessages)
+				Log.Verbose(Diagnostics.PhysicalMessageContains, message.MessageId, msg.GetType().FullName);
 
 			using (var serializedStream = new MemoryStream())
 			{
@@ -58,11 +78,13 @@ namespace NanoMessageBus.Endpoints
 		{
 			try
 			{
-				using (var connector = this.connectorFactory(address))
-					connector.Send(message);
+				this.GetConnection(address).Send(message);
 			}
 			catch (MessageQueueException e)
 			{
+				lock (this.activeConnections)
+					DisposeConnection(address);
+
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					Log.Error(Diagnostics.QueueNotFound, address);
 
@@ -70,6 +92,23 @@ namespace NanoMessageBus.Endpoints
 					Log.Fatal(Diagnostics.AccessDenied, address);
 
 				throw new EndpointException(e.Message, e);
+			}
+		}
+		private MsmqConnector GetConnection(string address)
+		{
+			MsmqConnector connector;
+			if (this.activeConnections.TryGetValue(address, out connector))
+				return connector;
+
+			lock (this.activeConnections)
+			{
+				if (this.disposed)
+					throw new ObjectDisposedException(Diagnostics.EndpointAlreadyDisposed);
+
+				if (!this.activeConnections.TryGetValue(address, out connector))
+					this.activeConnections[address] = connector = this.connectorFactory(address);
+
+				return connector;
 			}
 		}
 	}

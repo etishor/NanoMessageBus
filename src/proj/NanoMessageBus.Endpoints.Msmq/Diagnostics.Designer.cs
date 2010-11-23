@@ -88,6 +88,15 @@ namespace NanoMessageBus.Endpoints {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This endpoint has already been disposed..
+        /// </summary>
+        internal static string EndpointAlreadyDisposed {
+            get {
+                return ResourceManager.GetString("EndpointAlreadyDisposed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A message of length {0} bytes was received from endpoint &apos;{1}&apos;..
         /// </summary>
         internal static string MessageReceived {
