@@ -97,6 +97,15 @@ namespace NanoMessageBus.Endpoints {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The message queue address provided &apos;{0}&apos; was not in the format &apos;msmq://MachineName/QueueName/&apos;..
+        /// </summary>
+        internal static string InvalidAddress {
+            get {
+                return ResourceManager.GetString("InvalidAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A message of length {0} bytes was received from endpoint &apos;{1}&apos;..
         /// </summary>
         internal static string MessageReceived {

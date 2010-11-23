@@ -98,7 +98,8 @@ namespace NanoMessageBus.Transports
 		}
 		private void KillWorkerThreads()
 		{
-			Thread.Sleep(KillDelay); // TODO: more efficient way if all threads have already exited.
+			// ENHANCEMENT: There's a more efficient way to do this if all of the threads have exited.
+			Thread.Sleep(KillDelay);
 			foreach (var worker in this.workers)
 				worker.Abort();
 		}

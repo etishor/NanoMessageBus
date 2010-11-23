@@ -129,6 +129,9 @@
   <data name="EndpointAlreadyDisposed" xml:space="preserve">
     <value>This endpoint has already been disposed.</value>
   </data>
+  <data name="InvalidAddress" xml:space="preserve">
+    <value>The message queue address provided '{0}' was not in the format 'msmq://MachineName/QueueName/'.</value>
+  </data>
   <data name="MessageReceived" xml:space="preserve">
     <value>A message of length {0} bytes was received from endpoint '{1}'.</value>
   </data>
