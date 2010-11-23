@@ -68,6 +68,7 @@ mkdir output\doc
 copy "doc\license.txt" "output\doc\NanoMessageBus License.txt"
 copy "lib\Log4net\log4net.license.txt" "output\doc\log4net License.txt"
 copy "lib\Newtonsoft.Json\readme.txt" "output\doc\Json.NET License.txt"
+copy "lib\NLog\license.txt" "output\doc\NLog License.txt"
 
 echo Cleaning
 msbuild /nologo /verbosity:quiet src/NanoMessageBus.sln /p:Configuration=%TARGET_CONFIG% /t:Clean
