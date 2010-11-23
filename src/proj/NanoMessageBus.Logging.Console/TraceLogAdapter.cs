@@ -18,27 +18,27 @@ namespace NanoMessageBus.Logging
 			this.typeToLog = typeToLog;
 		}
 
-		public void Verbose(string message, params object[] values)
+		public virtual void Verbose(string message, params object[] values)
 		{
 			this.DebugWindow("Verbose / ", message, values);
 		}
-		public void Debug(string message, params object[] values)
+		public virtual void Debug(string message, params object[] values)
 		{
 			this.DebugWindow("Debug / ", message, values);
 		}
-		public void Info(string message, params object[] values)
+		public virtual void Info(string message, params object[] values)
 		{
 			this.TraceWindow("Info / ", message, values);
 		}
-		public void Warn(string message, params object[] values)
+		public virtual void Warn(string message, params object[] values)
 		{
 			this.TraceWindow("Warn / ", message, values);
 		}
-		public void Error(string message, params object[] values)
+		public virtual void Error(string message, params object[] values)
 		{
 			this.TraceWindow("Error / ", message, values);
 		}
-		public void Fatal(string message, params object[] values)
+		public virtual void Fatal(string message, params object[] values)
 		{
 			this.TraceWindow("Fatal / ", message, values);
 		}

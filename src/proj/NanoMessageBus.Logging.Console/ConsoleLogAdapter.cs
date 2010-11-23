@@ -18,27 +18,27 @@ namespace NanoMessageBus.Logging
 			this.typeToLog = typeToLog;
 		}
 
-		public void Verbose(string message, params object[] values)
+		public virtual void Verbose(string message, params object[] values)
 		{
 			this.Log(ConsoleColor.Green, message, values);
 		}
-		public void Debug(string message, params object[] values)
+		public virtual void Debug(string message, params object[] values)
 		{
 			this.Log(ConsoleColor.Green, message, values);
 		}
-		public void Info(string message, params object[] values)
+		public virtual void Info(string message, params object[] values)
 		{
 			this.Log(ConsoleColor.White, message, values);
 		}
-		public void Warn(string message, params object[] values)
+		public virtual void Warn(string message, params object[] values)
 		{
 			this.Log(ConsoleColor.Yellow, message, values);
 		}
-		public void Error(string message, params object[] values)
+		public virtual void Error(string message, params object[] values)
 		{
 			this.Log(ConsoleColor.Red, message, values);
 		}
-		public void Fatal(string message, params object[] values)
+		public virtual void Fatal(string message, params object[] values)
 		{
 			this.Log(ConsoleColor.Red, message, values);
 		}
