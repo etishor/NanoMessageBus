@@ -43,7 +43,7 @@ namespace NanoMessageBus.Endpoints
 			{
 				var message = this.connector.Receive(Timeout);
 
-				Log.Info(Diagnostics.MessageReceived, message.BodyStream.Length, this.connector.QueueName);
+				Log.Info(Diagnostics.MessageReceived, message.BodyStream.Length, this.connector.Address);
 
 				using (message)
 				using (message.BodyStream)
@@ -55,14 +55,14 @@ namespace NanoMessageBus.Endpoints
 					return this.NoMessageAvailable();
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-					Log.Fatal(Diagnostics.AccessDenied, this.connector.QueueName);
+					Log.Fatal(Diagnostics.AccessDenied, this.connector.Address);
 
 				throw new EndpointException(e.Message, e);
 			}
 		}
 		private PhysicalMessage NoMessageAvailable()
 		{
-			Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.QueueName);
+			Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.Address);
 			return null;
 		}
 	}

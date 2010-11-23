@@ -10,6 +10,7 @@ namespace NanoMessageBus.Endpoints
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqConnector));
 		private readonly MessageQueue queue;
 		private readonly MessageQueueTransactionType transactionType;
+		private readonly string canonicalAddress;
 		private bool disposed;
 
 		public static MsmqConnector OpenReceive(string address, bool enlist)
@@ -51,6 +52,7 @@ namespace NanoMessageBus.Endpoints
 		{
 			this.queue = queue;
 			this.transactionType = transactionType;
+			this.canonicalAddress = queue.CanonicalAddress();
 		}
 		~MsmqConnector()
 		{
@@ -69,24 +71,24 @@ namespace NanoMessageBus.Endpoints
 
 			this.disposed = true;
 
-			Log.Debug(Diagnostics.DisposingQueue, this.QueueName);
+			Log.Debug(Diagnostics.DisposingQueue, this.Address);
 			this.queue.Dispose();
 		}
 
-		public virtual string QueueName
+		public virtual string Address
 		{
-			get { return this.queue.QueueName; }
+			get { return this.canonicalAddress; }
 		}
 
 		public virtual Message Receive(TimeSpan timeout)
 		{
-			Log.Verbose(Diagnostics.AttemptingToReceiveMessage, this.QueueName);
+			Log.Verbose(Diagnostics.AttemptingToReceiveMessage, this.Address);
 			return this.queue.Receive(timeout, this.transactionType);
 		}
 
 		public virtual void Send(object message)
 		{
-			Log.Verbose(Diagnostics.SendingMessage, this.QueueName);
+			Log.Verbose(Diagnostics.SendingMessage, this.Address);
 			this.queue.Send(message, this.transactionType);
 		}
 	}

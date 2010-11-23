@@ -5,6 +5,8 @@ namespace NanoMessageBus.Endpoints
 
 	internal static class ExtensionMethods
 	{
+		private const string LocalHost = ".";
+
 		public static TimeSpan Milliseconds(this int milliseconds)
 		{
 			return new TimeSpan(0, 0, 0, 0, milliseconds);
@@ -16,6 +18,11 @@ namespace NanoMessageBus.Endpoints
 		public static string FormatWith(this string format, params object[] values)
 		{
 			return string.Format(CultureInfo.InvariantCulture, format, values);
+		}
+		public static string GetMachineName(this string value)
+		{
+			value = (value ?? string.Empty).Trim();
+			return value.Length == 0 || value == LocalHost ? Environment.MachineName : value;
 		}
 	}
 }
