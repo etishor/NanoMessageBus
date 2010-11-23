@@ -11,8 +11,6 @@ namespace NanoMessageBus
 			// TODO: durable, expiration, headers, current address (as return address?), etc.)
 			return new PhysicalMessage(
 				Guid.NewGuid(),
-				0,
-				0,
 				null,
 				DateTime.MaxValue,
 				true,

@@ -5,7 +5,7 @@ namespace NanoMessageBus.Core
 	public class NullMessageContext : IMessageContext
 	{
 		private static readonly PhysicalMessage NullMessage =
-			new PhysicalMessage(Guid.Empty, 0, 0, string.Empty, DateTime.MinValue, false, null, null);
+			new PhysicalMessage(Guid.Empty, string.Empty, DateTime.MinValue, false, null, null);
 
 		public void DeferMessage()
 		{
