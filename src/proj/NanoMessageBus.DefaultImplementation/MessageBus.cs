@@ -41,7 +41,7 @@ namespace NanoMessageBus
 			Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
 			this.Dispatch(
 				messages,
-				populated => populated.BuildPhysicalMessage(this.context.CurrentMessage.CorrelationId),
+				populated => populated.BuildPhysicalMessage(),
 				type => new[] { this.context.CurrentMessage.ReturnAddress });
 		}
 

@@ -47,7 +47,7 @@ namespace NanoMessageBus.Endpoints
 
 				using (message)
 				using (message.BodyStream)
-					return message.BuildMessage(this.serializer);
+					return message.Deserialize(this.serializer);
 			}
 			catch (MessageQueueException e)
 			{

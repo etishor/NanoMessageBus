@@ -12,7 +12,10 @@ namespace NanoMessageBus
 		private readonly Guid messageId;
 
 		[DataMember(EmitDefaultValue = false, IsRequired = false)]
-		private readonly Guid correlationId;
+		private readonly int index;
+
+		[DataMember(EmitDefaultValue = false, IsRequired = false)]
+		private readonly int count;
 
 		[DataMember(EmitDefaultValue = false, IsRequired = false)]
 		private readonly string returnAddress;
@@ -31,7 +34,8 @@ namespace NanoMessageBus
 
 		public PhysicalMessage(
 			Guid messageId,
-			Guid correlationId,
+			int index,
+			int count,
 			string returnAddress,
 			DateTime expiration,
 			bool durable,
@@ -39,7 +43,8 @@ namespace NanoMessageBus
 			ICollection<object> logicalMessages)
 		{
 			this.messageId = messageId;
-			this.correlationId = correlationId;
+			this.index = index;
+			this.count = count;
 			this.returnAddress = returnAddress;
 			this.expiration = expiration;
 			this.durable = durable;
@@ -51,9 +56,13 @@ namespace NanoMessageBus
 		{
 			get { return this.messageId; }
 		}
-		public Guid CorrelationId
+		public int Index
 		{
-			get { return this.correlationId; }
+			get { return this.index; }
+		}
+		public int Count
+		{
+			get { return this.count; }
 		}
 		public string ReturnAddress
 		{

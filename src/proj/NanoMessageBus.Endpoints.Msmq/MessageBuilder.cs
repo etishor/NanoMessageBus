@@ -10,12 +10,12 @@ namespace NanoMessageBus.Endpoints
 	{
 		private const string LabelFormat = "NMB:{0}:{1}";
 
-		public static PhysicalMessage BuildMessage(this Message message, ISerializeMessages serializer)
+		public static PhysicalMessage Deserialize(this Message message, ISerializeMessages serializer)
 		{
 			return (PhysicalMessage)serializer.Deserialize(message.BodyStream);
 		}
 
-		public static Message BuildMessage(this PhysicalMessage message, Stream serialized)
+		public static Message BuildMsmqMessage(this PhysicalMessage message, Stream serialized)
 		{
 			var label = string.Format(
 				CultureInfo.InvariantCulture,

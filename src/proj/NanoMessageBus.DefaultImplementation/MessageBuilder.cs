@@ -8,14 +8,11 @@ namespace NanoMessageBus
 	{
 		public static PhysicalMessage BuildPhysicalMessage(this IEnumerable<object> messages)
 		{
-			return messages.BuildPhysicalMessage(Guid.Empty);
-		}
-		public static PhysicalMessage BuildPhysicalMessage(this IEnumerable<object> messages, Guid correlationId)
-		{
-			// TODO: durable, expiration, correlationId, headers, current address (as return address?), etc.)
+			// TODO: durable, expiration, headers, current address (as return address?), etc.)
 			return new PhysicalMessage(
 				Guid.NewGuid(),
-				correlationId,
+				0,
+				0,
 				null,
 				DateTime.MaxValue,
 				true,

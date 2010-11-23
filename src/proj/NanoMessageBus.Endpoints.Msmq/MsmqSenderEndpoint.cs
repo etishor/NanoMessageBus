@@ -56,7 +56,7 @@ namespace NanoMessageBus.Endpoints
 			using (var serializedStream = new MemoryStream())
 			{
 				this.serializer.Serialize(message, serializedStream);
-				this.Send(message.BuildMessage(serializedStream), recipients);
+				this.Send(message.BuildMsmqMessage(serializedStream), recipients);
 			}
 		}
 		private void Send(IDisposable message, params string[] recipients)
