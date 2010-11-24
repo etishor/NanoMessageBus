@@ -14,20 +14,20 @@ namespace NanoMessageBus
 		private readonly IStoreSubscriptions subscriptions;
 		private readonly IDictionary<Type, IEnumerable<string>> recipients;
 		private readonly IMessageContext context;
-		private readonly string localAddress;
+		private readonly MessageBuilder builder;
 
 		public MessageBus(
 			ITransportMessages transport,
 			IStoreSubscriptions subscriptions,
 			IDictionary<Type, IEnumerable<string>> recipients,
 			IMessageContext context,
-			string localAddress)
+			MessageBuilder builder)
 		{
 			this.transport = transport;
 			this.subscriptions = subscriptions;
 			this.recipients = recipients;
 			this.context = context;
-			this.localAddress = localAddress;
+			this.builder = builder;
 		}
 
 		public virtual void Send(params object[] messages)
@@ -61,8 +61,7 @@ namespace NanoMessageBus
 				return;
 			}
 
-			var physicalMessage = logicalMessages.BuildPhysicalMessage(this.localAddress);
-			this.transport.Send(physicalMessage, addresses.ToArray());
+			this.transport.Send(this.builder.BuildMessage(messages), addresses.ToArray());
 		}
 	}
 }
