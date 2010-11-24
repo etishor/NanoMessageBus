@@ -14,10 +14,10 @@ namespace NanoMessageBus
 		[DataMember(EmitDefaultValue = false, IsRequired = false)]
 		private readonly string returnAddress;
 
-		[DataMember(EmitDefaultValue = false, IsRequired = false)]
+		[IgnoreDataMember]
 		private readonly DateTime expiration;
 
-		[DataMember(EmitDefaultValue = false, IsRequired = false)]
+		[IgnoreDataMember]
 		private readonly bool durable;
 
 		[DataMember(EmitDefaultValue = false, IsRequired = false)]
