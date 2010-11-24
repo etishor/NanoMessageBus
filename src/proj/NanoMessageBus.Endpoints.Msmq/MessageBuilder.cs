@@ -1,5 +1,6 @@
 namespace NanoMessageBus.Endpoints
 {
+	using System;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -23,13 +24,20 @@ namespace NanoMessageBus.Endpoints
 				message.LogicalMessages.Count,
 				message.LogicalMessages.First().GetType().FullName);
 
-			// TODO: TimeToBeReceived, etc.
 			return new Message
 			{
 				Label = label,
 				BodyStream = serialized,
-				Recoverable = message.Durable
+				Recoverable = message.Durable,
+				TimeToBeReceived = message.Expiration.GetTimeToBeReceived(),
 			};
+		}
+		private static TimeSpan GetTimeToBeReceived(this DateTime expiration)
+		{
+			if (expiration == DateTime.MinValue || expiration == DateTime.MaxValue)
+				return MessageQueue.InfiniteTimeout;
+
+			return expiration.Subtract(DateTime.UtcNow);
 		}
 	}
 }
