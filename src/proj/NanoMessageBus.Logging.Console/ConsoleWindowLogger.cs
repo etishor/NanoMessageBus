@@ -2,18 +2,18 @@ namespace NanoMessageBus.Logging
 {
 	using System;
 
-	public class ConsoleLogAdapter : ILog
+	public class ConsoleWindowLogger : ILog
 	{
 		public static void MakePrimaryLogger()
 		{
-			LogFactory.BuildLogger = type => new ConsoleLogAdapter(type);
+			LogFactory.BuildLogger = type => new ConsoleWindowLogger(type);
 		}
 
 		private static readonly object Sync = new object();
 		private readonly Type typeToLog;
 		private readonly ConsoleColor originalColor = Console.ForegroundColor;
 
-		public ConsoleLogAdapter(Type typeToLog)
+		public ConsoleWindowLogger(Type typeToLog)
 		{
 			this.typeToLog = typeToLog;
 		}

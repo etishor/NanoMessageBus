@@ -37,9 +37,9 @@
     <AssemblyOriginatorKeyFile>..\..\NanoMessageBus.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ConsoleLogAdapter.cs" />
+    <Compile Include="ConsoleWindowLogger.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="TraceLogAdapter.cs" />
+    <Compile Include="OutputWindowLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

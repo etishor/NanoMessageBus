@@ -46,7 +46,7 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="NLogAdapter.cs" />
+    <Compile Include="NLogLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NLog">
-	  <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
       <HintPath>..\..\..\lib\NLog\.NET 3.5\NLog.dll</HintPath>
     </Reference>
-	<Reference Include="NLog" Condition="$(TargetFrameworkVersion) == 'v4.0'">
-	  <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    <Reference Include="NLog" Condition="$(TargetFrameworkVersion) == 'v4.0'">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
       <HintPath>..\..\..\lib\NLog\.NET 4.0\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>

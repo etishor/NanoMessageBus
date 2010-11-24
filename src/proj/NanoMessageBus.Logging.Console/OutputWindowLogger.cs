@@ -3,17 +3,17 @@ namespace NanoMessageBus.Logging
 	using System;
 	using System.Diagnostics;
 
-	public class TraceLogAdapter : ILog
+	public class OutputWindowLogger : ILog
 	{
 		public static void MakePrimaryLogger()
 		{
-			LogFactory.BuildLogger = type => new TraceLogAdapter(type);
+			LogFactory.BuildLogger = type => new OutputWindowLogger(type);
 		}
 
 		private static readonly object Sync = new object();
 		private readonly Type typeToLog;
 
-		public TraceLogAdapter(Type typeToLog)
+		public OutputWindowLogger(Type typeToLog)
 		{
 			this.typeToLog = typeToLog;
 		}

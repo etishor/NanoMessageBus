@@ -2,50 +2,49 @@ namespace NanoMessageBus.Logging
 {
 	using System;
 
-	public class NLogAdapter : ILog
+	public class Log4NetLogger : ILog
 	{
 		public static void MakePrimaryLogger()
 		{
-			LogFactory.BuildLogger = type => new NLogAdapter(type);
+			LogFactory.BuildLogger = type => new Log4NetLogger(type);
 		}
 
-		private static readonly NLog.LogFactory Factory = new NLog.LogFactory();
-		private readonly global::NLog.Logger log;
+		private readonly log4net.ILog log;
 
-		public NLogAdapter(Type typeToLog)
+		public Log4NetLogger(Type typeToLog)
 		{
-			this.log = Factory.GetLogger(typeToLog.FullName);
+			this.log = log4net.LogManager.GetLogger(typeToLog);
 		}
 
 		public virtual void Verbose(string message, params object[] values)
 		{
-			if (this.log.IsTraceEnabled)
-				this.log.Trace(message, values);
+			if (this.log.IsDebugEnabled)
+				this.log.DebugFormat(message, values);
 		}
 		public virtual void Debug(string message, params object[] values)
 		{
 			if (this.log.IsDebugEnabled)
-				this.log.Debug(message, values);
+				this.log.DebugFormat(message, values);
 		}
 		public virtual void Info(string message, params object[] values)
 		{
 			if (this.log.IsInfoEnabled)
-				this.log.Info(message, values);
+				this.log.InfoFormat(message, values);
 		}
 		public virtual void Warn(string message, params object[] values)
 		{
 			if (this.log.IsWarnEnabled)
-				this.log.Warn(message, values);
+				this.log.WarnFormat(message, values);
 		}
 		public virtual void Error(string message, params object[] values)
 		{
 			if (this.log.IsErrorEnabled)
-				this.log.Error(message, values);
+				this.log.ErrorFormat(message, values);
 		}
 		public virtual void Fatal(string message, params object[] values)
 		{
 			if (this.log.IsFatalEnabled)
-				this.log.Fatal(message, values);
+				this.log.FatalFormat(message, values);
 		}
 	}
 }
