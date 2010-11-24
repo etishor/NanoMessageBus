@@ -23,7 +23,7 @@ namespace NanoMessageBus.Endpoints
 			if (!match.Success)
 				throw new ArgumentException(Diagnostics.InvalidAddress.FormatWith(address), "address");
 
-			var machineName = match.Groups[HostNameCapture].Value.GetMachineName();
+			var machineName = match.Groups[HostNameCapture].Value.GetMachineName().ToLowerInvariant();
 			var queueName = match.Groups[QueueNameCapture].Value;
 			return MsmqFormat.FormatWith(machineName, queueName);
 		}

@@ -22,7 +22,8 @@ namespace NanoMessageBus.Endpoints
 		public static string GetMachineName(this string value)
 		{
 			value = (value ?? string.Empty).Trim();
-			return value.Length == 0 || value == LocalHost ? Environment.MachineName : value;
+			value = value.Length == 0 || value == LocalHost ? Environment.MachineName : value;
+			return value.ToLowerInvariant();
 		}
 	}
 }
