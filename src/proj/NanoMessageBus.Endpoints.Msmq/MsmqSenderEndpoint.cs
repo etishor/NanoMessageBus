@@ -73,8 +73,6 @@ namespace NanoMessageBus.Endpoints
 			}
 			catch (MessageQueueException e)
 			{
-				this.RemoveConnection(address);
-
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.QueueNotFound)
 					Log.Error(Diagnostics.QueueNotFound, address);
 
@@ -99,18 +97,6 @@ namespace NanoMessageBus.Endpoints
 					this.activeConnectors[address] = connector = this.connectorFactory(address);
 
 				return connector;
-			}
-		}
-		private void RemoveConnection(string address)
-		{
-			lock (this.activeConnectors)
-			{
-				MsmqConnector connector;
-				if (!this.activeConnectors.TryGetValue(address, out connector))
-					return;
-
-				connector.Dispose();
-				this.activeConnectors.Remove(address);	
 			}
 		}
 	}
