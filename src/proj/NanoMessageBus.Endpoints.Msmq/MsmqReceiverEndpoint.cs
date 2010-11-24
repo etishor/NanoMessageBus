@@ -37,6 +37,11 @@ namespace NanoMessageBus.Endpoints
 			this.connector.Dispose();
 		}
 
+		public string EndpointAddress
+		{
+			get { return this.connector.Address; }
+		}
+
 		public virtual PhysicalMessage Receive()
 		{
 			try
