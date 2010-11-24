@@ -48,11 +48,11 @@ namespace NanoMessageBus
 
 		private void Dispatch(IEnumerable<object> messages, Func<Type, ICollection<string>> getMessageRecipients)
 		{
-			var logicalMessages = messages.PopulatedMessagesOnly();
+			var logicalMessages = messages.PopulatedMessagesOnly().ToArray();
 			if (!logicalMessages.HasAny())
 				return;
 
-			var primaryLogicalMessageType = logicalMessages.First().GetType();
+			var primaryLogicalMessageType = logicalMessages[0].GetType();
 			var addresses = getMessageRecipients(primaryLogicalMessageType);
 
 			if (addresses.Count == 0)
