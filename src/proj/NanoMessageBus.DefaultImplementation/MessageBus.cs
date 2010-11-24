@@ -33,31 +33,29 @@ namespace NanoMessageBus
 		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
-			this.Dispatch(messages, type => this.recipients.GetRecipients(type));
+			this.Dispatch(messages, msg => this.recipients.GetRecipients(msg.GetTypes()));
 		}
 		public virtual void Reply(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
-			this.Dispatch(messages, type => new[] { this.context.CurrentMessage.ReturnAddress });
+			this.Dispatch(messages, msg => new[] { this.context.CurrentMessage.ReturnAddress });
 		}
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(messages, type => this.subscriptions.GetSubscribers(new[] { type }));
+			this.Dispatch(messages, msg => this.subscriptions.GetSubscribers(msg.GetTypes()));
 		}
 
-		private void Dispatch(object[] messages, Func<Type, ICollection<string>> getMessageRecipients)
+		private void Dispatch(object[] messages, Func<object, ICollection<string>> getRecipients)
 		{
 			messages = messages.PopulatedMessagesOnly();
 			if (!messages.Any())
 				return;
 
-			var primaryLogicalMessageType = messages[0].GetType();
-			var addresses = getMessageRecipients(primaryLogicalMessageType);
-
+			var addresses = getRecipients(messages[0]);
 			if (addresses.Count == 0)
 			{
-				Log.Warn(Diagnostics.DroppingMessage, primaryLogicalMessageType);
+				Log.Warn(Diagnostics.DroppingMessage, messages[0].GetType());
 				return;
 			}
 
