@@ -29,7 +29,7 @@ namespace NanoMessageBus.Endpoints
 				Label = label,
 				BodyStream = serialized,
 				Recoverable = message.Durable,
-				TimeToBeReceived = message.Expiration.GetTimeToBeReceived(),
+				TimeToBeReceived = message.TimeToLive.GetTimeToBeReceived(),
 			};
 		}
 		private static TimeSpan GetTimeToBeReceived(this TimeSpan expiration)
