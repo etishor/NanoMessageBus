@@ -46,13 +46,13 @@ namespace NanoMessageBus
 			this.Dispatch(messages, type => this.subscriptions.GetSubscribers(new[] { type }));
 		}
 
-		private void Dispatch(IEnumerable<object> messages, Func<Type, ICollection<string>> getMessageRecipients)
+		private void Dispatch(object[] messages, Func<Type, ICollection<string>> getMessageRecipients)
 		{
-			var logicalMessages = messages.PopulatedMessagesOnly().ToArray();
-			if (!logicalMessages.HasAny())
+			messages = messages.PopulatedMessagesOnly();
+			if (!messages.Any())
 				return;
 
-			var primaryLogicalMessageType = logicalMessages[0].GetType();
+			var primaryLogicalMessageType = messages[0].GetType();
 			var addresses = getMessageRecipients(primaryLogicalMessageType);
 
 			if (addresses.Count == 0)
