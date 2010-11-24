@@ -15,7 +15,7 @@ namespace NanoMessageBus
 		private readonly string returnAddress;
 
 		[IgnoreDataMember]
-		private readonly DateTime expiration;
+		private readonly TimeSpan expiration;
 
 		[IgnoreDataMember]
 		private readonly bool durable;
@@ -29,7 +29,7 @@ namespace NanoMessageBus
 		public PhysicalMessage(
 			Guid messageId,
 			string returnAddress,
-			DateTime expiration,
+			TimeSpan expiration,
 			bool durable,
 			IDictionary<string, string> headers,
 			ICollection<object> logicalMessages)
@@ -50,7 +50,7 @@ namespace NanoMessageBus
 		{
 			get { return this.returnAddress; }
 		}
-		public DateTime Expiration
+		public TimeSpan Expiration
 		{
 			get { return this.expiration; }
 		}

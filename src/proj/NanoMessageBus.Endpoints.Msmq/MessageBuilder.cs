@@ -32,12 +32,12 @@ namespace NanoMessageBus.Endpoints
 				TimeToBeReceived = message.Expiration.GetTimeToBeReceived(),
 			};
 		}
-		private static TimeSpan GetTimeToBeReceived(this DateTime expiration)
+		private static TimeSpan GetTimeToBeReceived(this TimeSpan expiration)
 		{
-			if (expiration == DateTime.MinValue || expiration == DateTime.MaxValue)
+			if (expiration == TimeSpan.MaxValue || expiration == TimeSpan.Zero)
 				return MessageQueue.InfiniteTimeout;
 
-			return expiration.Subtract(DateTime.UtcNow);
+			return expiration;
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace NanoMessageBus
 			return new PhysicalMessage(
 				Guid.NewGuid(),
 				this.localAddress,
-				DateTime.MaxValue,
+				TimeSpan.Zero,
 				true,
 				new Dictionary<string, string>(),
 				messages.ToArray());
