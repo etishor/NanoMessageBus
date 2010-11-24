@@ -133,7 +133,7 @@ namespace NanoMessageBus.Transports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is stopping executing of new work..
+        ///   Looks up a localized string similar to Worker thread &apos;{0}&apos; is stopping execution of any additional work..
         /// </summary>
         internal static string StoppingWorkerThread {
             get {

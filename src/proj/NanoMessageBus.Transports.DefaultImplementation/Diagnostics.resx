@@ -139,7 +139,7 @@
     <value>Stopping all {0} worker thread(s).</value>
   </data>
   <data name="StoppingWorkerThread" xml:space="preserve">
-    <value>Worker thread '{0}' is stopping executing of new work.</value>
+    <value>Worker thread '{0}' is stopping execution of any additional work.</value>
   </data>
   <data name="WorkerThreadName" xml:space="preserve">
     <value>Worker {0}</value>
