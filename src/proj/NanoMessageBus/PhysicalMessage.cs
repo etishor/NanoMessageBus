@@ -18,7 +18,7 @@ namespace NanoMessageBus
 		private readonly TimeSpan timeToLive;
 
 		[IgnoreDataMember]
-		private readonly bool durable;
+		private readonly bool persistent;
 
 		[DataMember(EmitDefaultValue = false, IsRequired = false)]
 		private readonly IDictionary<string, string> headers;
@@ -30,14 +30,14 @@ namespace NanoMessageBus
 			Guid messageId,
 			string returnAddress,
 			TimeSpan timeToLive,
-			bool durable,
+			bool persistent,
 			IDictionary<string, string> headers,
 			ICollection<object> logicalMessages)
 		{
 			this.messageId = messageId;
 			this.returnAddress = returnAddress;
 			this.timeToLive = timeToLive;
-			this.durable = durable;
+			this.persistent = persistent;
 			this.headers = headers;
 			this.logicalMessages = logicalMessages;
 		}
@@ -54,9 +54,9 @@ namespace NanoMessageBus
 		{
 			get { return this.timeToLive; }
 		}
-		public bool Durable
+		public bool Persistent
 		{
-			get { return this.durable; }
+			get { return this.persistent; }
 		}
 		public IDictionary<string, string> Headers
 		{

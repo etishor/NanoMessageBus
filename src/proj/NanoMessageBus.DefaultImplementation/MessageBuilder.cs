@@ -9,13 +9,15 @@ namespace NanoMessageBus
 		private readonly ICollection<Type> transientMessages;
 		private readonly string localAddress;
 
-		public MessageBuilder(
-			IDictionary<Type, TimeSpan> timeToLive,
-			ICollection<Type> transientMessages,
-			string localAddress)
+		public MessageBuilder(string localAddress)
+			: this(null, null, localAddress)
 		{
-			this.timeToLive = timeToLive;
-			this.transientMessages = transientMessages;
+		}
+		public MessageBuilder(
+			IDictionary<Type, TimeSpan> timeToLive, ICollection<Type> transientMessages, string localAddress)
+		{
+			this.timeToLive = timeToLive ?? new Dictionary<Type, TimeSpan>();
+			this.transientMessages = transientMessages ?? new HashSet<Type>();
 			this.localAddress = localAddress;
 		}
 
@@ -29,7 +31,7 @@ namespace NanoMessageBus
 				Guid.NewGuid(),
 				this.localAddress,
 				this.GetTimeToLive(primaryMessageType),
-				this.IsMessageDurable(primaryMessageType),
+				this.IsPersistent(primaryMessageType),
 				new Dictionary<string, string>(),
 				messages);
 		}
@@ -41,9 +43,18 @@ namespace NanoMessageBus
 
 			return TimeSpan.MaxValue;
 		}
-		private bool IsMessageDurable(Type messageType)
+		private bool IsPersistent(Type messageType)
 		{
 			return !this.transientMessages.Contains(messageType);
+		}
+
+		public virtual void RegisterMaximumMessageLifetime(Type messageType, TimeSpan ttl)
+		{
+			this.timeToLive[messageType] = ttl;
+		}
+		public virtual void RegisterTransientMessage(Type messageType)
+		{
+			this.transientMessages.Add(messageType);
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace NanoMessageBus.Endpoints
 			{
 				Label = label,
 				BodyStream = serialized,
-				Recoverable = message.Durable,
+				Recoverable = message.Persistent,
 				TimeToBeReceived = message.TimeToLive.GetTimeToBeReceived(),
 			};
 		}
