@@ -6,16 +6,17 @@ namespace NanoMessageBus
 
 	internal static class MessageBuilder
 	{
-		public static PhysicalMessage BuildPhysicalMessage(this IEnumerable<object> messages)
+		public static PhysicalMessage BuildPhysicalMessage(
+			this IEnumerable<object> messages, string localAddress)
 		{
-			// TODO: durable, expiration, headers, current address (as return address?), etc.)
+			// TODO: durable, expiration
 			return new PhysicalMessage(
 				Guid.NewGuid(),
-				null,
+				localAddress,
 				DateTime.MaxValue,
 				true,
-				null,
-				messages.ToList());
+				new Dictionary<string, string>(),
+				messages.ToArray());
 		}
 	}
 }

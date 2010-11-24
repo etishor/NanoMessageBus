@@ -14,50 +14,39 @@ namespace NanoMessageBus
 		private readonly IStoreSubscriptions subscriptions;
 		private readonly IDictionary<Type, IEnumerable<string>> recipients;
 		private readonly IMessageContext context;
+		private readonly string localAddress;
 
 		public MessageBus(
 			ITransportMessages transport,
 			IStoreSubscriptions subscriptions,
 			IDictionary<Type, IEnumerable<string>> recipients,
-			IMessageContext context)
+			IMessageContext context,
+			string localAddress)
 		{
 			this.transport = transport;
-			this.context = context;
-			this.recipients = recipients;
 			this.subscriptions = subscriptions;
+			this.recipients = recipients;
+			this.context = context;
+			this.localAddress = localAddress;
 		}
 
 		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
-			this.Dispatch(
-				messages,
-				populated => populated.BuildPhysicalMessage(),
-				type => this.recipients.GetRecipients(type));
+			this.Dispatch(messages, type => this.recipients.GetRecipients(type));
 		}
-
 		public virtual void Reply(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
-			this.Dispatch(
-				messages,
-				populated => populated.BuildPhysicalMessage(),
-				type => new[] { this.context.CurrentMessage.ReturnAddress });
+			this.Dispatch(messages, type => new[] { this.context.CurrentMessage.ReturnAddress });
 		}
-
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(
-				messages,
-				populated => populated.BuildPhysicalMessage(),
-				type => this.subscriptions.GetSubscribers(new[] { type }));
+			this.Dispatch(messages, type => this.subscriptions.GetSubscribers(new[] { type }));
 		}
 
-		private void Dispatch(
-			IEnumerable<object> messages,
-			Func<IEnumerable<object>, PhysicalMessage> buildMessage,
-			Func<Type, ICollection<string>> getMessageRecipients)
+		private void Dispatch(IEnumerable<object> messages, Func<Type, ICollection<string>> getMessageRecipients)
 		{
 			var logicalMessages = messages.PopulatedMessagesOnly();
 			if (!logicalMessages.HasAny())
@@ -72,7 +61,8 @@ namespace NanoMessageBus
 				return;
 			}
 
-			this.transport.Send(buildMessage(logicalMessages), addresses.ToArray());
+			var physicalMessage = logicalMessages.BuildPhysicalMessage(this.localAddress);
+			this.transport.Send(physicalMessage, addresses.ToArray());
 		}
 	}
 }
