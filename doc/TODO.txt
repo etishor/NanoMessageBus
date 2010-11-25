@@ -1,0 +1,65 @@
+Full unit and integration tests
+XML code comments
+Documentation and examples
+Fluent builder
+Support for multiple containers
+ILMerge quirks
+
+Protocol Buffer serializer
+Additional endpoint connectors, e.g. Azure, SQS, RabbitMQ, ActiveMQ, Qpid, etc.
+
+Maximum # of failures & retry / error queue / (infrastructure message headers would contain exception)
+ - or we could have another envelope around the error condition inside the PhysicalMessage
+Serialization exception should move straight to error queue
+
+Rename "DefaultImplementation" projects
+
+ISplitMessagesIntoPackets and IReassembleMessagesFromPackets
+ - allows smaller payloads to be split and transferred across the wire when the
+   infrastructure has a highly restrictive message size, e.g. Azure & SQS.)
+
+ - Packet: GroupId:Guid, Sequence/Index:int, Bytes:int, FinalPacket:bool
+ - Split(Stream, MaxPacketSize):IEnumerable<Packet>
+ -  Combine(Packet):Stream (null if !complete)
+
+ - Expiration?  All packets should expire at the same time and cause the entire "stream" to expire
+
+ - it feels like the endpoint itself should handle this responsibility with the help of some
+   collaborator code
+
+ITransportFiles (ITransportStreams?)
+ - this is in contrast to ISplitMessagesIntoPackets which keeps the payload in memory
+   whereas ITransportFiles doesn't attempt to keep everything in memory)
+ - it still needs to be aware of expiration
+
+ReplicatedSubscriptionStorage
+ - Publisher notifies "central" subscription storage of intent to publish along with
+   types of messages it will publish and expiration of publish (max publisher lifetime?).
+   This occurs when the SubscriptionStorage is initialized, e.g. ctro
+
+ - "Central" subscription storage receives publisher notification/annoucment and adds
+   the annocument/life of messages publisher will publish to its list of publishers
+
+ - Subscriber sends a sub/unsub request to the "publisher subscription endpoint" as normal.
+
+ - When a sub/unsub request arrives, the central storage saves it to the DB and then iterates
+   through the publishers and finds the publisher(s) that match the associated message types
+
+ - central publisher subscription endpoint then forwards* the corresponding sub/unsub message
+   to all publishers for the particular message type.
+   * forwards = new sub/unsub message with just the associated types
+
+ - the main advantage of this is that everything can be in memory for the publisher, e.g.
+   when it goes to publish, it doesn't have to query a database.  It can simply go to its
+   DiskBackedInMemorySubscriptionStorage instance.
+
+ - The publisher would persist all sub/unsubs to disk but retain a copy in memory to avoid
+   a disk read for every single invocation of "publish".
+
+   OPTIONAL STUFF:
+ - Heartbeat: Publisher renews "lifecycle lease" every X hours?
+ - "Central" subscription storage stops forwarding Subscribe/Unsubscribe requests after X missed heartbeats
+ - When publisher wakes up, central subscription store gets HB annoucment and forwards all corresponding
+   state to publisher
+
+ - this all could potentially be done using event sourcing with snapshots?
