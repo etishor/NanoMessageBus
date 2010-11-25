@@ -1,7 +1,6 @@
 namespace NanoMessageBus.Endpoints
 {
 	using System;
-	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using System.Messaging;
@@ -18,26 +17,25 @@ namespace NanoMessageBus.Endpoints
 
 		public static Message BuildMsmqMessage(this PhysicalMessage message, Stream serialized)
 		{
-			var label = string.Format(
-				CultureInfo.InvariantCulture,
-				LabelFormat,
-				message.LogicalMessages.Count,
-				message.LogicalMessages.First().GetType().FullName);
-
 			return new Message
 			{
-				Label = label,
+				Label = message.GetLabel(),
 				BodyStream = serialized,
 				Recoverable = message.Persistent,
-				TimeToBeReceived = message.TimeToLive.GetTimeToBeReceived(),
+				TimeToBeReceived = message.GetTimeToBeReceived(),
 			};
 		}
-		private static TimeSpan GetTimeToBeReceived(this TimeSpan expiration)
+		private static string GetLabel(this PhysicalMessage message)
 		{
-			if (expiration == TimeSpan.MaxValue || expiration == TimeSpan.Zero)
+			var messages = message.LogicalMessages;
+			return LabelFormat.FormatWith(messages.Count, messages.First().GetType().FullName);
+		}
+		private static TimeSpan GetTimeToBeReceived(this PhysicalMessage message)
+		{
+			if (message.TimeToLive == TimeSpan.MaxValue || message.TimeToLive == TimeSpan.Zero)
 				return MessageQueue.InfiniteTimeout;
 
-			return expiration;
+			return message.TimeToLive;
 		}
 	}
 }
