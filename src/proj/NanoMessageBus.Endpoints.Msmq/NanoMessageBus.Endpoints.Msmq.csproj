@@ -48,7 +48,6 @@
     </Compile>
     <Compile Include="AddressNormalizer.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="MessageBuilder.cs" />
     <Compile Include="MsmqConnector.cs" />
     <Compile Include="MsmqReceiverEndpoint.cs" />
     <Compile Include="MsmqSenderEndpoint.cs" />

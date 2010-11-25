@@ -3,6 +3,7 @@ namespace NanoMessageBus.Endpoints
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
 	using System.Messaging;
 	using Logging;
 	using Serialization;
@@ -10,6 +11,7 @@ namespace NanoMessageBus.Endpoints
 	public class MsmqSenderEndpoint : ISendToEndpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
+		private const string LabelFormat = "NMB:{0}:{1}";
 		private readonly IDictionary<string, MsmqConnector> activeConnectors;
 		private readonly Func<string, MsmqConnector> connectorFactory;
 		private readonly ISerializeMessages serializer;
@@ -56,7 +58,7 @@ namespace NanoMessageBus.Endpoints
 			using (var serializedStream = new MemoryStream())
 			{
 				this.serializer.Serialize(message, serializedStream);
-				this.Send(message.BuildMsmqMessage(serializedStream), recipients);
+				this.Send(BuildMsmqMessage(message, serializedStream), recipients);
 			}
 		}
 		private void Send(IDisposable message, params string[] recipients)
@@ -98,6 +100,28 @@ namespace NanoMessageBus.Endpoints
 
 				return connector;
 			}
+		}
+		public static Message BuildMsmqMessage(PhysicalMessage message, Stream serialized)
+		{
+			return new Message
+			{
+				Label = GetLabel(message),
+				BodyStream = serialized,
+				Recoverable = message.Persistent,
+				TimeToBeReceived = GetTimeToBeReceived(message),
+			};
+		}
+		private static string GetLabel(PhysicalMessage message)
+		{
+			var messages = message.LogicalMessages;
+			return LabelFormat.FormatWith(messages.Count, messages.First().GetType().FullName);
+		}
+		private static TimeSpan GetTimeToBeReceived(PhysicalMessage message)
+		{
+			if (message.TimeToLive == TimeSpan.MaxValue || message.TimeToLive == TimeSpan.Zero)
+				return MessageQueue.InfiniteTimeout;
+
+			return message.TimeToLive;
 		}
 	}
 }

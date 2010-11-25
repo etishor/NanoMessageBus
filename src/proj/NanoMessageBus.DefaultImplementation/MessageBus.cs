@@ -33,13 +33,31 @@ namespace NanoMessageBus
 		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
-			this.Dispatch(messages, msg => this.recipients.GetRecipients(msg.GetTypes()));
+			this.Dispatch(messages, msg => this.GetRecipients(msg.GetTypes()));
 		}
+		public ICollection<string> GetRecipients(IEnumerable<Type> messageTypes)
+		{
+			ICollection<string> list = new HashSet<string>();
+
+			foreach (var messageType in messageTypes)
+			{
+				IEnumerable<string> recipientsForMessageType;
+				if (!this.recipients.TryGetValue(messageType, out recipientsForMessageType))
+					continue;
+
+				foreach (var recipient in recipientsForMessageType)
+					list.Add(recipient);
+			}
+
+			return list;
+		}
+
 		public virtual void Reply(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
 			this.Dispatch(messages, msg => new[] { this.context.CurrentMessage.ReturnAddress });
 		}
+
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);

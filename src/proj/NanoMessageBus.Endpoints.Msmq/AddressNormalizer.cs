@@ -6,6 +6,7 @@ namespace NanoMessageBus.Endpoints
 
 	internal static class AddressNormalizer
 	{
+		private const string LocalHost = ".";
 		private const string PrivateQueue = @"PRIVATE$\";
 		private const string MsmqFormat = @"{0}\PRIVATE$\{1}";
 		private const string CanonicalFormat = @"msmq://{0}/{1}";
@@ -23,9 +24,15 @@ namespace NanoMessageBus.Endpoints
 			if (!match.Success)
 				throw new ArgumentException(Diagnostics.InvalidAddress.FormatWith(address), "address");
 
-			var machineName = match.Groups[HostNameCapture].Value.GetMachineName().ToLowerInvariant();
+			var machineName = GetMachineName(match.Groups[HostNameCapture].Value);
 			var queueName = match.Groups[QueueNameCapture].Value;
 			return MsmqFormat.FormatWith(machineName, queueName);
+		}
+		private static string GetMachineName(string value)
+		{
+			value = (value ?? string.Empty).Trim();
+			value = value.Length == 0 || value == LocalHost ? Environment.MachineName : value;
+			return value.ToLowerInvariant();
 		}
 
 		public static string CanonicalAddress(this MessageQueue queue)
