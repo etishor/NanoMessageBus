@@ -64,7 +64,7 @@ namespace NanoMessageBus.SubscriptionStorage {
         ///   Looks up a localized string similar to DELETE
         ///  FROM Subscriptions
         ///   AND Subscriber = @subscriber
-        ///   AND MessageType = @messageType;.
+        ///   AND MessageType = @messageType{0};.
         /// </summary>
         internal static string DeleteSubscription {
             get {
@@ -97,12 +97,12 @@ namespace NanoMessageBus.SubscriptionStorage {
         ///   Looks up a localized string similar to DELETE
         ///  FROM Subscriptions
         ///   AND Subscriber = @subscriber
-        ///   AND MessageType = @messageType
+        ///   AND MessageType = @messageType{0}
         ///
         ///INSERT
         ///  INTO Subscriptions
         ///     ( Subscriber, MessageType, Expiration )
-        ///SELECT @subscriber, @messageType, @expiration;.
+        ///SELECT @subscriber, @messageType{0}, @expiration;.
         /// </summary>
         internal static string InsertSubscription {
             get {

@@ -3,6 +3,7 @@ namespace NanoMessageBus.SubscriptionStorage
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Linq;
 	using System.Text;
 	using System.Transactions;
 	using IsolationLevel = System.Transactions.IsolationLevel;
@@ -43,16 +44,25 @@ namespace NanoMessageBus.SubscriptionStorage
 				command.AddParameter(SqlStatements.MessageTypeParameter, null);
 				command.AddParameter(SqlStatements.SubscriberParameter, address);
 				callback(command);
-				command.Prepare();
 
-				foreach (var messageTypeName in messageTypes)
-				{
-					((IDataParameter)command.Parameters[0]).Value = messageTypeName;
-					command.ExecuteNonQuery();
-				}
+				command.CommandText = PopulateCommand(command, messageTypes);
+				command.ExecuteNonQuery();
 
 				transaction.Complete();
 			}
+		}
+		private static string PopulateCommand(IDbCommand command, IEnumerable<string> messageTypes)
+		{
+			var builder = new StringBuilder();
+			var types = messageTypes.ToArray();
+
+			for (var i = 0; i < types.Length; i++)
+			{
+				command.AddParameter(SqlStatements.MessageTypeParameter + i, types[i]);
+				builder.AppendFormat(command.CommandText, i);
+			}
+
+			return builder.ToString();
 		}
 		private static TransactionScope NewTransaction()
 		{
@@ -78,17 +88,11 @@ namespace NanoMessageBus.SubscriptionStorage
 		private static IDbCommand BuildQuery(IDbConnection connection, IEnumerable<string> messageTypes)
 		{
 			var command = connection.CreateCommand();
+			command.CommandText = SqlStatements.MessageTypeWhereParameter;
 			command.AddParameter(SqlStatements.NowParameter, DateTime.UtcNow);
 
-			var i = 0;
-			var whereStatement = new StringBuilder();
-			foreach (var messageTypeName in messageTypes ?? new string[] { })
-			{
-				command.AddParameter(SqlStatements.MessageTypeParameter + i, messageTypeName);
-				whereStatement.AppendFormat(SqlStatements.MessageTypeWhereParameter, i++);
-			}
-
-			command.CommandText = SqlStatements.GetSubscribers.FormatWith(whereStatement);
+			var statement = PopulateCommand(command, messageTypes);
+			command.CommandText = SqlStatements.GetSubscribers.FormatWith(statement);
 			return command;
 		}
 

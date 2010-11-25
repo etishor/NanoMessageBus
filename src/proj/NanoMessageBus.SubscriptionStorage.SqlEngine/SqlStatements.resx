@@ -121,7 +121,7 @@
     <value>DELETE
   FROM Subscriptions
    AND Subscriber = @subscriber
-   AND MessageType = @messageType;</value>
+   AND MessageType = @messageType{0};</value>
   </data>
   <data name="ExpirationParameter" xml:space="preserve">
     <value>@expiration</value>
@@ -136,12 +136,12 @@
     <value>DELETE
   FROM Subscriptions
    AND Subscriber = @subscriber
-   AND MessageType = @messageType
+   AND MessageType = @messageType{0}
 
 INSERT
   INTO Subscriptions
      ( Subscriber, MessageType, Expiration )
-SELECT @subscriber, @messageType, @expiration;</value>
+SELECT @subscriber, @messageType{0}, @expiration;</value>
   </data>
   <data name="MessageTypeParameter" xml:space="preserve">
     <value>@messageType</value>
