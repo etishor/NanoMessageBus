@@ -18,7 +18,6 @@ namespace NanoMessageBus.Core
 		}
 
 		public static void RegisterHandler<TMessage>(Func<TContainer, IHandleMessages<TMessage>> route)
-			where TMessage : class
 		{
 			var key = typeof(TMessage);
 
@@ -43,7 +42,7 @@ namespace NanoMessageBus.Core
 			return routeCallbacks.Select(route => route(this.childContainer));
 		}
 
-		private class MessageHandler<TMessage> : IHandleMessages<object> where TMessage : class
+		private class MessageHandler<TMessage> : IHandleMessages<object>
 		{
 			private readonly IHandleMessages<TMessage> handler;
 
@@ -55,7 +54,7 @@ namespace NanoMessageBus.Core
 			public void Handle(object message)
 			{
 				Log.Verbose(Diagnostics.RoutingLogicalMessageToHandler, message.GetType(), this.handler.GetType());
-				this.handler.Handle(message as TMessage);
+				this.handler.Handle((TMessage)message);
 				Log.Debug(Diagnostics.HandlerCompleted, message.GetType(), this.handler.GetType());
 			}
 		}
