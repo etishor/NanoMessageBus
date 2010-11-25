@@ -8,9 +8,6 @@ namespace NanoMessageBus.MessageSubscriber
 	[DataContract]
 	public class SubscriptionRequestMessage
 	{
-		[DataMember(EmitDefaultValue = false, Name = "Subscriber")]
-		public string Subscriber { get; set; }
-
 		[DataMember(EmitDefaultValue = false, Name = "MessageTypes")]
 		public ICollection<string> MessageTypes { get; set; }
 

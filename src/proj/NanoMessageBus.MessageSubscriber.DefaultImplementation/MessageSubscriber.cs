@@ -6,25 +6,24 @@ namespace NanoMessageBus.MessageSubscriber
 
 	public class MessageSubscriber : ISubscribeToMessages, IUnsubscribeFromMessages
 	{
-		private readonly string localAddress;
+		private readonly string returnAddress;
 		private readonly ITransportMessages transport;
 
-		public MessageSubscriber(string localAddress, ITransportMessages transport)
+		public MessageSubscriber(string returnAddress, ITransportMessages transport)
 		{
-			this.localAddress = localAddress;
+			this.returnAddress = returnAddress;
 			this.transport = transport;
 		}
 
 		public virtual void Subscribe(string endpointAddress, DateTime expiration, params Type[] messageTypes)
 		{
-			var request = this.BuildSubscriptionRequest(expiration, messageTypes);
+			var request = BuildRequest(expiration, messageTypes);
 			this.Send(request, endpointAddress);
 		}
-		private SubscriptionRequestMessage BuildSubscriptionRequest(DateTime expiration, IEnumerable<Type> types)
+		private static SubscriptionRequestMessage BuildRequest(DateTime expiration, IEnumerable<Type> types)
 		{
 			return new SubscriptionRequestMessage
 			{
-				Subscriber = this.localAddress,
 				MessageTypes = types.GetTypeNames(),
 				Expiration = expiration
 			};
@@ -32,14 +31,13 @@ namespace NanoMessageBus.MessageSubscriber
 
 		public virtual void Unsubscribe(string endpointAddress, params Type[] messageTypes)
 		{
-			var request = this.BuildUnsubscribeRequest(messageTypes);
+			var request = BuildRequest(messageTypes);
 			this.Send(request, endpointAddress);
 		}
-		private UnsubscribeRequestMessage BuildUnsubscribeRequest(IEnumerable<Type> types)
+		private static UnsubscribeRequestMessage BuildRequest(IEnumerable<Type> types)
 		{
 			return new UnsubscribeRequestMessage
 			{
-				Subscriber = this.localAddress,
 				MessageTypes = types.GetTypeNames()
 			};
 		}
@@ -53,7 +51,7 @@ namespace NanoMessageBus.MessageSubscriber
 		{
 			return new PhysicalMessage(
 				Guid.NewGuid(),
-				this.localAddress,
+				this.returnAddress,
 				TimeSpan.MaxValue,
 				true,
 				null,
