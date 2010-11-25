@@ -61,7 +61,7 @@ namespace NanoMessageBus {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No receipients found for messages of type &apos;{0}&apos;, dropping message..
+        ///   Looks up a localized string similar to No receipients found for message(s) where primary message type &apos;{0}&apos;, dropping message(s)..
         /// </summary>
         internal static string DroppingMessage {
             get {
