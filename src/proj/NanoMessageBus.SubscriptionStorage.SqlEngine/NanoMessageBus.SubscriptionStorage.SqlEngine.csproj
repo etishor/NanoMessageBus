@@ -61,6 +61,7 @@
     <Content Include="..\CustomDictionary.xml">
       <Link>Properties\CustomDictionary.xml</Link>
     </Content>
+    <Content Include="DDL.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">

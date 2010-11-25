@@ -117,21 +117,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DeleteSubscription" xml:space="preserve">
+    <value>DELETE
+  FROM Subscriptions
+   AND Subscriber = @subscriber
+   AND MessageType = @messageType;</value>
+  </data>
+  <data name="ExpirationParameter" xml:space="preserve">
+    <value>@expiration</value>
+  </data>
+  <data name="GetSubscribers" xml:space="preserve">
+    <value>SELECT Subscriber FROM Subscriptions WHERE</value>
+  </data>
   <data name="InsertSubscription" xml:space="preserve">
-    <value>DELETE Subscriptions
- WHERE Expiration IS NOT NULL
-   AND Expiration &gt; @now
+    <value>DELETE
+  FROM Subscriptions
    AND Subscriber = @subscriber
    AND MessageType = @messageType
 
 INSERT
   INTO Subscriptions
      ( Subscriber, MessageType, Expiration )
-SELECT @subscriber, @messageType, @expiration
- WHERE NOT EXISTS
-     ( SELECT *
-         FROM Subscriptions
-        WHERE Subscriber = @subscriber
-          AND MessageType = @messageType );</value>
+SELECT @subscriber, @messageType, @expiration;</value>
+  </data>
+  <data name="MessageTypeParameter" xml:space="preserve">
+    <value>@messageType</value>
+  </data>
+  <data name="MessageTypeWhereParameter" xml:space="preserve">
+    <value>, @messageType{0}</value>
+  </data>
+  <data name="NowParameter" xml:space="preserve">
+    <value>@now</value>
+  </data>
+  <data name="SubscriberParameter" xml:space="preserve">
+    <value>@subscriber</value>
   </data>
 </root>

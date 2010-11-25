@@ -61,25 +61,85 @@ namespace NanoMessageBus.SubscriptionStorage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE Subscriptions
-        /// WHERE Expiration IS NOT NULL
-        ///   AND Expiration &gt; @now
+        ///   Looks up a localized string similar to DELETE
+        ///  FROM Subscriptions
+        ///   AND Subscriber = @subscriber
+        ///   AND MessageType = @messageType;.
+        /// </summary>
+        internal static string DeleteSubscription {
+            get {
+                return ResourceManager.GetString("DeleteSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @expiration.
+        /// </summary>
+        internal static string ExpirationParameter {
+            get {
+                return ResourceManager.GetString("ExpirationParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Subscriber FROM Subscriptions WHERE.
+        /// </summary>
+        internal static string GetSubscribers {
+            get {
+                return ResourceManager.GetString("GetSubscribers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE
+        ///  FROM Subscriptions
         ///   AND Subscriber = @subscriber
         ///   AND MessageType = @messageType
         ///
         ///INSERT
         ///  INTO Subscriptions
         ///     ( Subscriber, MessageType, Expiration )
-        ///SELECT @subscriber, @messageType, @expiration
-        /// WHERE NOT EXISTS
-        ///     ( SELECT *
-        ///         FROM Subscriptions
-        ///        WHERE Subscriber = @subscriber
-        ///          AND MessageType = @messageType );.
+        ///SELECT @subscriber, @messageType, @expiration;.
         /// </summary>
         internal static string InsertSubscription {
             get {
                 return ResourceManager.GetString("InsertSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @messageType.
+        /// </summary>
+        internal static string MessageTypeParameter {
+            get {
+                return ResourceManager.GetString("MessageTypeParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to , @messageType{0}.
+        /// </summary>
+        internal static string MessageTypeWhereParameter {
+            get {
+                return ResourceManager.GetString("MessageTypeWhereParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @now.
+        /// </summary>
+        internal static string NowParameter {
+            get {
+                return ResourceManager.GetString("NowParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @subscriber.
+        /// </summary>
+        internal static string SubscriberParameter {
+            get {
+                return ResourceManager.GetString("SubscriberParameter", resourceCulture);
             }
         }
     }

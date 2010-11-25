@@ -8,51 +8,64 @@ namespace NanoMessageBus.SubscriptionStorage
 
 	public class SqlSubscriptionStorage : IStoreSubscriptions
 	{
-		private readonly IDbConnection connection;
+		private readonly Func<IDbConnection> connectionFactory;
 
-		public SqlSubscriptionStorage(IDbConnection connection)
+		public SqlSubscriptionStorage(Func<IDbConnection> connectionFactory)
 		{
-			this.connection = connection;
+			this.connectionFactory = connectionFactory;
 		}
 
 		public virtual void Subscribe(string address, IEnumerable<Type> messageTypes, DateTime expiration)
 		{
-			if (string.IsNullOrEmpty(address))
+			this.ExecuteCommand(address, messageTypes, command =>
+			{
+				command.CommandText = SqlStatements.InsertSubscription;
+				command.AddParameter(SqlStatements.ExpirationParameter, expiration.ToNull());
+			});
+		}
+		public virtual void Unsubscribe(string address, IEnumerable<Type> messageTypes)
+		{
+			this.ExecuteCommand(address, messageTypes, command =>
+			{
+				command.CommandText = SqlStatements.DeleteSubscription;
+			});
+		}
+		private void ExecuteCommand(string address, IEnumerable<Type> messageTypes, Action<IDbCommand> callback)
+		{
+			if (string.IsNullOrEmpty(address) || messageTypes == null)
 				return;
 
 			using (var transaction = NewTransaction())
-			using (var command = this.connection.CreateCommand())
+			using (var connection = this.connectionFactory())
+			using (var command = connection.CreateCommand())
 			{
-				command.CommandText = string.Empty;
+				command.AddParameter(SqlStatements.MessageTypeParameter, null);
+				command.AddParameter(SqlStatements.SubscriberParameter, address);
+				callback(command);
 				command.Prepare();
-				command.AddParameter(string.Empty, string.Empty);
-				command.AddParameter("@now", DateTime.UtcNow);
 
-				foreach (var messageType in messageTypes ?? new Type[] { })
+				foreach (var messageType in messageTypes)
 				{
 					((IDataParameter)command.Parameters[0]).Value = messageType;
-					command.ExecuteNonQuery();	
+					command.ExecuteNonQuery();
 				}
 
 				transaction.Complete();
 			}
 		}
-		public virtual void Unsubscribe(string address, IEnumerable<Type> messageTypes)
+		private static TransactionScope NewTransaction()
 		{
-			if (string.IsNullOrEmpty(address))
-				return;
-
-			using (var transaction = NewTransaction())
-			{
-				transaction.Complete();
-			}
+			var options = new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted };
+			return new TransactionScope(TransactionScopeOption.RequiresNew, options);
 		}
+
 		public virtual ICollection<string> GetSubscribers(IEnumerable<Type> messageTypes)
 		{
 			ICollection<string> subscribers = new LinkedList<string>();
 
 			using (SuppressTransaction())
-			using (var query = this.connection.BuildGetSubscribersQuery(messageTypes))
+			using (var connection = this.connectionFactory())
+			using (var query = connection.BuildGetSubscribersQuery(messageTypes))
 			using (var reader = query.ExecuteReader())
 			{
 				while (reader.Read())
@@ -60,13 +73,6 @@ namespace NanoMessageBus.SubscriptionStorage
 			}
 
 			return subscribers;
-		}
-
-		private static TransactionScope NewTransaction()
-		{
-			return new TransactionScope(
-				TransactionScopeOption.RequiresNew,
-				new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
 		}
 		private static IDisposable SuppressTransaction()
 		{

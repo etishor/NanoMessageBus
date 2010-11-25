@@ -8,24 +8,27 @@ namespace NanoMessageBus.SubscriptionStorage
 
 	internal static class StatementBuilder
 	{
-		private const string ParameterNamePrefix = "@p";
-
 		public static IDbCommand BuildGetSubscribersQuery(
 			this IDbConnection connection, IEnumerable<Type> messageTypes)
 		{
 			var command = connection.CreateCommand();
+			command.AddParameter(SqlStatements.NowParameter, DateTime.UtcNow);
 
-			var statementBuilder = new StringBuilder();
 			var i = 0;
+			var whereStatementBuilder = new StringBuilder();
 			foreach (var type in messageTypes ?? new Type[] { })
 			{
-				////command.AddParameter(ParameterNamePrefix + i, type);
-				////statementBuilder.AppendFormat(
-				////    CultureInfo.InvariantCulture, SqlStatements.SelectSubscribersWhere, i);
-				////i++;
+				command.AddParameter(SqlStatements.MessageTypeParameter + i, type);
+				whereStatementBuilder.AppendFormat(SqlStatements.MessageTypeWhereParameter, i++);
 			}
 
+			command.CommandText = SqlStatements.GetSubscribers.FormatWith(whereStatementBuilder);
 			return command;
+		}
+
+		private static string FormatWith(this string value, params object[] values)
+		{
+			return string.Format(CultureInfo.InvariantCulture, value, values);
 		}
 	}
 }
