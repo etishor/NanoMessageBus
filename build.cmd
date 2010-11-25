@@ -42,6 +42,7 @@ SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.DefaultImplementati
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Core.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Core.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Endpoints.Msmq\bin\%TARGET_CONFIG%\NanoMessageBus.Endpoints.Msmq.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Logging.Console\bin\%TARGET_CONFIG%\NanoMessageBus.Logging.Console.dll"
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.MessageSubscriber.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.MessageSubscriber.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Serialization.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Serialization.DefaultImplementation.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.SubscriptionStorage.SqlEngine\bin\%TARGET_CONFIG%\NanoMessageBus.SubscriptionStorage.SqlEngine.dll"
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Transports.DefaultImplementation\bin\%TARGET_CONFIG%\NanoMessageBus.Transports.DefaultImplementation.dll"

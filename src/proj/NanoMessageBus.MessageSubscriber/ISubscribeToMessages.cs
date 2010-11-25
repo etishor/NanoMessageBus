@@ -4,6 +4,6 @@ namespace NanoMessageBus.MessageSubscriber
 
 	public interface ISubscribeToMessages
 	{
-		void Subscribe(DateTime expiration, params Type[] messageTypes);
+		void Subscribe(string endpointAddress, DateTime expiration, params Type[] messageTypes);
 	}
 }

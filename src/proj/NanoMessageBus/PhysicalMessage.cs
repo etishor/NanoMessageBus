@@ -38,7 +38,7 @@ namespace NanoMessageBus
 			this.returnAddress = returnAddress;
 			this.timeToLive = timeToLive;
 			this.persistent = persistent;
-			this.headers = headers;
+			this.headers = headers ?? new Dictionary<string, string>();
 			this.logicalMessages = logicalMessages;
 		}
 

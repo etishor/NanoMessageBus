@@ -4,6 +4,6 @@ namespace NanoMessageBus.MessageSubscriber
 
 	public interface IUnsubscribeFromMessages
 	{
-		void Unsubscribe(params Type[] messageTypes);
+		void Unsubscribe(string endpointAddress, params Type[] messageTypes);
 	}
 }
