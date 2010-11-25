@@ -43,23 +43,23 @@ namespace NanoMessageBus
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(messages, msg => this.subscriptions.GetSubscribers(msg.GetTypes()));
+			this.Dispatch(messages, msg => this.subscriptions.GetSubscribers(msg.GetTypes().GetTypeNames()));
 		}
 
-		private void Dispatch(object[] messages, Func<object, ICollection<string>> getRecipients)
+		private void Dispatch(object[] messages, Func<object, IEnumerable<string>> getRecipients)
 		{
 			messages = messages.PopulatedMessagesOnly();
 			if (!messages.Any())
 				return;
 
-			var addresses = getRecipients(messages[0]);
-			if (addresses.Count == 0)
+			var addresses = getRecipients(messages[0]).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+			if (addresses.Length == 0)
 			{
 				Log.Warn(Diagnostics.DroppingMessage, messages[0].GetType());
 				return;
 			}
 
-			this.transport.Send(this.builder.BuildMessage(messages), addresses.ToArray());
+			this.transport.Send(this.builder.BuildMessage(messages), addresses);
 		}
 	}
 }

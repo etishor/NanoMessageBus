@@ -127,7 +127,10 @@
     <value>@expiration</value>
   </data>
   <data name="GetSubscribers" xml:space="preserve">
-    <value>SELECT Subscriber FROM Subscriptions WHERE</value>
+    <value>SELECT Subscriber
+  FROM Subscriptions
+ WHERE Expiration &gt; @now
+   AND MessageType IN (''{0});</value>
   </data>
   <data name="InsertSubscription" xml:space="preserve">
     <value>DELETE

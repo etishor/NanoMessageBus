@@ -15,7 +15,7 @@ namespace NanoMessageBus.SubscriptionStorage
 			this.connectionFactory = connectionFactory;
 		}
 
-		public virtual void Subscribe(string address, IEnumerable<Type> messageTypes, DateTime expiration)
+		public virtual void Subscribe(string address, IEnumerable<string> messageTypes, DateTime expiration)
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
@@ -23,14 +23,14 @@ namespace NanoMessageBus.SubscriptionStorage
 				command.AddParameter(SqlStatements.ExpirationParameter, expiration.ToNull());
 			});
 		}
-		public virtual void Unsubscribe(string address, IEnumerable<Type> messageTypes)
+		public virtual void Unsubscribe(string address, IEnumerable<string> messageTypes)
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
 				command.CommandText = SqlStatements.DeleteSubscription;
 			});
 		}
-		private void ExecuteCommand(string address, IEnumerable<Type> messageTypes, Action<IDbCommand> callback)
+		private void ExecuteCommand(string address, IEnumerable<string> messageTypes, Action<IDbCommand> callback)
 		{
 			if (string.IsNullOrEmpty(address) || messageTypes == null)
 				return;
@@ -59,7 +59,7 @@ namespace NanoMessageBus.SubscriptionStorage
 			return new TransactionScope(TransactionScopeOption.RequiresNew, options);
 		}
 
-		public virtual ICollection<string> GetSubscribers(IEnumerable<Type> messageTypes)
+		public virtual ICollection<string> GetSubscribers(IEnumerable<string> messageTypes)
 		{
 			ICollection<string> subscribers = new LinkedList<string>();
 

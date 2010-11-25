@@ -9,14 +9,14 @@ namespace NanoMessageBus.SubscriptionStorage
 	internal static class StatementBuilder
 	{
 		public static IDbCommand BuildGetSubscribersQuery(
-			this IDbConnection connection, IEnumerable<Type> messageTypes)
+			this IDbConnection connection, IEnumerable<string> messageTypes)
 		{
 			var command = connection.CreateCommand();
 			command.AddParameter(SqlStatements.NowParameter, DateTime.UtcNow);
 
 			var i = 0;
 			var whereStatementBuilder = new StringBuilder();
-			foreach (var type in messageTypes ?? new Type[] { })
+			foreach (var type in messageTypes ?? new string[] { })
 			{
 				command.AddParameter(SqlStatements.MessageTypeParameter + i, type);
 				whereStatementBuilder.AppendFormat(SqlStatements.MessageTypeWhereParameter, i++);

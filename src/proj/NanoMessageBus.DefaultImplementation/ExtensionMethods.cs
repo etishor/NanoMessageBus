@@ -43,5 +43,10 @@ namespace NanoMessageBus
 
 			return list;
 		}
+
+		public static IEnumerable<string> GetTypeNames(this IEnumerable<Type> types)
+		{
+			return types.Select(type => type.AssemblyQualifiedName);
+		}
 	}
 }

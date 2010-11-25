@@ -82,7 +82,10 @@ namespace NanoMessageBus.SubscriptionStorage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT Subscriber FROM Subscriptions WHERE.
+        ///   Looks up a localized string similar to SELECT Subscriber
+        ///  FROM Subscriptions
+        /// WHERE Expiration &gt; @now
+        ///   AND MessageType IN (&apos;&apos;{0});.
         /// </summary>
         internal static string GetSubscribers {
             get {
