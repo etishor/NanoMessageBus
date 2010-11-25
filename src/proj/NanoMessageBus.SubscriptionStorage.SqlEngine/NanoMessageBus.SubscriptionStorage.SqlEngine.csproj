@@ -55,7 +55,6 @@
       <DependentUpon>SqlStatements.resx</DependentUpon>
     </Compile>
     <Compile Include="SqlSubscriptionStorage.cs" />
-    <Compile Include="StatementBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\CustomDictionary.xml">

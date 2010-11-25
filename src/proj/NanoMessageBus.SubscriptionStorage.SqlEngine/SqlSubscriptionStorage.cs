@@ -3,6 +3,7 @@ namespace NanoMessageBus.SubscriptionStorage
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Text;
 	using System.Transactions;
 	using IsolationLevel = System.Transactions.IsolationLevel;
 
@@ -44,9 +45,9 @@ namespace NanoMessageBus.SubscriptionStorage
 				callback(command);
 				command.Prepare();
 
-				foreach (var messageType in messageTypes)
+				foreach (var messageTypeName in messageTypes)
 				{
-					((IDataParameter)command.Parameters[0]).Value = messageType;
+					((IDataParameter)command.Parameters[0]).Value = messageTypeName;
 					command.ExecuteNonQuery();
 				}
 
@@ -65,7 +66,7 @@ namespace NanoMessageBus.SubscriptionStorage
 
 			using (SuppressTransaction())
 			using (var connection = this.connectionFactory())
-			using (var query = connection.BuildGetSubscribersQuery(messageTypes))
+			using (var query = BuildQuery(connection, messageTypes))
 			using (var reader = query.ExecuteReader())
 			{
 				while (reader.Read())
@@ -74,6 +75,23 @@ namespace NanoMessageBus.SubscriptionStorage
 
 			return subscribers;
 		}
+		private static IDbCommand BuildQuery(IDbConnection connection, IEnumerable<string> messageTypes)
+		{
+			var command = connection.CreateCommand();
+			command.AddParameter(SqlStatements.NowParameter, DateTime.UtcNow);
+
+			var i = 0;
+			var whereStatement = new StringBuilder();
+			foreach (var messageTypeName in messageTypes ?? new string[] { })
+			{
+				command.AddParameter(SqlStatements.MessageTypeParameter + i, messageTypeName);
+				whereStatement.AppendFormat(SqlStatements.MessageTypeWhereParameter, i++);
+			}
+
+			command.CommandText = SqlStatements.GetSubscribers.FormatWith(whereStatement);
+			return command;
+		}
+
 		private static IDisposable SuppressTransaction()
 		{
 			return new TransactionScope(TransactionScopeOption.Suppress);
