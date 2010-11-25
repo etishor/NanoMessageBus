@@ -5,6 +5,8 @@ Fluent builder
 Support for multiple containers
 ILMerge quirks
 
+Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
+
 Protocol Buffer serializer
 Additional endpoint connectors, e.g. Azure, SQS, RabbitMQ, ActiveMQ, Qpid, etc.
 

@@ -17,12 +17,20 @@ namespace NanoMessageBus.Core
 			this.childContainer = childContainer;
 		}
 
+		public static void RegisterHandler<TMessage>(IHandleMessages<TMessage> handler)
+		{
+			RegisterHandler(c => handler);
+		}
+		public static void RegisterHandler<TMessage>(Func<IHandleMessages<TMessage>> route)
+		{
+			RegisterHandler(c => route());
+		}
 		public static void RegisterHandler<TMessage>(Func<TContainer, IHandleMessages<TMessage>> route)
 		{
 			var key = typeof(TMessage);
 
 			ICollection<Func<TContainer, IHandleMessages<object>>> routes;
-			if (!Routes.TryGetValue(key, out routes))
+			if (!Routes.TryGetValue(key, out routes)) // todo: prevent duplicate registrations
 				Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages<object>>>();
 
 			Log.Debug(Diagnostics.RegisteringHandler, typeof(TMessage));
