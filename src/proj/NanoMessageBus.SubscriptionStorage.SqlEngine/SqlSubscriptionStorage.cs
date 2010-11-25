@@ -41,7 +41,6 @@ namespace NanoMessageBus.SubscriptionStorage
 			using (var connection = this.connectionFactory())
 			using (var command = connection.CreateCommand())
 			{
-				command.AddParameter(SqlStatements.MessageTypeParameter, null);
 				command.AddParameter(SqlStatements.SubscriberParameter, address);
 				callback(command);
 
@@ -98,7 +97,8 @@ namespace NanoMessageBus.SubscriptionStorage
 
 		private static IDisposable SuppressTransaction()
 		{
-			return new TransactionScope(TransactionScopeOption.Suppress);
+			var options = new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted };
+			return new TransactionScope(TransactionScopeOption.Suppress, options);
 		}
 	}
 }
