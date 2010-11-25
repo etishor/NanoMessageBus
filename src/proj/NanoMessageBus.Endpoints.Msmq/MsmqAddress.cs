@@ -45,7 +45,7 @@ namespace NanoMessageBus.Endpoints
 		}
 		public virtual string Proprietary
 		{
-			get { return this.canonical; }
+			get { return this.proprietary; }
 		}
 
 		public override string ToString()
