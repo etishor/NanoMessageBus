@@ -4,10 +4,9 @@ namespace NanoMessageBus.Endpoints
 	using System.Messaging;
 	using System.Text.RegularExpressions;
 
-	internal static class AddressNormalizer
+	public class MsmqAddress
 	{
 		private const string LocalHost = ".";
-		private const string PrivateQueue = @"PRIVATE$\";
 		private const string MsmqFormat = @"{0}\PRIVATE$\{1}";
 		private const string CanonicalFormat = @"msmq://{0}/{1}";
 		private const string Pattern = @"^((msmq\://)?([A-Za-z0-9-_.]+)/)?([A-Za-z0-9-_.]+)(/)?$";
@@ -15,7 +14,10 @@ namespace NanoMessageBus.Endpoints
 		private const int QueueNameCapture = 4;
 		private static readonly Regex AddressFormatRegex = new Regex(Pattern, RegexOptions.Compiled);
 
-		public static string ToQueuePath(this string address)
+		private readonly string canonical;
+		private readonly string proprietary;
+
+		public MsmqAddress(string address)
 		{
 			if (string.IsNullOrEmpty(address))
 				throw new ArgumentException(Diagnostics.InvalidAddress.FormatWith(address), "address");
@@ -26,7 +28,9 @@ namespace NanoMessageBus.Endpoints
 
 			var machineName = GetMachineName(match.Groups[HostNameCapture].Value);
 			var queueName = match.Groups[QueueNameCapture].Value;
-			return MsmqFormat.FormatWith(machineName, queueName);
+
+			this.proprietary = MsmqFormat.FormatWith(machineName, queueName);
+			this.canonical = CanonicalFormat.FormatWith(machineName, queueName);
 		}
 		private static string GetMachineName(string value)
 		{
@@ -35,10 +39,18 @@ namespace NanoMessageBus.Endpoints
 			return value.ToLowerInvariant();
 		}
 
-		public static string CanonicalAddress(this MessageQueue queue)
+		public virtual string Canonical
 		{
-			return CanonicalFormat.FormatWith(
-				queue.MachineName, queue.QueueName.Replace(PrivateQueue, string.Empty));
+			get { return this.canonical; }
+		}
+		public virtual string Proprietary
+		{
+			get { return this.canonical; }
+		}
+
+		public override string ToString()
+		{
+			return this.proprietary;
 		}
 	}
 }

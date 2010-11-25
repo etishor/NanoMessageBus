@@ -9,50 +9,36 @@ namespace NanoMessageBus.Endpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqConnector));
 		private readonly MessageQueue queue;
-		private readonly MessageQueueTransactionType transactionType;
-		private readonly string canonicalAddress;
+		private readonly bool enlist;
+		private readonly MsmqAddress address;
 		private bool disposed;
 
-		public static MsmqConnector OpenReceive(string address, bool enlist)
+		public static MsmqConnector OpenReceive(MsmqAddress address, bool enlist)
 		{
-			var queue = Open(address, QueueAccessMode.Receive);
+			var queue = new MessageQueue(address.Proprietary, QueueAccessMode.Receive);
 			queue.MessageReadPropertyFilter.SetAll();
 
-			var transactionType = enlist
-				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.None;
-
-			Log.Info(Diagnostics.OpeningQueueForReceive, address, transactionType);
+			Log.Info(Diagnostics.OpeningQueueForReceive, address, enlist);
 
 			if (!enlist || queue.Transactional)
-				return new MsmqConnector(queue, transactionType);
+				return new MsmqConnector(queue, address, enlist);
 
 			queue.Dispose();
 			Log.Error(Diagnostics.NonTransactionalQueue);
 			throw new EndpointException(Diagnostics.NonTransactionalQueue);
 		}
-		public static MsmqConnector OpenSend(string address, bool enlist)
+		public static MsmqConnector OpenSend(MsmqAddress address, bool enlist)
 		{
-			var queue = Open(address, QueueAccessMode.Send);
-			var transactionType = (enlist && Transaction.Current != null)
-				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
-
-			Log.Info(Diagnostics.OpeningQueueForSend, address, transactionType);
-			return new MsmqConnector(queue, transactionType);
-		}
-		private static MessageQueue Open(string address, QueueAccessMode accessMode)
-		{
-			if (!string.IsNullOrEmpty(address))
-				return new MessageQueue(address.ToQueuePath(), accessMode);
-
-			Log.Error(Diagnostics.MissingQueueAddress);
-			throw new EndpointException(Diagnostics.MissingQueueAddress);
+			var queue = new MessageQueue(address.Proprietary, QueueAccessMode.Send);
+			Log.Info(Diagnostics.OpeningQueueForSend, address, enlist);
+			return new MsmqConnector(queue, address, enlist);
 		}
 
-		private MsmqConnector(MessageQueue queue, MessageQueueTransactionType transactionType)
+		private MsmqConnector(MessageQueue queue, MsmqAddress address, bool enlist)
 		{
 			this.queue = queue;
-			this.transactionType = transactionType;
-			this.canonicalAddress = queue.CanonicalAddress();
+			this.address = address;
+			this.enlist = enlist;
 		}
 		~MsmqConnector()
 		{
@@ -77,19 +63,22 @@ namespace NanoMessageBus.Endpoints
 
 		public virtual string Address
 		{
-			get { return this.canonicalAddress; }
+			get { return this.address.Canonical; }
 		}
 
 		public virtual Message Receive(TimeSpan timeout)
 		{
 			Log.Verbose(Diagnostics.AttemptingToReceiveMessage, this.Address);
-			return this.queue.Receive(timeout, this.transactionType);
+			var trx = this.enlist ? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.None;
+			return this.queue.Receive(timeout, trx);
 		}
 
 		public virtual void Send(object message)
 		{
 			Log.Verbose(Diagnostics.SendingMessage, this.Address);
-			this.queue.Send(message, this.transactionType);
+			var trx = (this.enlist && Transaction.Current != null)
+				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
+			this.queue.Send(message, trx);
 		}
 	}
 }

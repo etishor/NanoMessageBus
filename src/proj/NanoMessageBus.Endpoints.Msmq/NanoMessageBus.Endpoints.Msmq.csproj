@@ -46,8 +46,8 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AddressNormalizer.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="MsmqAddress.cs" />
     <Compile Include="MsmqConnector.cs" />
     <Compile Include="MsmqReceiverEndpoint.cs" />
     <Compile Include="MsmqSenderEndpoint.cs" />
