@@ -6,7 +6,7 @@ namespace NanoMessageBus.Logging
 
 	internal static class ExtensionMethods
 	{
-		private const string MessageFormat = "{0:yyyyMMdd.HHmmss.ff} - {1} - {2} - {3}\r\n";
+		private const string MessageFormat = "{0:yyyyMMdd.HHmmss.ff} - {1} - {2} - {3}";
 
 		public static string FormatMessage(this string message, Type typeToLog, params object[] values)
 		{

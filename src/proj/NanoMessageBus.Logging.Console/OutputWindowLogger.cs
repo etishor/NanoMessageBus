@@ -20,27 +20,27 @@ namespace NanoMessageBus.Logging
 
 		public virtual void Verbose(string message, params object[] values)
 		{
-			this.DebugWindow("Verbose / ", message, values);
+			this.DebugWindow("Verbose", message, values);
 		}
 		public virtual void Debug(string message, params object[] values)
 		{
-			this.DebugWindow("Debug / ", message, values);
+			this.DebugWindow("Debug", message, values);
 		}
 		public virtual void Info(string message, params object[] values)
 		{
-			this.TraceWindow("Info / ", message, values);
+			this.TraceWindow("Info", message, values);
 		}
 		public virtual void Warn(string message, params object[] values)
 		{
-			this.TraceWindow("Warn / ", message, values);
+			this.TraceWindow("Warn", message, values);
 		}
 		public virtual void Error(string message, params object[] values)
 		{
-			this.TraceWindow("Error / ", message, values);
+			this.TraceWindow("Error", message, values);
 		}
 		public virtual void Fatal(string message, params object[] values)
 		{
-			this.TraceWindow("Fatal / ", message, values);
+			this.TraceWindow("Fatal", message, values);
 		}
 
 		private void DebugWindow(string category, string message, params object[] values)
@@ -51,7 +51,7 @@ namespace NanoMessageBus.Logging
 		private void TraceWindow(string category, string message, params object[] values)
 		{
 			lock (Sync)
-				Trace.Write(category, message.FormatMessage(this.typeToLog, values));
+				Trace.WriteLine(category, message.FormatMessage(this.typeToLog, values));
 		}
 	}
 }

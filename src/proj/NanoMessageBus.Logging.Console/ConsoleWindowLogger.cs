@@ -48,7 +48,7 @@ namespace NanoMessageBus.Logging
 			lock (Sync)
 			{
 				Console.ForegroundColor = color;
-				Console.Write(message.FormatMessage(this.typeToLog, values));
+				Console.WriteLine(message.FormatMessage(this.typeToLog, values));
 				Console.ForegroundColor = this.originalColor;
 			}
 		}
