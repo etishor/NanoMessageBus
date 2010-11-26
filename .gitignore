@@ -1,6 +1,7 @@
 obj
 Bin
 bin
+output
 App.config
 Web.config
 *.user
