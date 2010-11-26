@@ -17,9 +17,5 @@ namespace NanoMessageBus.Serialization
 
 			return destination;
 		}
-		public static bool KeyIsValid(this byte[] key, int length)
-		{
-			return key != null && key.Length == length;
-		}
 	}
 }

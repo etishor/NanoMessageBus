@@ -1,6 +1,7 @@
 namespace NanoMessageBus.Serialization
 {
 	using System;
+	using System.Collections;
 	using System.IO;
 	using System.Security.Cryptography;
 	using Logging;
@@ -14,11 +15,15 @@ namespace NanoMessageBus.Serialization
 
 		public EncryptMessageSerializer(ISerializeMessages inner, byte[] encryptionKey)
 		{
-			if (!encryptionKey.KeyIsValid(KeyLength))
+			if (!KeyIsValid(encryptionKey, KeyLength))
 				throw new ArgumentException(Diagnostics.InvalidEncryptionKey, "encryptionKey");
 
 			this.encryptionKey = encryptionKey;
 			this.inner = inner;
+		}
+		private static bool KeyIsValid(ICollection key, int length)
+		{
+			return key != null && key.Count == length;
 		}
 
 		public void Serialize(object message, Stream output)
