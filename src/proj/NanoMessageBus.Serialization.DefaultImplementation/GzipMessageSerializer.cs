@@ -17,19 +17,15 @@ namespace NanoMessageBus.Serialization
 		public virtual void Serialize(object message, Stream output)
 		{
 			Log.Verbose(Diagnostics.Serializing, message.GetType());
-			using (var serializedStream = new MemoryStream())
-			{
-				this.inner.Serialize(message, serializedStream);
-				using (var compressedStream = new DeflateStream(output, CompressionMode.Compress, true))
-					serializedStream.ReadInto(compressedStream);
-			}
+			using (var compressedStream = new DeflateStream(output, CompressionMode.Compress, true))
+				this.inner.Serialize(message, compressedStream);
 		}
 
 		public virtual object Deserialize(Stream input)
 		{
 			Log.Verbose(Diagnostics.Deserializing, input.CanSeek ? (object)input.Length : "unknown");
-			var inflatedStream = new DeflateStream(input, CompressionMode.Decompress);
-			return this.inner.Deserialize(inflatedStream);
+			using (var inflatedStream = new DeflateStream(input, CompressionMode.Decompress, true))
+				return this.inner.Deserialize(inflatedStream);
 		}
 	}
 }
