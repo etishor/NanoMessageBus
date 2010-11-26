@@ -32,12 +32,14 @@ REM Autofac
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\NanoMessageBus*.dll"
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /wildcards /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.dll %FILES_TO_MERGE%
+
+echo Copying
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\Autofac*.*" "output\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\Newtonsoft.Json*.*" "output\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\log4net.*" "output\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\NLog.*" "output\bin"
+copy "src\proj\NanoMessageBus.SubscriptionStorage.SqlEngine\bin\%TARGET_CONFIG%\*.sql" "output\bin\"
 
-echo Copying
 mkdir output\doc
 copy "doc\license.txt" "output\doc\NanoMessageBus License.txt"
 copy "lib\Log4net\log4net.license.txt" "output\doc\log4net License.txt"
