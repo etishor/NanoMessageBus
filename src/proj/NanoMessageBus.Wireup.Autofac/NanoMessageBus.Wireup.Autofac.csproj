@@ -8,7 +8,7 @@
     <ProjectGuid>{2122403B-F8F9-413B-A571-5B3B7211BF96}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.Wireup.Autofac</RootNamespace>
+    <RootNamespace>NanoMessageBus.Wireup</RootNamespace>
     <AssemblyName>NanoMessageBus.Wireup.Autofac</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,7 +46,19 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="EndpointWireup.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="IWireup.cs" />
+    <Compile Include="LoggingWireup.cs" />
+    <Compile Include="MessageBusWireup.cs" />
+    <Compile Include="MessageHandlerWireup.cs" />
+    <Compile Include="MessageRouterWireup.cs" />
+    <Compile Include="MessageSubscriberWireup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationWireup.cs" />
+    <Compile Include="SubscriptionStorageWireup.cs" />
+    <Compile Include="TransportWireup.cs" />
+    <Compile Include="WireupModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\CustomDictionary.xml">
@@ -62,6 +74,75 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
       <HintPath>..\..\..\lib\Autofac\.NET 4.0\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NanoMessageBus.Core.DefaultImplementation\NanoMessageBus.Core.DefaultImplementation.csproj">
+      <Project>{BC2204F1-4E15-4EFC-B42E-739E6795BE37}</Project>
+      <Name>NanoMessageBus.Core.DefaultImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Core\NanoMessageBus.Core.csproj">
+      <Project>{A2D7EDF7-FA67-43E3-AA34-C7483508A5F1}</Project>
+      <Name>NanoMessageBus.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.DefaultImplementation\NanoMessageBus.DefaultImplementation.csproj">
+      <Project>{E74CB074-6C34-4D22-B89B-5C4D318CA011}</Project>
+      <Name>NanoMessageBus.DefaultImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Endpoints.Msmq\NanoMessageBus.Endpoints.Msmq.csproj">
+      <Project>{A5151E49-1445-4B69-BAE9-4D5445DED4F9}</Project>
+      <Name>NanoMessageBus.Endpoints.Msmq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Endpoints\NanoMessageBus.Endpoints.csproj">
+      <Project>{FE46F683-F9A7-477E-B017-A8E3A1A48E24}</Project>
+      <Name>NanoMessageBus.Endpoints</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Logging.Console\NanoMessageBus.Logging.Console.csproj">
+      <Project>{63B9F5FD-2F57-417A-BB0A-C38EE028BE8B}</Project>
+      <Name>NanoMessageBus.Logging.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
+      <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
+      <Name>NanoMessageBus.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.MessageSubscriber.DefaultImplementation\NanoMessageBus.MessageSubscriber.DefaultImplementation.csproj">
+      <Project>{F328927B-9229-49C2-86F3-3D7F4F4B328E}</Project>
+      <Name>NanoMessageBus.MessageSubscriber.DefaultImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.MessageSubscriber\NanoMessageBus.MessageSubscriber.csproj">
+      <Project>{551B70F2-60EF-44D0-9BEA-46724F0E0069}</Project>
+      <Name>NanoMessageBus.MessageSubscriber</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj">
+      <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
+      <Name>NanoMessageBus.Serialization.DefaultImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
+      <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
+      <Name>NanoMessageBus.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage.SqlEngine\NanoMessageBus.SubscriptionStorage.SqlEngine.csproj">
+      <Project>{2ECF1F4C-57CC-4A00-A489-152D149D00AF}</Project>
+      <Name>NanoMessageBus.SubscriptionStorage.SqlEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage\NanoMessageBus.SubscriptionStorage.csproj">
+      <Project>{2787552C-88AE-4CED-A3F3-C0AD78754E63}</Project>
+      <Name>NanoMessageBus.SubscriptionStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Transports.DefaultImplementation\NanoMessageBus.Transports.DefaultImplementation.csproj">
+      <Project>{D4C0E7C4-716C-47CE-8B90-15E6F14B2872}</Project>
+      <Name>NanoMessageBus.Transports.DefaultImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj">
+      <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
+      <Name>NanoMessageBus.Transports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
+      <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
+      <Name>NanoMessageBus</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
