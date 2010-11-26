@@ -12,14 +12,14 @@ namespace NanoMessageBus
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageBus));
 		private readonly ITransportMessages transport;
 		private readonly IStoreSubscriptions subscriptions;
-		private readonly IDictionary<Type, IEnumerable<string>> recipients;
+		private readonly IDictionary<Type, ICollection<string>> recipients;
 		private readonly IMessageContext context;
 		private readonly MessageBuilder builder;
 
 		public MessageBus(
 			ITransportMessages transport,
 			IStoreSubscriptions subscriptions,
-			IDictionary<Type, IEnumerable<string>> recipients,
+			IDictionary<Type, ICollection<string>> recipients,
 			IMessageContext context,
 			MessageBuilder builder)
 		{
@@ -41,7 +41,7 @@ namespace NanoMessageBus
 
 			foreach (var messageType in messageTypes)
 			{
-				IEnumerable<string> recipientsForMessageType;
+				ICollection<string> recipientsForMessageType;
 				if (!this.recipients.TryGetValue(messageType, out recipientsForMessageType))
 					continue;
 
