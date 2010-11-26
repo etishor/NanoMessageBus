@@ -54,7 +54,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Diagnostics.resx</DependentUpon>
     </Compile>
-    <Compile Include="PreventDisposeStream.cs" />
+    <Compile Include="DoNotDisposeStream.cs" />
     <Compile Include="TransformationMessageSerializer.cs" />
     <Compile Include="XmlMessageSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
