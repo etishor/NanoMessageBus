@@ -48,13 +48,13 @@
     </Compile>
     <Compile Include="BinaryMessageSerializer.cs" />
     <Compile Include="EncryptMessageSerializer.cs" />
-    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="GzipMessageSerializer.cs" />
     <Compile Include="Diagnostics.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Diagnostics.resx</DependentUpon>
     </Compile>
+    <Compile Include="PreventDisposeStream.cs" />
     <Compile Include="TransformationMessageSerializer.cs" />
     <Compile Include="XmlMessageSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

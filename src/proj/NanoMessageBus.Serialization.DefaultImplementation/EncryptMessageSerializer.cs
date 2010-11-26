@@ -30,6 +30,7 @@ namespace NanoMessageBus.Serialization
 		{
 			Log.Verbose(Diagnostics.Serializing, message.GetType());
 
+			output = new PreventDisposeStream(output); // caller disposes output, not cryptostream
 			using (var rijndael = new RijndaelManaged())
 			{
 				rijndael.Key = this.encryptionKey;
@@ -37,16 +38,12 @@ namespace NanoMessageBus.Serialization
 				rijndael.GenerateIV();
 
 				using (var encryptor = rijndael.CreateEncryptor())
-				using (var workingStream = new MemoryStream())
-				using (var encryptionStream = new CryptoStream(workingStream, encryptor, CryptoStreamMode.Write))
+				using (var encryptionStream = new CryptoStream(output, encryptor, CryptoStreamMode.Write))
 				{
-					workingStream.Write(rijndael.IV, 0, rijndael.IV.Length);
+					output.Write(rijndael.IV, 0, rijndael.IV.Length);
 					this.inner.Serialize(message, encryptionStream);
 					encryptionStream.Flush();
 					encryptionStream.FlushFinalBlock();
-					workingStream.Flush();
-					workingStream.Position = 0;
-					workingStream.ReadInto(output);
 				}
 			}
 		}
