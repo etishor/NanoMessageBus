@@ -48,7 +48,7 @@ namespace NanoMessageBus.Serialization
 
 		public object Deserialize(Stream input)
 		{
-			Log.Verbose(Diagnostics.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.CanSeek ? (object)input.Length : "unknown");
 
 			using (var rijndael = new RijndaelManaged())
 			{

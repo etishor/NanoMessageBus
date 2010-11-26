@@ -23,7 +23,7 @@ namespace NanoMessageBus.Serialization
 		}
 		public virtual object Deserialize(Stream input)
 		{
-			Log.Verbose(Diagnostics.Deserializing, input.Length);
+			Log.Verbose(Diagnostics.Deserializing, input.CanSeek ? (object)input.Length : "unknown");
 			using (var streamReader = new StreamReader(input))
 			using (var jsonReader = new JsonTextReader(streamReader))
 				return this.serializer.Deserialize(jsonReader);
