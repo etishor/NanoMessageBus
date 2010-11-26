@@ -6,10 +6,12 @@ namespace NanoMessageBus.SubscriptionStorage
 	using System.Linq;
 	using System.Text;
 	using System.Transactions;
+	using Logging;
 	using IsolationLevel = System.Transactions.IsolationLevel;
 
 	public class SqlSubscriptionStorage : IStoreSubscriptions
 	{
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(SqlSubscriptionStorage));
 		private readonly Func<IDbConnection> connectionFactory;
 
 		public SqlSubscriptionStorage(Func<IDbConnection> connectionFactory)
@@ -21,6 +23,9 @@ namespace NanoMessageBus.SubscriptionStorage
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
+				foreach (var type in messageTypes)
+					Log.Info(Diagnostics.Subscribe, address, type, expiration);
+
 				command.CommandText = SqlStatements.InsertSubscription;
 				command.AddParameter(SqlStatements.ExpirationParameter, expiration.ToNull());
 			});
@@ -29,6 +34,9 @@ namespace NanoMessageBus.SubscriptionStorage
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
+				foreach (var type in messageTypes)
+					Log.Info(Diagnostics.Unsubscribe, address, type);
+
 				command.CommandText = SqlStatements.DeleteSubscription;
 			});
 		}

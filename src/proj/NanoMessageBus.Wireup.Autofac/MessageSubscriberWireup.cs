@@ -2,7 +2,9 @@ namespace NanoMessageBus.Wireup
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Autofac;
+	using Autofac.Core;
 	using Endpoints;
 	using MessageSubscriber;
 	using SubscriptionStorage;
@@ -20,8 +22,7 @@ namespace NanoMessageBus.Wireup
 
 		public virtual MessageSubscriberWireup AddSubscription(string publisher, params Type[] messageTypes)
 		{
-			// TODO: once application is initialized, we need to dispatch these requests
-			// TODO: subscription expirations;
+			// TODO: subscription expiration
 			ICollection<Type> types;
 			if (!this.requests.TryGetValue(publisher, out types))
 				this.requests[publisher] = types = new HashSet<Type>();
@@ -48,6 +49,9 @@ namespace NanoMessageBus.Wireup
 				.ExternallyOwned();
 
 			this.RegisterMessageHandlerRoutes();
+
+			if (this.requests.Count > 0)
+				builder.RegisterCallback(this.OnContainerConfigured);
 		}
 		protected virtual MessageSubscriber BuildMessageSubsciber(IComponentContext c)
 		{
@@ -67,6 +71,17 @@ namespace NanoMessageBus.Wireup
 				c => c.Resolve<SubscriptionMessageHandlers>());
 			this.Configure<MessageHandlerWireup>().AddHandler<UnsubscribeRequestMessage>(
 				c => c.Resolve<SubscriptionMessageHandlers>());
+		}
+
+		protected virtual void OnContainerConfigured(IComponentRegistry registry)
+		{
+			var service = new TypedService(typeof(ITransportMessages));
+			registry.RegistrationsFor(service).First().Activated += (s, e) =>
+			{
+				var subscriber = e.Context.Resolve<ISubscribeToMessages>();
+				foreach (var request in this.requests)
+					subscriber.Subscribe(request.Key, DateTime.MaxValue, request.Value.ToArray());
+			};
 		}
 	}
 }

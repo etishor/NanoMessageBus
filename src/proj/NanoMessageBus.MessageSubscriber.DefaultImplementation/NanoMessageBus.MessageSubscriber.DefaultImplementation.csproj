@@ -46,6 +46,11 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Diagnostics.resx</DependentUpon>
+    </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MessageSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,6 +62,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
+      <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
+      <Name>NanoMessageBus.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.MessageSubscriber\NanoMessageBus.MessageSubscriber.csproj">
       <Project>{551B70F2-60EF-44D0-9BEA-46724F0E0069}</Project>
       <Name>NanoMessageBus.MessageSubscriber</Name>
@@ -73,6 +82,16 @@
       <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
       <Name>NanoMessageBus</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Diagnostics.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
