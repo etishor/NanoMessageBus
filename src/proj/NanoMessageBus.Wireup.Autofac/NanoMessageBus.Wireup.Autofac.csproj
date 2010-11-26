@@ -103,6 +103,14 @@
       <Project>{63B9F5FD-2F57-417A-BB0A-C38EE028BE8B}</Project>
       <Name>NanoMessageBus.Logging.Console</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Logging.Log4Net\NanoMessageBus.Logging.Log4Net.csproj">
+      <Project>{FF58714D-AC6A-4238-B8E1-D4F9D90BEF81}</Project>
+      <Name>NanoMessageBus.Logging.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Logging.NLog\NanoMessageBus.Logging.NLog.csproj">
+      <Project>{17F95FB2-EE45-47CC-9FC3-11452D7876D5}</Project>
+      <Name>NanoMessageBus.Logging.NLog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
@@ -118,6 +126,10 @@
     <ProjectReference Include="..\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj">
       <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
       <Name>NanoMessageBus.Serialization.DefaultImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization.Json\NanoMessageBus.Serialization.Json.csproj">
+      <Project>{2E659CAC-6DDB-4800-90AB-13AE068CE407}</Project>
+      <Name>NanoMessageBus.Serialization.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
       <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>

@@ -20,6 +20,21 @@ namespace NanoMessageBus.Wireup
 			this.messageSerializer = new BinaryMessageSerializer();
 			return this;
 		}
+		public virtual SerializationWireup XmlSerializer()
+		{
+			this.messageSerializer = new XmlMessageSerializer();
+			return this;
+		}
+		public virtual SerializationWireup JsonSerializer()
+		{
+			this.messageSerializer = new JsonMessageSerializer();
+			return this;
+		}
+		public virtual SerializationWireup BsonSerializer()
+		{
+			this.messageSerializer = new BsonMessageSerializer();
+			return this;
+		}
 		public virtual SerializationWireup CompressMessages()
 		{
 			this.compress = true;

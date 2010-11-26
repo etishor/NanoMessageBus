@@ -19,5 +19,15 @@ namespace NanoMessageBus.Wireup
 			OutputWindowLogger.MakePrimaryLogger();
 			return this;
 		}
+		public virtual LoggingWireup UseNLog()
+		{
+			NLogLogger.MakePrimaryLogger();
+			return this;
+		}
+		public virtual LoggingWireup UseLog4Net()
+		{
+			Log4NetLogger.MakePrimaryLogger();
+			return this;
+		}
 	}
 }
