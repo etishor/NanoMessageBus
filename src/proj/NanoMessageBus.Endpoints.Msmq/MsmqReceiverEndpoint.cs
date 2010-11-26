@@ -2,6 +2,7 @@ namespace NanoMessageBus.Endpoints
 {
 	using System;
 	using System.Messaging;
+	using System.Runtime.Serialization;
 	using Logging;
 	using Serialization;
 
@@ -52,7 +53,7 @@ namespace NanoMessageBus.Endpoints
 
 				using (message)
 				using (message.BodyStream)
-					return (PhysicalMessage)this.serializer.Deserialize(message.BodyStream);
+					return this.Deserialize(message);
 			}
 			catch (MessageQueueException e)
 			{
@@ -65,6 +66,19 @@ namespace NanoMessageBus.Endpoints
 				throw new EndpointException(e.Message, e);
 			}
 		}
+		private PhysicalMessage Deserialize(Message message)
+		{
+			try
+			{
+				return (PhysicalMessage)this.serializer.Deserialize(message.BodyStream);
+			}
+			catch (Exception e)
+			{
+				Log.Error(Diagnostics.UnableToDeserialize, message.Id);
+				throw new SerializationException(e.Message, e);
+			}
+		}
+
 		private PhysicalMessage NoMessageAvailable()
 		{
 			Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.Address);

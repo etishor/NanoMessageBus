@@ -5,6 +5,7 @@ namespace NanoMessageBus.Endpoints
 	using System.IO;
 	using System.Linq;
 	using System.Messaging;
+	using System.Runtime.Serialization;
 	using Logging;
 	using Serialization;
 
@@ -57,10 +58,23 @@ namespace NanoMessageBus.Endpoints
 
 			using (var serializedStream = new MemoryStream())
 			{
-				this.serializer.Serialize(message, serializedStream);
+				this.Serialize(message, serializedStream);
 				this.Send(BuildMsmqMessage(message, serializedStream), recipients);
 			}
 		}
+		private void Serialize(object message, Stream stream)
+		{
+			try
+			{
+				this.serializer.Serialize(message, stream);
+			}
+			catch (Exception e)
+			{
+				Log.Error(Diagnostics.UnableToSerialize);
+				throw new SerializationException(e.Message, e);
+			}
+		}
+
 		private void Send(IDisposable message, params string[] recipients)
 		{
 			using (message)
