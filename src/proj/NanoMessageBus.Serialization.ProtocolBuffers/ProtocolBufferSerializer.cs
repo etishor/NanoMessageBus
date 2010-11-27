@@ -37,9 +37,8 @@ namespace NanoMessageBus.Serialization
 			this.types.Add(messageType, key);
 
 			this.serializers[messageType] = (stream, message) => Serializer.Serialize(stream, message);
-			var deserialize = typeof(Serializer).GetMethod("Deserialize");
-			deserialize = deserialize.MakeGenericMethod(messageType);
-			this.deserializers[messageType] = stream => deserialize.Invoke(stream, null);
+			var deserialize = typeof(Serializer).GetMethod("Deserialize").MakeGenericMethod(messageType);
+			this.deserializers[messageType] = stream => deserialize.Invoke(null, new object[] { stream });
 		}
 
 		protected override void SerializeMessage(Stream output, object message)

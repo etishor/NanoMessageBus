@@ -46,7 +46,6 @@ copy "doc\license.txt" "output\doc\NanoMessageBus License.txt"
 copy "lib\Autofac\Autofac License.txt" "output\doc\Autofac License.txt"
 copy "lib\Newtonsoft.Json\readme.txt" "output\doc\Json.NET License.txt"
 copy "lib\protobuf-net\License.txt" "output\doc\protobuf-net License.txt"
-copy "lib\protobuf-net\protoc-license.txt" "output\doc\Google Protocol Buffers License.txt"
 copy "lib\Log4net\log4net.license.txt" "output\doc\log4net License.txt"
 copy "lib\NLog\license.txt" "output\doc\NLog License.txt"
 
