@@ -194,23 +194,5 @@ namespace NanoMessageBus.Endpoints {
                 return ResourceManager.GetString("SendingMessage", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Message &apos;{0}&apos; could not be deserialized..
-        /// </summary>
-        internal static string UnableToDeserialize {
-            get {
-                return ResourceManager.GetString("UnableToDeserialize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to serialize message.
-        /// </summary>
-        internal static string UnableToSerialize {
-            get {
-                return ResourceManager.GetString("UnableToSerialize", resourceCulture);
-            }
-        }
     }
 }

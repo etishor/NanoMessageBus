@@ -55,6 +55,7 @@
       <DependentUpon>Diagnostics.resx</DependentUpon>
     </Compile>
     <Compile Include="DoNotDisposeStream.cs" />
+    <Compile Include="SerializerBase.cs" />
     <Compile Include="TransformationMessageSerializer.cs" />
     <Compile Include="XmlMessageSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

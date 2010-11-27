@@ -88,6 +88,15 @@ namespace NanoMessageBus.Serialization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to serialize/deserialize the message provided..
+        /// </summary>
+        internal static string SerializationFailed {
+            get {
+                return ResourceManager.GetString("SerializationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Serializing message of type &apos;{0}&apos;..
         /// </summary>
         internal static string Serializing {

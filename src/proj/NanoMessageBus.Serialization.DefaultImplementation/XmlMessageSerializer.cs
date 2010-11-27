@@ -5,7 +5,7 @@ namespace NanoMessageBus.Serialization
 	using System.Runtime.Serialization;
 	using Logging;
 
-	public class XmlMessageSerializer : ISerializeMessages
+	public class XmlMessageSerializer : SerializerBase
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(XmlMessageSerializer));
 		private readonly DataContractSerializer serializer;
@@ -21,14 +21,12 @@ namespace NanoMessageBus.Serialization
 			this.serializer = new DataContractSerializer(envelopeType);
 		}
 
-		public virtual void Serialize(object message, Stream output)
+		protected override void SerializeMessage(object message, Stream output)
 		{
-			Log.Verbose(Diagnostics.Serializing, message.GetType());
 			this.serializer.WriteObject(output, message);
 		}
-		public virtual object Deserialize(Stream input)
+		protected override object DeserializeMessage(Stream input)
 		{
-			Log.Verbose(Diagnostics.Deserializing, input.CanSeek ? (object)input.Length : "unknown");
 			return this.serializer.ReadObject(input);
 		}
 	}

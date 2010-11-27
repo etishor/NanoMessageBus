@@ -126,6 +126,9 @@
   <data name="InvalidEncryptionKey" xml:space="preserve">
     <value>The encryption key provided is invalid.  It must be a non-null byte array containing exactly 16 bytes.</value>
   </data>
+  <data name="SerializationFailed" xml:space="preserve">
+    <value>Unable to serialize/deserialize the message provided.</value>
+  </data>
   <data name="Serializing" xml:space="preserve">
     <value>Serializing message of type '{0}'.</value>
   </data>

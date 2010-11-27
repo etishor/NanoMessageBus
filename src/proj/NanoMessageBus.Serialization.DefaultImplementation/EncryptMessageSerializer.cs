@@ -4,11 +4,9 @@ namespace NanoMessageBus.Serialization
 	using System.Collections;
 	using System.IO;
 	using System.Security.Cryptography;
-	using Logging;
 
-	public class EncryptMessageSerializer : ISerializeMessages
+	public class EncryptMessageSerializer : SerializerBase
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(EncryptMessageSerializer));
 		private const int KeyLength = 16; // bytes
 		private readonly ISerializeMessages inner;
 		private readonly byte[] encryptionKey;
@@ -26,10 +24,8 @@ namespace NanoMessageBus.Serialization
 			return key != null && key.Count == length;
 		}
 
-		public void Serialize(object message, Stream output)
+		protected override void SerializeMessage(object message, Stream output)
 		{
-			Log.Verbose(Diagnostics.Serializing, message.GetType());
-
 			using (var rijndael = new RijndaelManaged())
 			{
 				rijndael.Key = this.encryptionKey;
@@ -48,10 +44,8 @@ namespace NanoMessageBus.Serialization
 			}
 		}
 
-		public object Deserialize(Stream input)
+		protected override object DeserializeMessage(Stream input)
 		{
-			Log.Verbose(Diagnostics.Deserializing, input.CanSeek ? (object)input.Length : "unknown");
-
 			using (var rijndael = new RijndaelManaged())
 			{
 				rijndael.Key = this.encryptionKey;

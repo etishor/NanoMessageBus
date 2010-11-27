@@ -53,7 +53,7 @@ namespace NanoMessageBus.Endpoints
 
 				using (message)
 				using (message.BodyStream)
-					return this.Deserialize(message);
+					return (PhysicalMessage)this.serializer.Deserialize(message.BodyStream);
 			}
 			catch (MessageQueueException e)
 			{
@@ -64,18 +64,6 @@ namespace NanoMessageBus.Endpoints
 					Log.Fatal(Diagnostics.AccessDenied, this.connector.Address);
 
 				throw new EndpointException(e.Message, e);
-			}
-		}
-		private PhysicalMessage Deserialize(Message message)
-		{
-			try
-			{
-				return (PhysicalMessage)this.serializer.Deserialize(message.BodyStream);
-			}
-			catch (Exception e)
-			{
-				Log.Error(Diagnostics.UnableToDeserialize, message.Id);
-				throw new SerializationException(e.Message, e);
 			}
 		}
 

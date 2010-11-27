@@ -162,10 +162,4 @@
   <data name="SendingMessage" xml:space="preserve">
     <value>Sending a message to the endpoint '{0}'.</value>
   </data>
-  <data name="UnableToDeserialize" xml:space="preserve">
-    <value>Message '{0}' could not be deserialized.</value>
-  </data>
-	<data name="UnableToSerialize">
-		<value xml:space="preserve">Unable to serialize message</value>
-	</data>
 </root>
