@@ -24,7 +24,7 @@ namespace NanoMessageBus.Serialization
 			return key != null && key.Count == length;
 		}
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			using (var rijndael = new RijndaelManaged())
 			{
@@ -37,7 +37,7 @@ namespace NanoMessageBus.Serialization
 				using (var encryptionStream = new CryptoStream(openStream, encryptor, CryptoStreamMode.Write))
 				{
 					openStream.Write(rijndael.IV, 0, rijndael.IV.Length);
-					this.inner.Serialize(message, encryptionStream);
+					this.inner.Serialize(encryptionStream, message);
 					encryptionStream.Flush();
 					encryptionStream.FlushFinalBlock();
 				}

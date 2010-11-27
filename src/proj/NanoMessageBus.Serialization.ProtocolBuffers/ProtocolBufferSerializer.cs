@@ -3,6 +3,7 @@ namespace NanoMessageBus.Serialization
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Reflection;
 	using System.Runtime.Serialization;
 	using ProtoBuf;
 
@@ -10,7 +11,11 @@ namespace NanoMessageBus.Serialization
 	{
 		private readonly Dictionary<int, Type> keys = new Dictionary<int, Type>();
 		private readonly Dictionary<Type, int> types = new Dictionary<Type, int>();
-		private readonly Dictionary<Type, IFormatter> formatters = new Dictionary<Type, IFormatter>();
+
+		private readonly Dictionary<Type, Action<Stream, object>> serializers = 
+			new Dictionary<Type, Action<Stream, object>>();
+		private readonly Dictionary<Type, Func<Stream, object>> deserializers =
+			new Dictionary<Type, Func<Stream, object>>();
 
 		public ProtocolBufferSerializer(params Type[] messageTypes)
 		{
@@ -24,21 +29,20 @@ namespace NanoMessageBus.Serialization
 			if (messageType == null || string.IsNullOrEmpty(messageType.FullName))
 				return;
 
+			if (this.types.ContainsKey(messageType))
+				return; // already registered
+
 			var key = messageType.FullName.GetHashCode();
 			this.keys.Add(key, messageType);
 			this.types.Add(messageType, key);
-			this.formatters.Add(messageType, CreateFormatter(messageType));
-		}
-		private static IFormatter CreateFormatter(Type type)
-		{
-			typeof(Serializer).GetMethod("PrepareSerializer")
-				.MakeGenericMethod(type).Invoke(null, null);
 
-			return (IFormatter)typeof(Serializer).GetMethod("CreateFormatter")
-				.MakeGenericMethod(type).Invoke(null, null);
+			this.serializers[messageType] = (stream, message) => Serializer.Serialize(stream, message);
+			var deserialize = typeof(Serializer).GetMethod("Deserialize");
+			deserialize = deserialize.MakeGenericMethod(messageType);
+			this.deserializers[messageType] = stream => deserialize.Invoke(stream, null);
 		}
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			int key;
 			if (!this.types.TryGetValue(message.GetType(), out key))
@@ -47,7 +51,7 @@ namespace NanoMessageBus.Serialization
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
 
-			this.formatters[message.GetType()].Serialize(output, message);
+			this.serializers[message.GetType()](output, message);
 		}
 		protected override object DeserializeMessage(Stream input)
 		{
@@ -59,7 +63,7 @@ namespace NanoMessageBus.Serialization
 			if (!this.keys.TryGetValue(key, out messageType))
 				throw new SerializationException(key + " has not been registered with the serializer");
 
-			return this.formatters[messageType].Deserialize(input);
+			return this.deserializers[messageType](input);
 		}
 	}
 }

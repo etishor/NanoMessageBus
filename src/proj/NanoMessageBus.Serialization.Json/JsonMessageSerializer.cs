@@ -10,7 +10,7 @@ namespace NanoMessageBus.Serialization
 			TypeNameHandling = TypeNameHandling.Objects
 		};
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			var streamWriter = new StreamWriter(output);
 			var jsonWriter = new JsonTextWriter(streamWriter);

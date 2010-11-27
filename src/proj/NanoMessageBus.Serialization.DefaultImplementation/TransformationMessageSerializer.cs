@@ -13,10 +13,10 @@ namespace NanoMessageBus.Serialization
 			this.inner = inner;
 		}
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			message = this.transformer.Transform(message);
-			this.inner.Serialize(message, output);
+			this.inner.Serialize(output, message);
 		}
 		protected override object DeserializeMessage(Stream input)
 		{

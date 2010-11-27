@@ -21,7 +21,7 @@ namespace NanoMessageBus.Serialization
 			this.serializer = new DataContractSerializer(envelopeType);
 		}
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			this.serializer.WriteObject(output, message);
 		}

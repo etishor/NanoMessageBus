@@ -8,7 +8,7 @@ namespace NanoMessageBus.Serialization
 	{
 		private readonly IFormatter formatter = new BinaryFormatter();
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			this.formatter.Serialize(output, message);
 		}

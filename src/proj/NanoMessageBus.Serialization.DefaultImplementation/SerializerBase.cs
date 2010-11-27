@@ -14,12 +14,12 @@
 			this.log = LogFactory.BuildLogger(this.GetType());
 		}
 
-		public void Serialize(object message, Stream output)
+		public void Serialize(Stream output, object message)
 		{
 			try
 			{
 				this.log.Verbose(Diagnostics.Serializing, message.GetType());
-				this.SerializeMessage(message, output);
+				this.SerializeMessage(output, message);
 			}
 			catch (SerializationException)
 			{
@@ -31,7 +31,7 @@
 				throw new SerializationException(Diagnostics.SerializationFailed, e);
 			}
 		}
-		protected abstract void SerializeMessage(object message, Stream output);
+		protected abstract void SerializeMessage(Stream output, object message);
 
 		public object Deserialize(Stream input)
 		{

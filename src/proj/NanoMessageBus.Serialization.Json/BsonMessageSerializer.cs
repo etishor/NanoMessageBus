@@ -11,7 +11,7 @@ namespace NanoMessageBus.Serialization
 			TypeNameHandling = TypeNameHandling.Objects
 		};
 
-		protected override void SerializeMessage(object message, Stream output)
+		protected override void SerializeMessage(Stream output, object message)
 		{
 			using (var bsonWriter = new BsonWriter(output))
 				this.serializer.Serialize(bsonWriter, message);
