@@ -2,7 +2,7 @@ Full unit and integration tests
 XML code comments
 Documentation and examples
 Fluent builder
-Support for multiple containers
+Support for multiple containers (Castle, SM, Ninject, Unity)
 ILMerge quirks
 
 Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
