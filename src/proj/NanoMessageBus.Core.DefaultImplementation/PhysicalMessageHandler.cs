@@ -20,7 +20,7 @@ namespace NanoMessageBus.Core
 		public virtual void Handle(PhysicalMessage message)
 		{
 			Log.Debug(Diagnostics.LogicalMessageCount, message.LogicalMessages.Count);
-			foreach (var logicalMessage in message.LogicalMessages)
+			foreach (var logicalMessage in message.LogicalMessages.Where(x => x != null))
 				this.HandleLogicalMessage(logicalMessage);
 		}
 		private void HandleLogicalMessage(object message)
