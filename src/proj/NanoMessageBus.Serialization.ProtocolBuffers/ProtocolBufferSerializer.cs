@@ -3,7 +3,6 @@ namespace NanoMessageBus.Serialization
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using System.Reflection;
 	using System.Runtime.Serialization;
 	using ProtoBuf;
 
@@ -12,8 +11,6 @@ namespace NanoMessageBus.Serialization
 		private readonly Dictionary<int, Type> keys = new Dictionary<int, Type>();
 		private readonly Dictionary<Type, int> types = new Dictionary<Type, int>();
 
-		private readonly Dictionary<Type, Action<Stream, object>> serializers = 
-			new Dictionary<Type, Action<Stream, object>>();
 		private readonly Dictionary<Type, Func<Stream, object>> deserializers =
 			new Dictionary<Type, Func<Stream, object>>();
 
@@ -22,7 +19,7 @@ namespace NanoMessageBus.Serialization
 			this.RegisterMessage(typeof(PhysicalMessage));
 
 			foreach (var messageType in messageTypes ?? new Type[] { })
-				RegisterMessage(messageType);
+				this.RegisterMessage(messageType);
 		}
 		private void RegisterMessage(Type messageType)
 		{
@@ -35,8 +32,6 @@ namespace NanoMessageBus.Serialization
 			var key = messageType.FullName.GetHashCode();
 			this.keys.Add(key, messageType);
 			this.types.Add(messageType, key);
-
-			this.serializers[messageType] = (stream, message) => Serializer.Serialize(stream, message);
 
 			// TODO: make this faster by using reflection to create a delegate and then invoking the delegate
 			var deserialize = typeof(Serializer).GetMethod("Deserialize").MakeGenericMethod(messageType);
@@ -54,7 +49,7 @@ namespace NanoMessageBus.Serialization
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
 
-			this.serializers[messageType](output, message);
+			Serializer.Serialize(output, message);
 		}
 		protected override object DeserializeMessage(Stream input)
 		{

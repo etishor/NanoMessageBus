@@ -26,12 +26,12 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	public class when_serializing_an_unregistered_type
 	{
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer();
-		static Exception Exception;
+		static Exception exception;
 
-		Because of = () => Exception = Catch.Exception(() => Serializer.Serialize(null, 0));
+		Because of = () => exception = Catch.Exception(() => Serializer.Serialize(null, 0));
 
 		It should_throw_a_SerializationException = () =>
-			Exception.ShouldBeOfType(typeof(SerializationException));
+			exception.ShouldBeOfType(typeof(SerializationException));
 	}
 
 	[Subject("ProtocolBufferSerializer")]
