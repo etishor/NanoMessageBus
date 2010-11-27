@@ -8,6 +8,7 @@ ILMerge quirks
 Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
 
 Protocol Buffer serializer
+
 Additional endpoint connectors, e.g. Azure, SQS, RabbitMQ, ActiveMQ, Qpid, etc.
 
 Maximum # of failures & retry / error queue / (infrastructure message headers would contain exception)
@@ -15,6 +16,24 @@ Maximum # of failures & retry / error queue / (infrastructure message headers wo
 Serialization exception should move straight to error queue
 
 Rename "DefaultImplementation" projects
+
+IdempotentReceiver
+ - when a message is received, we ensure that we've only received it once and that,
+   when the UoW is complete, the message is considered received and then ignored
+ - This would most likely occur in memory where we could track the last X,000 messages
+   (or X minutes) received and de-duplicate on that...
+
+SinglePhaseCommitReceiver/Sender
+ - The message is received in a separate transaction from the work against the DB
+ - This really works well for NoSQL implementations...
+ - When the "DB" UoW is done, it commits and tracks the incoming message that was
+   associated with the UoW.
+ - Furthermore, it writes its results to an outbound "queue" table.
+ - It pushes the message to publish onto an in-memory "queue" which another thread
+   it monitoring and publishing from
+ - This thread then does the publish and removes the item from the queue table.
+ - The entire objective is to completely avoid 2PC so as to enable use of other
+   storage engines that may not support 2PC outright.
 
 ISplitMessagesIntoPackets and IReassembleMessagesFromPackets
  - allows smaller payloads to be split and transferred across the wire when the
