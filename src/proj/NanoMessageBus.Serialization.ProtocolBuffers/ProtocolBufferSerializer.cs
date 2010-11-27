@@ -37,20 +37,24 @@ namespace NanoMessageBus.Serialization
 			this.types.Add(messageType, key);
 
 			this.serializers[messageType] = (stream, message) => Serializer.Serialize(stream, message);
+
+			// TODO: make this faster by using reflection to create a delegate and then invoking the delegate
 			var deserialize = typeof(Serializer).GetMethod("Deserialize").MakeGenericMethod(messageType);
 			this.deserializers[messageType] = stream => deserialize.Invoke(null, new object[] { stream });
 		}
 
 		protected override void SerializeMessage(Stream output, object message)
 		{
+			var messageType = message.GetType();
+
 			int key;
-			if (!this.types.TryGetValue(message.GetType(), out key))
-				throw new SerializationException(message.GetType() + " has not been registered with the serializer");
+			if (!this.types.TryGetValue(messageType, out key))
+				throw new SerializationException(Diagnostics.UnregisteredType.FormatWith(messageType));
 
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
 
-			this.serializers[message.GetType()](output, message);
+			this.serializers[messageType](output, message);
 		}
 		protected override object DeserializeMessage(Stream input)
 		{
@@ -60,7 +64,7 @@ namespace NanoMessageBus.Serialization
 
 			Type messageType;
 			if (!this.keys.TryGetValue(key, out messageType))
-				throw new SerializationException(key + " has not been registered with the serializer");
+				throw new SerializationException(Diagnostics.UnrecognizedHeader.FormatWith(key));
 
 			return this.deserializers[messageType](input);
 		}
