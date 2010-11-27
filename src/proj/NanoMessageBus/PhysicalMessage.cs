@@ -26,6 +26,9 @@ namespace NanoMessageBus
 		[DataMember(EmitDefaultValue = false, IsRequired = false)]
 		private readonly ICollection<object> logicalMessages;
 
+		protected PhysicalMessage()
+		{
+		}
 		public PhysicalMessage(
 			Guid messageId,
 			string returnAddress,
