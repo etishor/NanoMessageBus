@@ -46,6 +46,7 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IDiscoverMessageTypes.cs" />
     <Compile Include="IHandleUnitOfWork.cs" />
     <Compile Include="IRouteMessagesToHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

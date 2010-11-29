@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="ITrackMessageHandlers.cs" />
     <Compile Include="MessageHandlerTable.cs" />
+    <Compile Include="MessageTypeDiscoverer.cs" />
     <Compile Include="NullMessageContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PhysicalMessageHandler.cs" />

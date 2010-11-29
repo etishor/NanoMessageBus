@@ -70,12 +70,17 @@ namespace NanoMessageBus.Wireup
 				c.Resolve<IStoreSubscriptions>(),
 				this.endpoints,
 				c.ResolveOptional<IMessageContext>() ?? new NullMessageContext(),
-				c.Resolve<MessageBuilder>());
+				c.Resolve<MessageBuilder>(),
+				this.BuildMessageTypeDiscoverer(c));
 		}
 		protected virtual MessageBuilder BuildPhysicalMessageBuilder(IComponentContext c)
 		{
 			return new MessageBuilder(
 				this.timeToLiveTypes, this.transientTypes, c.Resolve<IReceiveFromEndpoints>().EndpointAddress);
+		}
+		protected virtual IDiscoverMessageTypes BuildMessageTypeDiscoverer(IComponentContext c)
+		{
+			return new MessageTypeDiscoverer();
 		}
 	}
 }

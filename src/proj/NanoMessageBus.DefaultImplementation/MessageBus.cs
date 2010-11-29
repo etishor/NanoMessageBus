@@ -3,6 +3,7 @@ namespace NanoMessageBus
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Core;
 	using Logging;
 	using SubscriptionStorage;
 	using Transports;
@@ -15,25 +16,28 @@ namespace NanoMessageBus
 		private readonly IDictionary<Type, ICollection<string>> recipients;
 		private readonly IMessageContext context;
 		private readonly MessageBuilder builder;
+		private readonly IDiscoverMessageTypes discoverer;
 
 		public MessageBus(
 			ITransportMessages transport,
 			IStoreSubscriptions subscriptions,
 			IDictionary<Type, ICollection<string>> recipients,
 			IMessageContext context,
-			MessageBuilder builder)
+			MessageBuilder builder,
+			IDiscoverMessageTypes discoverer)
 		{
 			this.transport = transport;
 			this.subscriptions = subscriptions;
 			this.recipients = recipients;
 			this.context = context;
 			this.builder = builder;
+			this.discoverer = discoverer;
 		}
 
 		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
-			this.Dispatch(messages, msg => this.GetRecipients(msg.GetTypes()));
+			this.Dispatch(messages, msg => this.GetRecipients(this.discoverer.GetTypes(msg)));
 		}
 		public ICollection<string> GetRecipients(IEnumerable<Type> messageTypes)
 		{
@@ -61,12 +65,16 @@ namespace NanoMessageBus
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(messages, msg => this.subscriptions.GetSubscribers(msg.GetTypes().GetTypeNames()));
+			this.Dispatch(messages, GetSubscribers);
+		}
+		private IEnumerable<string> GetSubscribers(object message)
+		{
+			return this.subscriptions.GetSubscribers(this.discoverer.GetTypeNames(message));
 		}
 
 		private void Dispatch(object[] messages, Func<object, IEnumerable<string>> getRecipients)
 		{
-			messages = messages.PopulatedMessagesOnly();
+			messages = PopulatedMessagesOnly(messages);
 			if (!messages.Any())
 				return;
 
@@ -78,6 +86,11 @@ namespace NanoMessageBus
 			}
 
 			this.transport.Send(this.builder.BuildMessage(messages), addresses);
+		}
+		private static object[] PopulatedMessagesOnly(object[] messages)
+		{
+			messages = (messages ?? new object[] { }).Where(x => x != null).ToArray();
+			return messages;
 		}
 	}
 }
