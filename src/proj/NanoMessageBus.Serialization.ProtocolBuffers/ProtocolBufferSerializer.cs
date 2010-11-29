@@ -48,8 +48,14 @@ namespace NanoMessageBus.Serialization
 
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
-
 			Serializer.Serialize(output, message);
+			////var model = global::ProtoBuf.Meta.TypeModel.Create();
+			////model.AutoAddMissingTypes = true;
+			////model.AutoCompile = true;
+			////model.Add(messageType.GetType(), true);
+
+			////model.Serialize(output, message);
+			//////var clone = Serializer.DeepClone(message);
 		}
 		protected override object DeserializeMessage(Stream input)
 		{

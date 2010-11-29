@@ -83,6 +83,38 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	}
 
 	[Subject("ProtocolBufferSerializer")]
+	public class when_serializing_and_then_deserializing_a_simple_message
+	{
+		static readonly SimpleMessage InputValue = new SimpleMessage { Value = "Hello, World!" };
+		static readonly Stream TempStream = new MemoryStream();
+		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
+		static SimpleMessage outputValue;
+
+		Establish context = () =>
+		{
+			Serializer.Serialize(TempStream, InputValue);
+			TempStream.Position = 0;
+		};
+
+		Because of = () =>
+			outputValue = (SimpleMessage)Serializer.Deserialize(TempStream);
+
+		It should_deserialize_back_to_the_same_type = () =>
+			outputValue.ShouldBeOfType(InputValue.GetType());
+
+		It should_deserialize_the_contents_of_the_simple_message = () =>
+			outputValue.Value.ShouldEqual(InputValue.Value);
+
+		[Serializable]
+		[DataContract]
+		private class SimpleMessage
+		{
+			[DataMember(Order = 1)]
+			public string Value { get; set; }
+		}
+	}
+
+	[Subject("ProtocolBufferSerializer")]
 	public class when_serializing_and_then_deserializing_a_PhysicalMessage
 	{
 		static readonly PhysicalMessage InputValue =

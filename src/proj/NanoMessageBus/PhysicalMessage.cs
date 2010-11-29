@@ -8,10 +8,10 @@ namespace NanoMessageBus
 	[Serializable]
 	public class PhysicalMessage
 	{
-		[DataMember(EmitDefaultValue = false, IsRequired = false)]
+		[DataMember(Order = 1, EmitDefaultValue = false, IsRequired = false)]
 		private readonly Guid messageId;
 
-		[DataMember(EmitDefaultValue = false, IsRequired = false)]
+		[DataMember(Order = 2, EmitDefaultValue = false, IsRequired = false)]
 		private readonly string returnAddress;
 
 		[IgnoreDataMember]
@@ -20,11 +20,11 @@ namespace NanoMessageBus
 		[IgnoreDataMember]
 		private readonly bool persistent;
 
-		[DataMember(EmitDefaultValue = false, IsRequired = false)]
+		[DataMember(Order = 3, EmitDefaultValue = false, IsRequired = false)]
 		private readonly IDictionary<string, string> headers;
 
-		[DataMember(EmitDefaultValue = false, IsRequired = false)]
-		private readonly ICollection<object> logicalMessages;
+		[DataMember(Order = 4, EmitDefaultValue = false, IsRequired = false)]
+		private readonly object[] logicalMessages;
 
 		protected PhysicalMessage()
 		{
@@ -35,7 +35,7 @@ namespace NanoMessageBus
 			TimeSpan timeToLive,
 			bool persistent,
 			IDictionary<string, string> headers,
-			ICollection<object> logicalMessages)
+			object[] logicalMessages)
 		{
 			this.messageId = messageId;
 			this.returnAddress = returnAddress;
