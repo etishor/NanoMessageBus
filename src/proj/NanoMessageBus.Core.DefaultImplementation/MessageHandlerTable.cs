@@ -11,10 +11,12 @@ namespace NanoMessageBus.Core
 		private static readonly IDictionary<Type, ICollection<Func<TContainer, IHandleMessages<object>>>> Routes =
 			new Dictionary<Type, ICollection<Func<TContainer, IHandleMessages<object>>>>();
 		private readonly TContainer childContainer;
+		private readonly IDiscoverMessageTypes messageTypeDiscoverer;
 
-		public MessageHandlerTable(TContainer childContainer)
+		public MessageHandlerTable(TContainer childContainer, IDiscoverMessageTypes messageTypeDiscoverer)
 		{
 			this.childContainer = childContainer;
+			this.messageTypeDiscoverer = messageTypeDiscoverer;
 		}
 
 		public static void RegisterHandler<TMessage>(IHandleMessages<TMessage> handler)
@@ -30,23 +32,30 @@ namespace NanoMessageBus.Core
 			var key = typeof(TMessage);
 
 			ICollection<Func<TContainer, IHandleMessages<object>>> routes;
-			if (!Routes.TryGetValue(key, out routes)) // todo: prevent duplicate registrations
+			if (!Routes.TryGetValue(key, out routes)) // TODO: prevent duplicate registrations
 				Routes[key] = routes = new LinkedList<Func<TContainer, IHandleMessages<object>>>();
 
 			Log.Debug(Diagnostics.RegisteringHandler, typeof(TMessage));
 			routes.Add(c => new MessageHandler<TMessage>(route(c)));
 		}
 
-		public virtual IEnumerable<IHandleMessages<object>> GetHandlers(Type messageType)
+		public virtual IEnumerable<IHandleMessages<object>> GetHandlers(object message)
 		{
-			ICollection<Func<TContainer, IHandleMessages<object>>> routeCallbacks;
-			if (!Routes.TryGetValue(messageType, out routeCallbacks))
+			var count = 0;
+			var handlers = this.messageTypeDiscoverer.GetTypes(message).SelectMany(this.GetHandlersForType);
+			foreach (var handler in handlers)
 			{
-				Log.Warn(Diagnostics.NoRegisteredHandlersFound, messageType);
-				return new IHandleMessages<object>[] { };
+				count++;
+				yield return handler;
 			}
 
-			Log.Verbose(Diagnostics.GettingHandlers, messageType);
+			if (count == 0)
+				Log.Warn(Diagnostics.NoRegisteredHandlersFound, message.GetType());
+		}
+		private IEnumerable<IHandleMessages<object>> GetHandlersForType(Type messageType)
+		{
+			ICollection<Func<TContainer, IHandleMessages<object>>> routeCallbacks;
+			Routes.TryGetValue(messageType, out routeCallbacks);
 			return routeCallbacks.Select(route => route(this.childContainer));
 		}
 

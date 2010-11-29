@@ -70,7 +70,7 @@ namespace NanoMessageBus.Core
 
 			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
 
-			var routes = this.handlerTable.GetHandlers(this.CurrentMessage.GetType());
+			var routes = this.handlerTable.GetHandlers(this.CurrentMessage);
 			foreach (var route in routes.TakeWhile(route => this.ContinueProcessing))
 				route.Handle(this.CurrentMessage);
 

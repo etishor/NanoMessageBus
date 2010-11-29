@@ -65,7 +65,7 @@ namespace NanoMessageBus
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(messages, GetSubscribers);
+			this.Dispatch(messages, this.GetSubscribers);
 		}
 		private IEnumerable<string> GetSubscribers(object message)
 		{

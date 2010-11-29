@@ -27,15 +27,16 @@ namespace NanoMessageBus.Wireup
 				.ExternallyOwned();
 
 			builder
-				.Register(c => new MessageHandlerTable<IComponentContext>(c))
+				.Register(c => new MessageHandlerTable<IComponentContext>(
+					c, this.BuildMessageTypeDiscoverer(c)))
 				.As<ITrackMessageHandlers>()
 				.InstancePerLifetimeScope()
 				.ExternallyOwned();
 
 			builder
 				.Register(c => new PhysicalMessageHandler(
-				    c.Resolve<ITrackMessageHandlers>(),
-				    c.Resolve<IMessageContext>()))
+					c.Resolve<ITrackMessageHandlers>(),
+					c.Resolve<IMessageContext>()))
 				.As<PhysicalMessageHandler>()
 				.InstancePerLifetimeScope()
 				.ExternallyOwned();
@@ -52,14 +53,18 @@ namespace NanoMessageBus.Wireup
 		{
 			builder
 				.Register(c => new MessageRouter(
-				    c.Resolve<ILifetimeScope>(),
-				    c.Resolve<IHandleUnitOfWork>(),
-				    c.Resolve<ITransportMessages>(),
-				    c.Resolve<ITrackMessageHandlers>()))
+					c.Resolve<ILifetimeScope>(),
+					c.Resolve<IHandleUnitOfWork>(),
+					c.Resolve<ITransportMessages>(),
+					c.Resolve<ITrackMessageHandlers>()))
 				.As<MessageRouter>()
 				.As<IMessageContext>()
 				.InstancePerLifetimeScope()
 				.ExternallyOwned();
+		}
+		protected virtual IDiscoverMessageTypes BuildMessageTypeDiscoverer(IComponentContext c)
+		{
+			return new MessageTypeDiscoverer();
 		}
 	}
 }
