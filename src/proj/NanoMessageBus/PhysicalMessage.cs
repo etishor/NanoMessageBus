@@ -2,6 +2,7 @@ namespace NanoMessageBus
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	[DataContract]
@@ -24,7 +25,7 @@ namespace NanoMessageBus
 		private readonly IDictionary<string, string> headers;
 
 		[DataMember(Order = 4, EmitDefaultValue = false, IsRequired = false)]
-		private readonly object[] logicalMessages;
+		private readonly List<object> logicalMessages;
 
 		protected PhysicalMessage()
 		{
@@ -35,14 +36,14 @@ namespace NanoMessageBus
 			TimeSpan timeToLive,
 			bool persistent,
 			IDictionary<string, string> headers,
-			object[] logicalMessages)
+			IEnumerable<object> logicalMessages)
 		{
 			this.messageId = messageId;
 			this.returnAddress = returnAddress;
 			this.timeToLive = timeToLive;
 			this.persistent = persistent;
 			this.headers = headers ?? new Dictionary<string, string>();
-			this.logicalMessages = logicalMessages;
+			this.logicalMessages = logicalMessages.ToList();
 		}
 
 		public Guid MessageId
