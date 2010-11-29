@@ -184,7 +184,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	public class when_serializing_and_then_deserializing_a_PhysicalMessage
 	{
 		static readonly PhysicalMessage InputValue =
-			new PhysicalMessage(Guid.NewGuid(), "ReturnAddress", TimeSpan.Zero, true, null, new List<object>());
+			new PhysicalMessage(Guid.NewGuid(), "ReturnAddress", TimeSpan.Zero, true, null, new object[] { });
 		static readonly Stream TempStream = new MemoryStream();
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
 		static PhysicalMessage outputValue;
