@@ -16,7 +16,7 @@ namespace NanoMessageBus.Serialization
 
 		public ProtocolBufferSerializer(params Type[] messageTypes)
 		{
-			this.RegisterMessage(typeof(PhysicalMessage));
+			this.RegisterMessage(typeof(ProtocolBufferTransportMessage));
 
 			foreach (var messageType in messageTypes ?? new Type[] { })
 				this.RegisterMessage(messageType);
@@ -41,6 +41,17 @@ namespace NanoMessageBus.Serialization
 		protected override void SerializeMessage(Stream output, object message)
 		{
 			var messageType = message.GetType();
+			this.WriteTypeToStream(messageType, output);
+
+			if (messageType == typeof(PhysicalMessage))
+				this.SerializeMessage(output, message as PhysicalMessage);
+			else
+				Serializer.Serialize(output, message);
+		}
+		private void WriteTypeToStream(Type messageType, Stream output)
+		{
+			if (messageType == typeof(PhysicalMessage))
+				messageType = typeof(ProtocolBufferTransportMessage);
 
 			int key;
 			if (!this.types.TryGetValue(messageType, out key))
@@ -48,26 +59,43 @@ namespace NanoMessageBus.Serialization
 
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
-			Serializer.Serialize(output, message);
-			////var model = global::ProtoBuf.Meta.TypeModel.Create();
-			////model.AutoAddMissingTypes = true;
-			////model.AutoCompile = true;
-			////model.Add(messageType.GetType(), true);
-
-			////model.Serialize(output, message);
-			//////var clone = Serializer.DeepClone(message);
 		}
+		private void SerializeMessage(Stream output, PhysicalMessage message)
+		{
+			Serializer.Serialize(output, new ProtocolBufferTransportMessage(message));
+			foreach (var logicalMessage in message.LogicalMessages)
+				this.SerializeMessage(output, logicalMessage);
+		}
+
 		protected override object DeserializeMessage(Stream input)
 		{
 			var header = new byte[4];
 			input.Read(header, 0, header.Length);
+			var messageType = this.GetSerializedType(header);
+
+			var message = this.deserializers[messageType](input);
+			if (messageType != typeof(ProtocolBufferTransportMessage))
+				return message;
+
+			return this.DeserializeTransportMessage(input, message);
+		}
+		private Type GetSerializedType(byte[] header)
+		{
 			var key = BitConverter.ToInt32(header, 0);
 
 			Type messageType;
 			if (!this.keys.TryGetValue(key, out messageType))
 				throw new SerializationException(Diagnostics.UnrecognizedHeader.FormatWith(key));
 
-			return this.deserializers[messageType](input);
+			return messageType == typeof(PhysicalMessage) ? typeof(ProtocolBufferTransportMessage) : messageType;
+		}
+		private object DeserializeTransportMessage(Stream input, object message)
+		{
+			var wireMessage = (ProtocolBufferTransportMessage)message;
+			while (input.Position < input.Length)
+				wireMessage.LogicalMessages.Add(this.DeserializeMessage(input));
+
+			return wireMessage.ToMessage();
 		}
 	}
 }

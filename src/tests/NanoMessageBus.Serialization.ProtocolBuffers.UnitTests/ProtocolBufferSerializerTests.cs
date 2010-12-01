@@ -6,6 +6,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
 	using System.Runtime.Serialization;
 	using Machine.Specifications;
 
@@ -147,38 +148,38 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 		}
 	}
 
-	[Subject("ProtocolBufferSerializer")]
-	public class when_serializing_and_then_deserializing_an_untyped_collection_of_objects
-	{
-		static readonly IList<object> InputValue =
-			new List<object> { new SimpleMessage { Value = "Hello, World!" } };
-		static readonly Stream TempStream = new MemoryStream();
-		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
-		static IList<object> outputValue;
+	////[Subject("ProtocolBufferSerializer")]
+	////public class when_serializing_and_then_deserializing_an_untyped_collection_of_objects
+	////{
+	////    static readonly IList<object> InputValue =
+	////        new List<object> { new SimpleMessage { Value = "Hello, World!" } };
+	////    static readonly Stream TempStream = new MemoryStream();
+	////    static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
+	////    static IList<object> outputValue;
 
-		Establish context = () =>
-		{
-			Serializer.Serialize(TempStream, InputValue);
-			TempStream.Position = 0;
-		};
+	////    Establish context = () =>
+	////    {
+	////        Serializer.Serialize(TempStream, InputValue);
+	////        TempStream.Position = 0;
+	////    };
 
-		Because of = () =>
-			outputValue = (IList<object>)Serializer.Deserialize(TempStream);
+	////    Because of = () =>
+	////        outputValue = (IList<object>)Serializer.Deserialize(TempStream);
 
-		It should_deserialize_back_to_a_collection = () =>
-			outputValue.ShouldNotBeNull();
+	////    It should_deserialize_back_to_a_collection = () =>
+	////        outputValue.ShouldNotBeNull();
 
-		It should_deserialize_the_contents_of_the_simple_message = () =>
-			((SimpleMessage)outputValue[0]).Value.ShouldEqual(((SimpleMessage)InputValue[0]).Value);
+	////    It should_deserialize_the_contents_of_the_simple_message = () =>
+	////        ((SimpleMessage)outputValue[0]).Value.ShouldEqual(((SimpleMessage)InputValue[0]).Value);
 
-		[Serializable]
-		[DataContract]
-		private class SimpleMessage
-		{
-			[DataMember(Order = 1)]
-			public string Value { get; set; }
-		}
-	}
+	////    [Serializable]
+	////    [DataContract]
+	////    private class SimpleMessage
+	////    {
+	////        [DataMember(Order = 1)]
+	////        public string Value { get; set; }
+	////    }
+	////}
 
 	[Subject("ProtocolBufferSerializer")]
 	public class when_serializing_and_then_deserializing_a_PhysicalMessage
@@ -203,6 +204,44 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 
 		It should_deserialize_the_contents_of_the_complex_type = () =>
 			outputValue.MessageId.ShouldEqual(InputValue.MessageId);
+	}
+
+	[Subject("ProtocolBufferSerializer")]
+	public class when_a_PhysicalMessage_contains_several_different_logical_message_types
+	{
+		static readonly PhysicalMessage InputValue =
+			new PhysicalMessage(
+				Guid.NewGuid(),
+				"ReturnAddress",
+				TimeSpan.Zero,
+				true,
+				null,
+				new object[] {12345, Guid.NewGuid(), "whatever" });
+
+		static readonly Stream TempStream = new MemoryStream();
+		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(
+			InputValue.GetType(),
+			InputValue.LogicalMessages.ToList()[0].GetType(),
+			InputValue.LogicalMessages.ToList()[1].GetType(),
+			InputValue.LogicalMessages.ToList()[2].GetType());
+		static PhysicalMessage outputValue;
+
+		Establish context = () =>
+		{
+			Serializer.Serialize(TempStream, InputValue);
+			TempStream.Position = 0;
+		};
+
+		Because of = () =>
+			outputValue = (PhysicalMessage)Serializer.Deserialize(TempStream);
+
+		It should_deserialize_the_each_logical_message_propertly = () =>
+		{
+			var input = InputValue.LogicalMessages.ToList();
+			var output = outputValue.LogicalMessages.ToList();
+			for (var i = 0; i < input.Count; i++)
+				output[i].ShouldEqual(input[i]);
+		};
 	}
 }
 
