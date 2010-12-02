@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtocolBufferSerializerTests.cs" />
+    <Compile Include="SimpleMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\proj\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj">

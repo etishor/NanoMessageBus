@@ -16,10 +16,37 @@ namespace NanoMessageBus.Serialization
 
 		public ProtocolBufferSerializer(params Type[] messageTypes)
 		{
-			this.RegisterMessage(typeof(ProtocolBufferTransportMessage));
+			this.RegisterPrimitives();
+			this.RegisterCommonTypes();
 
 			foreach (var messageType in messageTypes ?? new Type[] { })
 				this.RegisterMessage(messageType);
+		}
+		private void RegisterPrimitives()
+		{
+			this.RegisterMessage(typeof(bool));
+
+			this.RegisterMessage(typeof(char));
+			this.RegisterMessage(typeof(byte));
+			this.RegisterMessage(typeof(sbyte));
+
+			this.RegisterMessage(typeof(short));
+			this.RegisterMessage(typeof(ushort));
+			this.RegisterMessage(typeof(int));
+			this.RegisterMessage(typeof(uint));
+			this.RegisterMessage(typeof(long));
+			this.RegisterMessage(typeof(ulong));
+			this.RegisterMessage(typeof(double));
+			this.RegisterMessage(typeof(float));
+			this.RegisterMessage(typeof(decimal));
+
+			this.RegisterMessage(typeof(string));
+		}
+		private void RegisterCommonTypes()
+		{
+			this.RegisterMessage(typeof(Uri));
+			this.RegisterMessage(typeof(Guid));
+			this.RegisterMessage(typeof(ProtocolBufferTransportMessage));
 		}
 		private void RegisterMessage(Type messageType)
 		{

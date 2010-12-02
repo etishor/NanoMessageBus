@@ -27,9 +27,11 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	public class when_serializing_an_unregistered_type
 	{
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer();
+		static readonly Stream TempStream = new MemoryStream();
 		static Exception exception;
 
-		Because of = () => exception = Catch.Exception(() => Serializer.Serialize(null, 0));
+		Because of = () =>
+			exception = Catch.Exception(() => Serializer.Serialize(TempStream, new SimpleMessage()));
 
 		It should_throw_a_SerializationException = () =>
 			exception.ShouldBeOfType(typeof(SerializationException));
@@ -105,14 +107,6 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 
 		It should_deserialize_the_contents_of_the_simple_message = () =>
 			outputValue.Value.ShouldEqual(InputValue.Value);
-
-		[Serializable]
-		[DataContract]
-		private class SimpleMessage
-		{
-			[DataMember(Order = 1)]
-			public string Value { get; set; }
-		}
 	}
 
 	[Subject("ProtocolBufferSerializer")]
@@ -138,48 +132,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 
 		It should_deserialize_the_contents_of_the_simple_message = () =>
 			outputValue[0].Value.ShouldEqual(InputValue[0].Value);
-
-		[Serializable]
-		[DataContract]
-		private class SimpleMessage
-		{
-			[DataMember(Order = 1)]
-			public string Value { get; set; }
-		}
 	}
-
-	////[Subject("ProtocolBufferSerializer")]
-	////public class when_serializing_and_then_deserializing_an_untyped_collection_of_objects
-	////{
-	////    static readonly IList<object> InputValue =
-	////        new List<object> { new SimpleMessage { Value = "Hello, World!" } };
-	////    static readonly Stream TempStream = new MemoryStream();
-	////    static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
-	////    static IList<object> outputValue;
-
-	////    Establish context = () =>
-	////    {
-	////        Serializer.Serialize(TempStream, InputValue);
-	////        TempStream.Position = 0;
-	////    };
-
-	////    Because of = () =>
-	////        outputValue = (IList<object>)Serializer.Deserialize(TempStream);
-
-	////    It should_deserialize_back_to_a_collection = () =>
-	////        outputValue.ShouldNotBeNull();
-
-	////    It should_deserialize_the_contents_of_the_simple_message = () =>
-	////        ((SimpleMessage)outputValue[0]).Value.ShouldEqual(((SimpleMessage)InputValue[0]).Value);
-
-	////    [Serializable]
-	////    [DataContract]
-	////    private class SimpleMessage
-	////    {
-	////        [DataMember(Order = 1)]
-	////        public string Value { get; set; }
-	////    }
-	////}
 
 	[Subject("ProtocolBufferSerializer")]
 	public class when_serializing_and_then_deserializing_a_PhysicalMessage
