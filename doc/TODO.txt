@@ -1,29 +1,50 @@
-Full unit and integration tests
-XML code comments
-Documentation and examples
-Fluent builder
-Support for multiple containers (Castle, SM, Ninject, Unity)
-ILMerge quirks
+[A] Rename "DefaultImplementation" projects and standardize assembly packaging
+[A] ILMerge quirks
+[A] XML code comments on contract interfaces
+[A] Full unit and integration tests
+[A] Documentation and examples
+[A] Fluent builder
+[A] Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
+[A] Maximum # of failures & retry / error queue / (infrastructure message headers would contain exception)
+    - or we could have another envelope around the error condition inside the PhysicalMessage
+[A] Serialization exception should move straight to error queue
 
-Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
+[B] Support for multiple containers (Castle, SM, Ninject, Unity)
 
-Protocol Buffer serializer
+[B] Perhaps we should promote the concept of an "Address" to be first class?
+    - using System.Uri (we can use user/pass values for authenticated endpoints)
+    - we could also use querystring the query string values to wrap endpoints in endpoints,
+      e.g. an msmq address inside of an http address
 
-Additional endpoint connectors, e.g. Azure, SQS, RabbitMQ, ActiveMQ, Qpid, etc.
+[B] IdempotentReceiver
+    - when a message is received, we ensure that we've only received it once and that,
+      when the UoW is complete, the message is considered received and then ignored
+    - This would most likely occur in memory where we could track the last X,000 messages
+      (or X minutes) received and de-duplicate on that...
 
-Maximum # of failures & retry / error queue / (infrastructure message headers would contain exception)
- - or we could have another envelope around the error condition inside the PhysicalMessage
-Serialization exception should move straight to error queue
+[B] Generic host
+[C] Timeout Manager
 
-Rename "DefaultImplementation" projects
+[B] ISplitMessagesIntoPackets and IReassembleMessagesFromPackets
+    - allows smaller payloads to be split and transferred across the wire when the
+      infrastructure has a highly restrictive message size, e.g. Azure & SQS.)
+    - Packet: GroupId:Guid, Sequence/Index:int, Bytes:int, FinalPacket:bool
+    - Split(Stream, MaxPacketSize):IEnumerable<Packet>
+    -  Combine(Packet):Stream (null if !complete)
+    - Expiration?  All packets should expire at the same time and cause the entire "stream" to expire
+    - it feels like the endpoint itself should handle this responsibility with the help of some
+      collaborator code
 
-IdempotentReceiver
- - when a message is received, we ensure that we've only received it once and that,
-   when the UoW is complete, the message is considered received and then ignored
- - This would most likely occur in memory where we could track the last X,000 messages
-   (or X minutes) received and de-duplicate on that...
+[C] Additional endpoint connectors, e.g. Azure, SQS, RabbitMQ, ActiveMQ, Qpid, etc.
 
-SinglePhaseCommitReceiver/Sender
+[C] Additional transports, e.g. HttpTransport, FtpTransport, SmtpTransport, etc.
+
+[C] MessageBus should receive a Func<address, ITransportMessages> instead of just ITransportMessages
+ - this allows us to dispatch to transports based upon the address scheme, e.g. msmq://, smtp://, ftp://, http(s)://
+ - for non-queued (and non-durable transports), we'll probably want to create a small DB queue infrastructure
+   such that outbound messages are committed as part of the UoW and dispatched async on a separate thread.
+
+[C] SinglePhaseCommitReceiver/Sender
  - The message is received in a separate transaction from the work against the DB
  - This really works well for NoSQL implementations...
  - When the "DB" UoW is done, it commits and tracks the incoming message that was
@@ -35,25 +56,12 @@ SinglePhaseCommitReceiver/Sender
  - The entire objective is to completely avoid 2PC so as to enable use of other
    storage engines that may not support 2PC outright.
 
-ISplitMessagesIntoPackets and IReassembleMessagesFromPackets
- - allows smaller payloads to be split and transferred across the wire when the
-   infrastructure has a highly restrictive message size, e.g. Azure & SQS.)
-
- - Packet: GroupId:Guid, Sequence/Index:int, Bytes:int, FinalPacket:bool
- - Split(Stream, MaxPacketSize):IEnumerable<Packet>
- -  Combine(Packet):Stream (null if !complete)
-
- - Expiration?  All packets should expire at the same time and cause the entire "stream" to expire
-
- - it feels like the endpoint itself should handle this responsibility with the help of some
-   collaborator code
-
-ITransportFiles (ITransportStreams?)
+[C] ITransportFiles (ITransportStreams?)
  - this is in contrast to ISplitMessagesIntoPackets which keeps the payload in memory
    whereas ITransportFiles doesn't attempt to keep everything in memory)
  - it still needs to be aware of expiration
 
-ReplicatedSubscriptionStorage
+[B] ReplicatedSubscriptionStorage
  - Publisher notifies "central" subscription storage of intent to publish along with
    types of messages it will publish and expiration of publish (max publisher lifetime?).
    This occurs when the SubscriptionStorage is initialized, e.g. ctro
