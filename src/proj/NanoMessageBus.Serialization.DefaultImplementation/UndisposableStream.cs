@@ -2,11 +2,11 @@ namespace NanoMessageBus.Serialization
 {
 	using System.IO;
 
-	internal class DoNotDisposeStream : Stream
+	internal class UndisposableStream : Stream
 	{
 		private readonly Stream stream;
 
-		public DoNotDisposeStream(Stream stream)
+		public UndisposableStream(Stream stream)
 		{
 			this.stream = stream;
 		}

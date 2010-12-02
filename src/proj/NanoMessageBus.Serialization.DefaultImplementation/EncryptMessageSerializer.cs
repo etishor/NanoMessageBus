@@ -33,10 +33,10 @@ namespace NanoMessageBus.Serialization
 				rijndael.GenerateIV();
 
 				using (var encryptor = rijndael.CreateEncryptor())
-				using (var openStream = new DoNotDisposeStream(output))
-				using (var encryptionStream = new CryptoStream(openStream, encryptor, CryptoStreamMode.Write))
+				using (var outputWrapper = new UndisposableStream(output))
+				using (var encryptionStream = new CryptoStream(outputWrapper, encryptor, CryptoStreamMode.Write))
 				{
-					openStream.Write(rijndael.IV, 0, rijndael.IV.Length);
+					outputWrapper.Write(rijndael.IV, 0, rijndael.IV.Length);
 					this.inner.Serialize(encryptionStream, message);
 					encryptionStream.Flush();
 					encryptionStream.FlushFinalBlock();
