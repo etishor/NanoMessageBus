@@ -2,7 +2,6 @@ namespace NanoMessageBus.Serialization
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using ProtoBuf;
 
 	[ProtoContract]
@@ -10,14 +9,14 @@ namespace NanoMessageBus.Serialization
 	{
 		public ProtocolBufferTransportMessage()
 		{
-			this.LogicalMessages = new List<object>();
+			this.LogicalMessages = new List<byte[]>();
 		}
 		public ProtocolBufferTransportMessage(PhysicalMessage message)
+			: this()
 		{
 			this.MessageId = message.MessageId;
 			this.ReturnAddress = message.ReturnAddress;
 			this.Headers = message.Headers;
-			this.LogicalMessages = message.LogicalMessages;
 		}
 
 		public PhysicalMessage ToMessage()
@@ -28,7 +27,7 @@ namespace NanoMessageBus.Serialization
 				TimeSpan.Zero,
 				false,
 				this.Headers,
-				this.LogicalMessages.ToArray());
+				new List<object>());
 		}
 
 		[ProtoMember(1)]
@@ -40,7 +39,7 @@ namespace NanoMessageBus.Serialization
 		[ProtoMember(3)]
 		public IDictionary<string, string> Headers { get; set; }
 
-		[ProtoIgnore]
-		public ICollection<object> LogicalMessages { get; set; }
+		[ProtoMember(4)]
+		public ICollection<byte[]> LogicalMessages { get; set; }
 	}
 }

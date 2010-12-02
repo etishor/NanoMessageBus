@@ -24,7 +24,7 @@ namespace NanoMessageBus
 		private readonly IDictionary<string, string> headers;
 
 		[DataMember(Order = 4, EmitDefaultValue = false, IsRequired = false)]
-		private readonly object[] logicalMessages;
+		private readonly ICollection<object> logicalMessages;
 
 		protected PhysicalMessage()
 		{
@@ -35,7 +35,7 @@ namespace NanoMessageBus
 			TimeSpan timeToLive,
 			bool persistent,
 			IDictionary<string, string> headers,
-			object[] logicalMessages)
+			ICollection<object> logicalMessages)
 		{
 			this.messageId = messageId;
 			this.returnAddress = returnAddress;

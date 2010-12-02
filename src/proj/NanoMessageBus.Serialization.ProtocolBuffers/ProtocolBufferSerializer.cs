@@ -62,9 +62,17 @@ namespace NanoMessageBus.Serialization
 		}
 		private void SerializeMessage(Stream output, PhysicalMessage message)
 		{
-			Serializer.Serialize(output, new ProtocolBufferTransportMessage(message));
+			var protoMessage = new ProtocolBufferTransportMessage(message);
 			foreach (var logicalMessage in message.LogicalMessages)
-				this.SerializeMessage(output, logicalMessage);
+			{
+				using (var stream = new MemoryStream())
+				{
+					this.SerializeMessage(stream, logicalMessage);
+					protoMessage.LogicalMessages.Add(stream.ToArray());
+				}
+			}
+
+			Serializer.Serialize(output, protoMessage);
 		}
 
 		protected override object DeserializeMessage(Stream input)
@@ -77,7 +85,7 @@ namespace NanoMessageBus.Serialization
 			if (messageType != typeof(ProtocolBufferTransportMessage))
 				return message;
 
-			return this.DeserializeTransportMessage(input, message);
+			return this.DeserializeTransportMessage(message as ProtocolBufferTransportMessage);
 		}
 		private Type GetSerializedType(byte[] header)
 		{
@@ -89,13 +97,15 @@ namespace NanoMessageBus.Serialization
 
 			return messageType == typeof(PhysicalMessage) ? typeof(ProtocolBufferTransportMessage) : messageType;
 		}
-		private object DeserializeTransportMessage(Stream input, object message)
+		private object DeserializeTransportMessage(ProtocolBufferTransportMessage message)
 		{
-			var wireMessage = (ProtocolBufferTransportMessage)message;
-			while (input.Position < input.Length)
-				wireMessage.LogicalMessages.Add(this.DeserializeMessage(input));
+			var transportMessage = message.ToMessage();
 
-			return wireMessage.ToMessage();
+			foreach (var serializedLogicalMessage in message.LogicalMessages)
+				using (var stream = new MemoryStream(serializedLogicalMessage))
+					transportMessage.LogicalMessages.Add(this.DeserializeMessage(stream));
+
+			return transportMessage;
 		}
 	}
 }

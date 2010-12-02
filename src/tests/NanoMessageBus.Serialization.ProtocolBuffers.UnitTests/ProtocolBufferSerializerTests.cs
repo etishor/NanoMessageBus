@@ -216,7 +216,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 				TimeSpan.Zero,
 				true,
 				null,
-				new object[] {12345, Guid.NewGuid(), "whatever" });
+				new object[] { 12345, Guid.NewGuid(), "whatever" });
 
 		static readonly Stream TempStream = new MemoryStream();
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(
@@ -235,7 +235,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 		Because of = () =>
 			outputValue = (PhysicalMessage)Serializer.Deserialize(TempStream);
 
-		It should_deserialize_the_each_logical_message_propertly = () =>
+		It should_deserialize_the_contents_of_each_logical_message_properly = () =>
 		{
 			var input = InputValue.LogicalMessages.ToList();
 			var output = outputValue.LogicalMessages.ToList();
