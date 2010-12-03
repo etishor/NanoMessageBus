@@ -1,15 +1,13 @@
 [A] Standardize assembly packaging
 [A] ILMerge quirks
-[A] XML code comments on contract interfaces
 [A] Full unit and integration tests
 [A] Documentation and examples
-[A] Fluent builder
 [A] Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
 [A] Maximum # of failures & retry / error queue / (infrastructure message headers would contain exception)
     - or we could have another envelope around the error condition inside the PhysicalMessage
 [A] Serialization exception should move straight to error queue
 
-[B] Support for multiple containers (Castle, SM, Ninject, Unity)
+[B] Support for multiple containers (Castle, SM, Ninject, Unity) with fluent builders
 
 [B] Perhaps we should promote the concept of an "Address" to be first class?
     - using System.Uri (we can use user/pass values for authenticated endpoints)
