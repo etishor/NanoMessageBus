@@ -160,16 +160,7 @@ namespace NanoMessageBus.Endpoints {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Physical message &apos;{0}&apos; contains a logical message of type &apos;{1}&apos;..
-        /// </summary>
-        internal static string PhysicalMessageContains {
-            get {
-                return ResourceManager.GetString("PhysicalMessageContains", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Preparing to send physical message &apos;{0}&apos; which contains {1} logical messages..
+        ///   Looks up a localized string similar to Preparing to send transport message &apos;{0}&apos; which contains {1} logical messages..
         /// </summary>
         internal static string PreparingMessageToSend {
             get {
@@ -192,6 +183,15 @@ namespace NanoMessageBus.Endpoints {
         internal static string SendingMessage {
             get {
                 return ResourceManager.GetString("SendingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transport message &apos;{0}&apos; contains a logical message of type &apos;{1}&apos;..
+        /// </summary>
+        internal static string TransportMessageContains {
+            get {
+                return ResourceManager.GetString("TransportMessageContains", resourceCulture);
             }
         }
     }

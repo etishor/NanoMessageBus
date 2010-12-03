@@ -50,11 +50,11 @@ namespace NanoMessageBus.Endpoints
 			}
 		}
 
-		public virtual void Send(PhysicalMessage message, params string[] recipients)
+		public virtual void Send(TransportMessage message, params string[] recipients)
 		{
 			Log.Debug(Diagnostics.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
 			foreach (var msg in message.LogicalMessages)
-				Log.Verbose(Diagnostics.PhysicalMessageContains, message.MessageId, msg.GetType().FullName);
+				Log.Verbose(Diagnostics.TransportMessageContains, message.MessageId, msg.GetType().FullName);
 
 			using (var serializedStream = new MemoryStream())
 			{
@@ -103,7 +103,7 @@ namespace NanoMessageBus.Endpoints
 				return connector;
 			}
 		}
-		public static Message BuildMsmqMessage(PhysicalMessage message, Stream serialized)
+		public static Message BuildMsmqMessage(TransportMessage message, Stream serialized)
 		{
 			return new Message
 			{
@@ -113,12 +113,12 @@ namespace NanoMessageBus.Endpoints
 				TimeToBeReceived = GetTimeToBeReceived(message),
 			};
 		}
-		private static string GetLabel(PhysicalMessage message)
+		private static string GetLabel(TransportMessage message)
 		{
 			var messages = message.LogicalMessages;
 			return LabelFormat.FormatWith(messages.Count, messages.First().GetType().FullName);
 		}
-		private static TimeSpan GetTimeToBeReceived(PhysicalMessage message)
+		private static TimeSpan GetTimeToBeReceived(TransportMessage message)
 		{
 			if (message.TimeToLive == TimeSpan.MaxValue || message.TimeToLive == TimeSpan.Zero)
 				return MessageQueue.InfiniteTimeout;

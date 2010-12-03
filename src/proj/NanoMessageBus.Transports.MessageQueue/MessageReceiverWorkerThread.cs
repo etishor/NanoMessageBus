@@ -64,7 +64,7 @@ namespace NanoMessageBus.Transports
 				this.RouteToHandlers(router, message);
 			}
 		}
-		private void RouteToHandlers(IRouteMessagesToHandlers router, PhysicalMessage message)
+		private void RouteToHandlers(IRouteMessagesToHandlers router, TransportMessage message)
 		{
 			if (!message.IsPopulated())
 				return;

@@ -40,14 +40,14 @@ namespace NanoMessageBus.Wireup
 				.ExternallyOwned();
 
 			builder
-				.Register(c => new PhysicalMessageHandler(
+				.Register(c => new TransportMessageHandler(
 					c.Resolve<ITrackMessageHandlers>(),
 					c.Resolve<IMessageContext>()))
-				.As<PhysicalMessageHandler>()
+				.As<TransportMessageHandler>()
 				.InstancePerLifetimeScope()
 				.ExternallyOwned();
 
-			this.Configure<MessageHandlerWireup>().AddHandler(c => c.Resolve<PhysicalMessageHandler>());
+			this.Configure<MessageHandlerWireup>().AddHandler(c => c.Resolve<TransportMessageHandler>());
 		}
 		protected virtual IRouteMessagesToHandlers BuildRouter(IComponentContext c)
 		{

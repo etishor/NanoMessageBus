@@ -5,6 +5,6 @@ namespace NanoMessageBus.Endpoints
 	public interface IReceiveFromEndpoints : IDisposable
 	{
 		string EndpointAddress { get; }
-		PhysicalMessage Receive();
+		TransportMessage Receive();
 	}
 }

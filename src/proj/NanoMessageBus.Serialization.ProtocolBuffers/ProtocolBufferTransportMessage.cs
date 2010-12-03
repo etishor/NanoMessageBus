@@ -11,7 +11,7 @@ namespace NanoMessageBus.Serialization
 		{
 			this.LogicalMessages = new List<byte[]>();
 		}
-		public ProtocolBufferTransportMessage(PhysicalMessage message)
+		public ProtocolBufferTransportMessage(TransportMessage message)
 			: this()
 		{
 			this.MessageId = message.MessageId;
@@ -19,9 +19,9 @@ namespace NanoMessageBus.Serialization
 			this.Headers = message.Headers;
 		}
 
-		public PhysicalMessage ToMessage()
+		public TransportMessage ToMessage()
 		{
-			return new PhysicalMessage(
+			return new TransportMessage(
 				this.MessageId,
 				this.ReturnAddress,
 				TimeSpan.Zero,

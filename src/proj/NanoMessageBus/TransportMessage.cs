@@ -6,7 +6,7 @@ namespace NanoMessageBus
 
 	[DataContract]
 	[Serializable]
-	public class PhysicalMessage
+	public class TransportMessage
 	{
 		[DataMember(Order = 1, EmitDefaultValue = false, IsRequired = false)]
 		private readonly Guid messageId;
@@ -26,10 +26,10 @@ namespace NanoMessageBus
 		[DataMember(Order = 4, EmitDefaultValue = false, IsRequired = false)]
 		private readonly ICollection<object> logicalMessages;
 
-		protected PhysicalMessage()
+		protected TransportMessage()
 		{
 		}
-		public PhysicalMessage(
+		public TransportMessage(
 			Guid messageId,
 			string returnAddress,
 			TimeSpan timeToLive,

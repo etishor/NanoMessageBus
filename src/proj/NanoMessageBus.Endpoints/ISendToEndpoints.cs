@@ -4,6 +4,6 @@ namespace NanoMessageBus.Endpoints
 
 	public interface ISendToEndpoints : IDisposable
 	{
-		void Send(PhysicalMessage message, params string[] recipients);
+		void Send(TransportMessage message, params string[] recipients);
 	}
 }

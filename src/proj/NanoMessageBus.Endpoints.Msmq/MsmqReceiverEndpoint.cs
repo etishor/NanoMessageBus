@@ -43,7 +43,7 @@ namespace NanoMessageBus.Endpoints
 			get { return this.connector.Address; }
 		}
 
-		public virtual PhysicalMessage Receive()
+		public virtual TransportMessage Receive()
 		{
 			try
 			{
@@ -53,7 +53,7 @@ namespace NanoMessageBus.Endpoints
 
 				using (message)
 				using (message.BodyStream)
-					return (PhysicalMessage)this.serializer.Deserialize(message.BodyStream);
+					return (TransportMessage)this.serializer.Deserialize(message.BodyStream);
 			}
 			catch (MessageQueueException e)
 			{
@@ -67,7 +67,7 @@ namespace NanoMessageBus.Endpoints
 			}
 		}
 
-		private PhysicalMessage NoMessageAvailable()
+		private TransportMessage NoMessageAvailable()
 		{
 			Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.Address);
 			return null;

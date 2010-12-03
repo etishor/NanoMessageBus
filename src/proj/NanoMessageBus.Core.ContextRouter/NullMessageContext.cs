@@ -4,8 +4,8 @@ namespace NanoMessageBus.Core
 
 	public class NullMessageContext : IMessageContext
 	{
-		private static readonly PhysicalMessage NullMessage =
-			new PhysicalMessage(Guid.Empty, string.Empty, TimeSpan.Zero, false, null, null);
+		private static readonly TransportMessage NullMessage =
+			new TransportMessage(Guid.Empty, string.Empty, TimeSpan.Zero, false, null, null);
 
 		public void DeferMessage()
 		{
@@ -13,7 +13,7 @@ namespace NanoMessageBus.Core
 		public void DropMessage()
 		{
 		}
-		public PhysicalMessage CurrentMessage
+		public TransportMessage CurrentMessage
 		{
 			get { return NullMessage; }
 		}

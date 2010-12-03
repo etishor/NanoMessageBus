@@ -70,14 +70,14 @@ namespace NanoMessageBus.Serialization
 			var messageType = message.GetType();
 			this.WriteTypeToStream(messageType, output);
 
-			if (messageType == typeof(PhysicalMessage))
-				this.SerializeMessage(output, message as PhysicalMessage);
+			if (messageType == typeof(TransportMessage))
+				this.SerializeMessage(output, message as TransportMessage);
 			else
 				Serializer.Serialize(output, message);
 		}
 		private void WriteTypeToStream(Type messageType, Stream output)
 		{
-			if (messageType == typeof(PhysicalMessage))
+			if (messageType == typeof(TransportMessage))
 				messageType = typeof(ProtocolBufferTransportMessage);
 
 			int key;
@@ -87,7 +87,7 @@ namespace NanoMessageBus.Serialization
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
 		}
-		private void SerializeMessage(Stream output, PhysicalMessage message)
+		private void SerializeMessage(Stream output, TransportMessage message)
 		{
 			var protoMessage = new ProtocolBufferTransportMessage(message);
 			foreach (var logicalMessage in message.LogicalMessages)
@@ -122,7 +122,7 @@ namespace NanoMessageBus.Serialization
 			if (!this.keys.TryGetValue(key, out messageType))
 				throw new SerializationException(Diagnostics.UnrecognizedHeader.FormatWith(key));
 
-			return messageType == typeof(PhysicalMessage) ? typeof(ProtocolBufferTransportMessage) : messageType;
+			return messageType == typeof(TransportMessage) ? typeof(ProtocolBufferTransportMessage) : messageType;
 		}
 		private object DeserializeTransportMessage(ProtocolBufferTransportMessage message)
 		{

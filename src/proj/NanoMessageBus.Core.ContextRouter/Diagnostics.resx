@@ -133,7 +133,7 @@
     <value>Skipping remaining handlers.</value>
   </data>
   <data name="LogicalMessageCount" xml:space="preserve">
-    <value>Physical message contains {0} logical messages.</value>
+    <value>Transport message contains {0} logical messages.</value>
   </data>
   <data name="LogicalMessageHandled" xml:space="preserve">
     <value>Logical message of type '{0}' has been handled.</value>

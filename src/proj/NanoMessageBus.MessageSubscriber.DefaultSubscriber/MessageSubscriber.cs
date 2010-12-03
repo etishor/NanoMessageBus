@@ -54,12 +54,12 @@ namespace NanoMessageBus.MessageSubscriber
 
 		private void Send(object request, string endpointAddress)
 		{
-			var physicalMessage = this.BuildPhysicalMessage(request);
-			this.transport.Send(physicalMessage, endpointAddress);
+			var transportMessage = this.BuildTransportMessage(request);
+			this.transport.Send(transportMessage, endpointAddress);
 		}
-		private PhysicalMessage BuildPhysicalMessage(object logicalMessage)
+		private TransportMessage BuildTransportMessage(object logicalMessage)
 		{
-			return new PhysicalMessage(
+			return new TransportMessage(
 				Guid.NewGuid(),
 				this.returnAddress,
 				TimeSpan.MaxValue,

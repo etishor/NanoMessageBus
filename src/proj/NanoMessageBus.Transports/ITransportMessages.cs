@@ -7,6 +7,6 @@ namespace NanoMessageBus.Transports
 		void StartListening();
 		void StopListening();
 
-		void Send(PhysicalMessage message, params string[] recipients);
+		void Send(TransportMessage message, params string[] recipients);
 	}
 }

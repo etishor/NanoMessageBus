@@ -3,21 +3,19 @@ namespace NanoMessageBus.Core
 	using System.Linq;
 	using Logging;
 
-	public class PhysicalMessageHandler : IHandleMessages<PhysicalMessage>
+	public class TransportMessageHandler : IHandleMessages<TransportMessage>
 	{
-		private static readonly ILog Log = LogFactory.BuildLogger(typeof(PhysicalMessageHandler));
+		private static readonly ILog Log = LogFactory.BuildLogger(typeof(TransportMessageHandler));
 		private readonly ITrackMessageHandlers handlerTable;
 		private readonly IMessageContext context;
 
-		public PhysicalMessageHandler(
-			ITrackMessageHandlers handlerTable,
-			IMessageContext context)
+		public TransportMessageHandler(ITrackMessageHandlers handlerTable, IMessageContext context)
 		{
 			this.handlerTable = handlerTable;
 			this.context = context;
 		}
 
-		public virtual void Handle(PhysicalMessage message)
+		public virtual void Handle(TransportMessage message)
 		{
 			Log.Debug(Diagnostics.LogicalMessageCount, message.LogicalMessages.Count);
 			foreach (var logicalMessage in message.LogicalMessages.Where(x => x != null))

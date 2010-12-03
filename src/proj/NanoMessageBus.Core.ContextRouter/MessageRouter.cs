@@ -49,7 +49,7 @@ namespace NanoMessageBus.Core
 			this.childContainer.Dispose();
 		}
 
-		public virtual PhysicalMessage CurrentMessage { get; private set; }
+		public virtual TransportMessage CurrentMessage { get; private set; }
 		public virtual bool ContinueProcessing { get; private set; }
 
 		public virtual void DeferMessage()
@@ -64,7 +64,7 @@ namespace NanoMessageBus.Core
 			this.ContinueProcessing = false;
 		}
 
-		public virtual void Route(PhysicalMessage message)
+		public virtual void Route(TransportMessage message)
 		{
 			this.CurrentMessage = message;
 

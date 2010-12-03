@@ -135,13 +135,13 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	}
 
 	[Subject("ProtocolBufferSerializer")]
-	public class when_serializing_and_then_deserializing_a_PhysicalMessage
+	public class when_serializing_and_then_deserializing_a_TransportMessage
 	{
-		static readonly PhysicalMessage InputValue =
-			new PhysicalMessage(Guid.NewGuid(), "ReturnAddress", TimeSpan.Zero, true, null, new object[] { });
+		static readonly TransportMessage InputValue =
+			new TransportMessage(Guid.NewGuid(), "ReturnAddress", TimeSpan.Zero, true, null, new object[] { });
 		static readonly Stream TempStream = new MemoryStream();
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
-		static PhysicalMessage outputValue;
+		static TransportMessage outputValue;
 
 		Establish context = () =>
 		{
@@ -150,7 +150,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 		};
 
 		Because of = () =>
-			outputValue = (PhysicalMessage)Serializer.Deserialize(TempStream);
+			outputValue = (TransportMessage)Serializer.Deserialize(TempStream);
 
 		It should_deserialize_back_to_the_same_type = () =>
 			outputValue.ShouldBeOfType(InputValue.GetType());
@@ -160,10 +160,10 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	}
 
 	[Subject("ProtocolBufferSerializer")]
-	public class when_a_PhysicalMessage_contains_several_different_logical_message_types
+	public class when_a_TransportMessage_contains_several_different_logical_message_types
 	{
-		static readonly PhysicalMessage InputValue =
-			new PhysicalMessage(
+		static readonly TransportMessage InputValue =
+			new TransportMessage(
 				Guid.NewGuid(),
 				"ReturnAddress",
 				TimeSpan.Zero,
@@ -177,7 +177,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 			InputValue.LogicalMessages.ToList()[0].GetType(),
 			InputValue.LogicalMessages.ToList()[1].GetType(),
 			InputValue.LogicalMessages.ToList()[2].GetType());
-		static PhysicalMessage outputValue;
+		static TransportMessage outputValue;
 
 		Establish context = () =>
 		{
@@ -186,7 +186,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 		};
 
 		Because of = () =>
-			outputValue = (PhysicalMessage)Serializer.Deserialize(TempStream);
+			outputValue = (TransportMessage)Serializer.Deserialize(TempStream);
 
 		It should_deserialize_the_contents_of_each_logical_message_properly = () =>
 		{

@@ -4,6 +4,6 @@ namespace NanoMessageBus.Core
 
 	public interface IRouteMessagesToHandlers : IMessageContext, IDisposable
 	{
-		void Route(PhysicalMessage message);
+		void Route(TransportMessage message);
 	}
 }

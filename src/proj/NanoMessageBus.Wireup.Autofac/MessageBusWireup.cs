@@ -58,7 +58,7 @@ namespace NanoMessageBus.Wireup
 				.ExternallyOwned();
 
 			builder
-				.Register(this.BuildPhysicalMessageBuilder)
+				.Register(this.BuildTransportMessageBuilder)
 				.As<MessageBuilder>()
 				.SingleInstance()
 				.ExternallyOwned();
@@ -73,7 +73,7 @@ namespace NanoMessageBus.Wireup
 				c.Resolve<MessageBuilder>(),
 				c.Resolve<IDiscoverMessageTypes>());
 		}
-		protected virtual MessageBuilder BuildPhysicalMessageBuilder(IComponentContext c)
+		protected virtual MessageBuilder BuildTransportMessageBuilder(IComponentContext c)
 		{
 			return new MessageBuilder(
 				this.timeToLiveTypes, this.transientTypes, c.Resolve<IReceiveFromEndpoints>().EndpointAddress);
