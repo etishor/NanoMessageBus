@@ -29,13 +29,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Serializatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Serialization.Json", "proj\NanoMessageBus.Serialization.Json\NanoMessageBus.Serialization.Json.csproj", "{2E659CAC-6DDB-4800-90AB-13AE068CE407}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Transports.DefaultImplementation", "proj\NanoMessageBus.Transports.DefaultImplementation\NanoMessageBus.Transports.DefaultImplementation.csproj", "{D4C0E7C4-716C-47CE-8B90-15E6F14B2872}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Transports.MessageQueue", "proj\NanoMessageBus.Transports.MessageQueue\NanoMessageBus.Transports.MessageQueue.csproj", "{D4C0E7C4-716C-47CE-8B90-15E6F14B2872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Serialization.DefaultImplementation", "proj\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj", "{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Serialization.NativeSerializers", "proj\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj", "{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Core.DefaultImplementation", "proj\NanoMessageBus.Core.DefaultImplementation\NanoMessageBus.Core.DefaultImplementation.csproj", "{BC2204F1-4E15-4EFC-B42E-739E6795BE37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Core.ContextRouter", "proj\NanoMessageBus.Core.ContextRouter\NanoMessageBus.Core.ContextRouter.csproj", "{BC2204F1-4E15-4EFC-B42E-739E6795BE37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.DefaultImplementation", "proj\NanoMessageBus.DefaultImplementation\NanoMessageBus.DefaultImplementation.csproj", "{E74CB074-6C34-4D22-B89B-5C4D318CA011}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.TransportBus", "proj\NanoMessageBus.TransportBus\NanoMessageBus.TransportBus.csproj", "{E74CB074-6C34-4D22-B89B-5C4D318CA011}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Logging.NLog", "proj\NanoMessageBus.Logging.NLog\NanoMessageBus.Logging.NLog.csproj", "{17F95FB2-EE45-47CC-9FC3-11452D7876D5}"
 EndProject
@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.Logging.Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.MessageSubscriber", "proj\NanoMessageBus.MessageSubscriber\NanoMessageBus.MessageSubscriber.csproj", "{551B70F2-60EF-44D0-9BEA-46724F0E0069}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.MessageSubscriber.DefaultImplementation", "proj\NanoMessageBus.MessageSubscriber.DefaultImplementation\NanoMessageBus.MessageSubscriber.DefaultImplementation.csproj", "{F328927B-9229-49C2-86F3-3D7F4F4B328E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanoMessageBus.MessageSubscriber.DefaultSubscriber", "proj\NanoMessageBus.MessageSubscriber.DefaultSubscriber\NanoMessageBus.MessageSubscriber.DefaultSubscriber.csproj", "{F328927B-9229-49C2-86F3-3D7F4F4B328E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wireup", "wireup", "{09F8CF6F-62D8-4F3F-A306-9950CDC5EAA2}"
 EndProject

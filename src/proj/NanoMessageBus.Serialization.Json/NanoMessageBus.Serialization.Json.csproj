@@ -67,9 +67,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj">
       <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
-      <Name>NanoMessageBus.Serialization.DefaultImplementation</Name>
+      <Name>NanoMessageBus.Serialization.NativeSerializers</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
       <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>

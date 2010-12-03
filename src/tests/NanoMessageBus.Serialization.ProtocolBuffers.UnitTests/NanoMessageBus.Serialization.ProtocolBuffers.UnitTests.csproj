@@ -42,9 +42,9 @@
     <Compile Include="SimpleMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\proj\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj">
+    <ProjectReference Include="..\..\proj\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj">
       <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
-      <Name>NanoMessageBus.Serialization.DefaultImplementation</Name>
+      <Name>NanoMessageBus.Serialization.NativeSerializers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\proj\NanoMessageBus.Serialization.ProtocolBuffers\NanoMessageBus.Serialization.ProtocolBuffers.csproj">
       <Project>{BD0CBB4E-B1B4-4E53-8ECC-66CF0E73D78C}</Project>

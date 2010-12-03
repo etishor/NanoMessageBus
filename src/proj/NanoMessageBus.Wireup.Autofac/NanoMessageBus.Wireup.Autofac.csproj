@@ -79,17 +79,17 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NanoMessageBus.Core.DefaultImplementation\NanoMessageBus.Core.DefaultImplementation.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Core.ContextRouter\NanoMessageBus.Core.ContextRouter.csproj">
       <Project>{BC2204F1-4E15-4EFC-B42E-739E6795BE37}</Project>
-      <Name>NanoMessageBus.Core.DefaultImplementation</Name>
+      <Name>NanoMessageBus.Core.ContextRouter</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Core\NanoMessageBus.Core.csproj">
       <Project>{A2D7EDF7-FA67-43E3-AA34-C7483508A5F1}</Project>
       <Name>NanoMessageBus.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.DefaultImplementation\NanoMessageBus.DefaultImplementation.csproj">
+    <ProjectReference Include="..\NanoMessageBus.TransportBus\NanoMessageBus.TransportBus.csproj">
       <Project>{E74CB074-6C34-4D22-B89B-5C4D318CA011}</Project>
-      <Name>NanoMessageBus.DefaultImplementation</Name>
+      <Name>NanoMessageBus.TransportBus</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Endpoints.Msmq\NanoMessageBus.Endpoints.Msmq.csproj">
       <Project>{A5151E49-1445-4B69-BAE9-4D5445DED4F9}</Project>
@@ -115,17 +115,17 @@
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.MessageSubscriber.DefaultImplementation\NanoMessageBus.MessageSubscriber.DefaultImplementation.csproj">
+    <ProjectReference Include="..\NanoMessageBus.MessageSubscriber.DefaultSubscriber\NanoMessageBus.MessageSubscriber.DefaultSubscriber.csproj">
       <Project>{F328927B-9229-49C2-86F3-3D7F4F4B328E}</Project>
-      <Name>NanoMessageBus.MessageSubscriber.DefaultImplementation</Name>
+      <Name>NanoMessageBus.MessageSubscriber.DefaultSubscriber</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.MessageSubscriber\NanoMessageBus.MessageSubscriber.csproj">
       <Project>{551B70F2-60EF-44D0-9BEA-46724F0E0069}</Project>
       <Name>NanoMessageBus.MessageSubscriber</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Serialization.DefaultImplementation\NanoMessageBus.Serialization.DefaultImplementation.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj">
       <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
-      <Name>NanoMessageBus.Serialization.DefaultImplementation</Name>
+      <Name>NanoMessageBus.Serialization.NativeSerializers</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Serialization.Json\NanoMessageBus.Serialization.Json.csproj">
       <Project>{2E659CAC-6DDB-4800-90AB-13AE068CE407}</Project>
@@ -147,9 +147,9 @@
       <Project>{2787552C-88AE-4CED-A3F3-C0AD78754E63}</Project>
       <Name>NanoMessageBus.SubscriptionStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Transports.DefaultImplementation\NanoMessageBus.Transports.DefaultImplementation.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Transports.MessageQueue\NanoMessageBus.Transports.MessageQueue.csproj">
       <Project>{D4C0E7C4-716C-47CE-8B90-15E6F14B2872}</Project>
-      <Name>NanoMessageBus.Transports.DefaultImplementation</Name>
+      <Name>NanoMessageBus.Transports.MessageQueue</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj">
       <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NanoMessageBus.Core</RootNamespace>
-    <AssemblyName>NanoMessageBus.Core.DefaultImplementation</AssemblyName>
+    <AssemblyName>NanoMessageBus.Core.ContextRouter</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -1,4 +1,4 @@
-[A] Rename "DefaultImplementation" projects and standardize assembly packaging
+[A] Standardize assembly packaging
 [A] ILMerge quirks
 [A] XML code comments on contract interfaces
 [A] Full unit and integration tests

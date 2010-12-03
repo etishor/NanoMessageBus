@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F328927B-9229-49C2-86F3-3D7F4F4B328E}</ProjectGuid>
+    <ProjectGuid>{D4C0E7C4-716C-47CE-8B90-15E6F14B2872}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NanoMessageBus.MessageSubscriber</RootNamespace>
-    <AssemblyName>NanoMessageBus.MessageSubscriber.DefaultImplementation</AssemblyName>
+    <RootNamespace>NanoMessageBus.Transports</RootNamespace>
+    <AssemblyName>NanoMessageBus.Transports.MessageQueue</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,15 +46,17 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BackgroundThread.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="IThread.cs" />
+    <Compile Include="MessageQueueTransport.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Diagnostics.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Diagnostics.resx</DependentUpon>
     </Compile>
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="MessageSubscriber.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SubscriptionMessageHandlers.cs" />
+    <Compile Include="MessageReceiverWorkerThread.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\CustomDictionary.xml">
@@ -62,17 +64,23 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Diagnostics.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NanoMessageBus.Core\NanoMessageBus.Core.csproj">
+      <Project>{A2D7EDF7-FA67-43E3-AA34-C7483508A5F1}</Project>
+      <Name>NanoMessageBus.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Endpoints\NanoMessageBus.Endpoints.csproj">
+      <Project>{FE46F683-F9A7-477E-B017-A8E3A1A48E24}</Project>
+      <Name>NanoMessageBus.Endpoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Logging\NanoMessageBus.Logging.csproj">
       <Project>{9C04BE79-85E3-45BB-8827-B5390C7E803E}</Project>
       <Name>NanoMessageBus.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.MessageSubscriber\NanoMessageBus.MessageSubscriber.csproj">
-      <Project>{551B70F2-60EF-44D0-9BEA-46724F0E0069}</Project>
-      <Name>NanoMessageBus.MessageSubscriber</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage\NanoMessageBus.SubscriptionStorage.csproj">
-      <Project>{2787552C-88AE-4CED-A3F3-C0AD78754E63}</Project>
-      <Name>NanoMessageBus.SubscriptionStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.Transports\NanoMessageBus.Transports.csproj">
       <Project>{83C0E14D-0C49-4726-B329-5E2E7B0B7681}</Project>
@@ -84,21 +92,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Diagnostics.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
