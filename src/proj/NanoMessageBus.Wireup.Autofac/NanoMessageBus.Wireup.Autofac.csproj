@@ -139,9 +139,9 @@
       <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
       <Name>NanoMessageBus.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage.SqlEngine\NanoMessageBus.SubscriptionStorage.SqlEngine.csproj">
+    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage.SqlStorage\NanoMessageBus.SubscriptionStorage.SqlStorage.csproj">
       <Project>{2ECF1F4C-57CC-4A00-A489-152D149D00AF}</Project>
-      <Name>NanoMessageBus.SubscriptionStorage.SqlEngine</Name>
+      <Name>NanoMessageBus.SubscriptionStorage.SqlStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage\NanoMessageBus.SubscriptionStorage.csproj">
       <Project>{2787552C-88AE-4CED-A3F3-C0AD78754E63}</Project>

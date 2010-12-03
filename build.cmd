@@ -39,7 +39,7 @@ copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\Newtonsoft.Json
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\protobuf-net.*" "output\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\log4net.*" "output\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\NLog.*" "output\bin"
-copy "src\proj\NanoMessageBus.SubscriptionStorage.SqlEngine\bin\%TARGET_CONFIG%\*.sql" "output\bin\"
+copy "src\proj\NanoMessageBus.SubscriptionStorage.SqlStorage\bin\%TARGET_CONFIG%\*.sql" "output\bin\"
 
 mkdir output\doc
 copy "doc\license.txt" "output\doc\NanoMessageBus License.txt"

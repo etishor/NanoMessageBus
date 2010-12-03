@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NanoMessageBus.SubscriptionStorage</RootNamespace>
-    <AssemblyName>NanoMessageBus.SubscriptionStorage.SqlEngine</AssemblyName>
+    <AssemblyName>NanoMessageBus.SubscriptionStorage.SqlStorage</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
