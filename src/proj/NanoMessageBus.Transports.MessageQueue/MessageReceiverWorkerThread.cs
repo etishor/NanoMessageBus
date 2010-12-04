@@ -75,12 +75,12 @@ namespace NanoMessageBus.Transports
 			{
 				router.Route(message);
 				Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
-				this.poisonMessageHandler.MarkAsSuccessful(message);
+				this.poisonMessageHandler.Handle(message);
 			}
 			catch (Exception e)
 			{
 				Log.Info(Diagnostics.MessageProcessingFailed, this.thread.Name, e.Message);
-				this.poisonMessageHandler.Forward(message, e);
+				this.poisonMessageHandler.HandleFailure(message, e);
 			}
 		}
 	}

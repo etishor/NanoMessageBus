@@ -18,12 +18,12 @@ namespace NanoMessageBus.Transports
 			this.maxAttempts = maxAttempts;
 		}
 
-		public virtual void MarkAsSuccessful(TransportMessage message)
+		public virtual void Handle(TransportMessage message)
 		{
 			if (message != null)
 				this.messageFailures.Remove(message.MessageId);
 		}
-		public virtual void Forward(TransportMessage message, Exception exception)
+		public virtual void HandleFailure(TransportMessage message, Exception exception)
 		{
 			if (!this.ReachedMaxAttempts(message))
 				return;
