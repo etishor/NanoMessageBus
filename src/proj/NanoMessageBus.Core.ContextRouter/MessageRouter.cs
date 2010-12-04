@@ -71,10 +71,8 @@ namespace NanoMessageBus.Core
 		{
 			this.CurrentMessage = message;
 
-			if (this.poisonMessageHandler.IsPoison(message))
-				this.DropMessage();
-
-			this.TryRoute(message);
+			if (!this.poisonMessageHandler.IsPoison(message))
+				this.TryRoute(message);
 
 			Log.Debug(Diagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();
