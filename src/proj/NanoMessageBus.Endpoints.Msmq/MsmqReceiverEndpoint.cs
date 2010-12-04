@@ -13,15 +13,15 @@ namespace NanoMessageBus.Endpoints
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
 		private static readonly TimeSpan Timeout = 500.Milliseconds();
 		private readonly MsmqConnector inputQueue;
-		private readonly MsmqConnector errorQueue;
+		private readonly MsmqConnector poisonQueue;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
 		public MsmqReceiverEndpoint(
-			MsmqConnector inputQueue, MsmqConnector errorQueue, ISerializeMessages serializer)
+			MsmqConnector inputQueue, MsmqConnector poisonQueue, ISerializeMessages serializer)
 		{
 			this.inputQueue = inputQueue;
-			this.errorQueue = errorQueue;
+			this.poisonQueue = poisonQueue;
 			this.serializer = serializer;
 		}
 		~MsmqReceiverEndpoint()
@@ -91,11 +91,11 @@ namespace NanoMessageBus.Endpoints
 			catch (SerializationException e)
 			{
 				Log.Error(Diagnostics.UnableToDeserializeMessage);
-				this.ForwardMessageToErrorQueue(message, e);
+				this.ForwardToPoisonMessageQueue(message, e);
 				return null;
 			}
 		}
-		private void ForwardMessageToErrorQueue(Message message, Exception deserializationError)
+		private void ForwardToPoisonMessageQueue(Message message, Exception deserializationError)
 		{
 			using (var serializedExceptionStream = new MemoryStream())
 			{
@@ -103,7 +103,7 @@ namespace NanoMessageBus.Endpoints
 				message.Extension = serializedExceptionStream.ToArray();
 			}
 
-			this.errorQueue.Send(message);
+			this.poisonQueue.Send(message);
 		}
 	}
 }

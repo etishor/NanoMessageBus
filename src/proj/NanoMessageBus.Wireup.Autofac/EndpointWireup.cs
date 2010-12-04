@@ -6,8 +6,10 @@ namespace NanoMessageBus.Wireup
 
 	public class EndpointWireup : WireupModule
 	{
+		internal const string PoisonEndpoint = "PoisonEndpoint";
+		private const bool SuppressPoisonEndpointEnlistment = true;
 		private string receiverAddress;
-		private string errorAddress;
+		private string poisonAddress;
 		private bool enlist = true;
 
 		public EndpointWireup(IWireup parent)
@@ -22,7 +24,7 @@ namespace NanoMessageBus.Wireup
 		}
 		public virtual EndpointWireup ForwardPoisonMessagesTo(string address)
 		{
-			this.errorAddress = address;
+			this.poisonAddress = address;
 			return this;
 		}
 		public virtual EndpointWireup IgnoreTransactions()
@@ -42,6 +44,11 @@ namespace NanoMessageBus.Wireup
 				.Register(this.BuildSenderEndpoint)
 				.As<ISendToEndpoints>()
 				.SingleInstance();
+
+			builder
+				.Register(this.BuildSenderEndpoint)
+				.Named(PoisonEndpoint, typeof(ISendToEndpoints))
+				.SingleInstance();
 		}
 		protected virtual ISendToEndpoints BuildSenderEndpoint(IComponentContext c)
 		{
@@ -49,11 +56,19 @@ namespace NanoMessageBus.Wireup
 				address => MsmqConnector.OpenSend(new MsmqAddress(address), this.enlist),
 				c.Resolve<ISerializeMessages>());
 		}
+		protected virtual ISendToEndpoints BuildPoisonEndpoint(IComponentContext c)
+		{
+			// ignore address provided, always send to the configured poison address
+			var address = new MsmqAddress(this.poisonAddress);
+			return new MsmqSenderEndpoint(
+				addr => MsmqConnector.OpenSend(address, SuppressPoisonEndpointEnlistment),
+				c.Resolve<ISerializeMessages>());
+		}
 		protected virtual IReceiveFromEndpoints BuildReceiverEndpoint(IComponentContext c)
 		{
 			return new MsmqReceiverEndpoint(
 				MsmqConnector.OpenReceive(new MsmqAddress(this.receiverAddress), this.enlist),
-				MsmqConnector.OpenSend(new MsmqAddress(this.errorAddress), this.enlist),
+				MsmqConnector.OpenSend(new MsmqAddress(this.poisonAddress), this.enlist),
 				c.Resolve<ISerializeMessages>());
 		}
 	}

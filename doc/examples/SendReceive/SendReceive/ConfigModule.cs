@@ -15,7 +15,8 @@ namespace SendReceive
 						.UseOutputWindow();
 
 			wireup = wireup.Configure<TransportWireup>()
-						.ReceiveWith(1.Threads());
+						.ReceiveWith(1.Threads())
+						.AttemptOnFailureAtLeast(3.Times());
 
 			wireup = wireup.Configure<SerializationWireup>()
 						.CompressMessages()
@@ -24,6 +25,7 @@ namespace SendReceive
 
 			wireup = wireup.Configure<EndpointWireup>()
 						.ListenOn("msmq://./MyReceiverQueue")
+						.ForwardPoisonMessagesTo("msmq://./Error")
 						.IgnoreTransactions();
 
 			wireup = wireup.Configure<SubscriptionStorageWireup>()

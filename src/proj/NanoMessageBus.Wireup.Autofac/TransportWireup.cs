@@ -1,6 +1,7 @@
 namespace NanoMessageBus.Wireup
 {
 	using Autofac;
+	using Autofac.Core;
 	using Core;
 	using Endpoints;
 	using Transports;
@@ -8,6 +9,7 @@ namespace NanoMessageBus.Wireup
 	public class TransportWireup : WireupModule
 	{
 		private int maxThreads = 1;
+		private int maxAttempts = 5;
 
 		public TransportWireup(IWireup parent)
 			: base(parent)
@@ -17,6 +19,11 @@ namespace NanoMessageBus.Wireup
 		public virtual TransportWireup ReceiveWith(int maxWorkerThreads)
 		{
 			this.maxThreads = maxWorkerThreads;
+			return this;
+		}
+		public virtual TransportWireup AttemptOnFailureAtLeast(int times)
+		{
+			this.maxAttempts = times;
 			return this;
 		}
 
@@ -46,8 +53,10 @@ namespace NanoMessageBus.Wireup
 			var threadSafeContext = c.Resolve<IComponentContext>();
 			return new MessageReceiverWorkerThread(
 				c.Resolve<IReceiveFromEndpoints>(),
+				c.ResolveNamed<ISendToEndpoints>(EndpointWireup.PoisonEndpoint, new Parameter[0]),
 				() => threadSafeContext.Resolve<IRouteMessagesToHandlers>(),
-				action => new BackgroundThread(() => action()));
+				action => new BackgroundThread(() => action()),
+				this.maxAttempts);
 		}
 	}
 }

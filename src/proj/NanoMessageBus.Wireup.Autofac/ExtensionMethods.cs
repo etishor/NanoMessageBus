@@ -9,6 +9,10 @@ namespace NanoMessageBus.Wireup
 		{
 			return threads;
 		}
+		public static int Times(this int times)
+		{
+			return times;
+		}
 
 		internal static TWireup Add<TWireup>(this IDictionary<Type, IWireup> modules, TWireup module)
 			where TWireup : class, IWireup
