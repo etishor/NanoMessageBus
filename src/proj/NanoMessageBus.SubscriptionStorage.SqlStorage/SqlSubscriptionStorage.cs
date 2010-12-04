@@ -53,7 +53,7 @@ namespace NanoMessageBus.SubscriptionStorage
 				callback(command);
 
 				command.CommandText = PopulateCommand(command, messageTypes);
-				command.ExecuteNonQuery();
+				command.ExecuteWrappedCommand();
 
 				transaction.Complete();
 			}
@@ -79,18 +79,10 @@ namespace NanoMessageBus.SubscriptionStorage
 
 		public virtual ICollection<string> GetSubscribers(IEnumerable<string> messageTypes)
 		{
-			ICollection<string> subscribers = new LinkedList<string>();
-
 			using (SuppressTransaction())
 			using (var connection = this.connectionFactory())
 			using (var query = BuildQuery(connection, messageTypes))
-			using (var reader = query.ExecuteReader())
-			{
-				while (reader.Read())
-					subscribers.Add((string)reader[0]);
-			}
-
-			return subscribers;
+				return query.ExecuteWrappedQuery().Select(record => (string)record[0]).ToArray();
 		}
 		private static IDbCommand BuildQuery(IDbConnection connection, IEnumerable<string> messageTypes)
 		{
@@ -102,7 +94,6 @@ namespace NanoMessageBus.SubscriptionStorage
 			command.CommandText = SqlStatements.GetSubscribers.FormatWith(statement);
 			return command;
 		}
-
 		private static IDisposable SuppressTransaction()
 		{
 			var options = new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted };
