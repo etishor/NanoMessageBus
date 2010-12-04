@@ -95,13 +95,14 @@ namespace NanoMessageBus.Endpoints
 				return null;
 			}
 		}
-		private void ForwardMessageToErrorQueue(Message message, Exception details)
+		private void ForwardMessageToErrorQueue(Message message, Exception deserializationError)
 		{
-			using (var stream = new MemoryStream())
+			using (var serializedExceptionStream = new MemoryStream())
 			{
-				this.serializer.Serialize(stream, details);
-				message.Extension = stream.ToArray();
+				this.serializer.Serialize(serializedExceptionStream, deserializationError);
+				message.Extension = serializedExceptionStream.ToArray();
 			}
+
 			this.errorQueue.Send(message);
 		}
 	}
