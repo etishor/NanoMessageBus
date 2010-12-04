@@ -19,7 +19,7 @@ namespace NanoMessageBus.Core
 		}
 
 		public TransactionScopeUnitOfWork(TransactionOptions options)
-			: this(new TransactionScope(TransactionScopeOption.Required, options))
+			: this(new TransactionScope(TransactionScopeOption.RequiresNew, options))
 		{
 		}
 
