@@ -1,7 +1,6 @@
 namespace NanoMessageBus.Endpoints
 {
 	using System;
-	using System.Messaging;
 	using System.Text.RegularExpressions;
 
 	public class MsmqAddress

@@ -2,7 +2,6 @@ namespace NanoMessageBus.Endpoints
 {
 	using System;
 	using System.Messaging;
-	using System.Runtime.Serialization;
 	using Logging;
 	using Serialization;
 

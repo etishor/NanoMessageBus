@@ -1,11 +1,11 @@
-[A] Standardize assembly packaging
-[A] ILMerge quirks
+[A] Standardize assembly packaging & ILMerge quirks
 [A] Full unit and integration tests
 [A] Documentation and examples
 [A] Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
 [A] Maximum # of failures & retry / error queue / (infrastructure message headers would contain exception)
     - or we could have another envelope around the error condition inside the PhysicalMessage
-[A] Serialization exception should move straight to error queue
+[A] Serialization exception should move the message straight to the error queue.
+    - exception information can be stored in the header.
 
 [B] Support for multiple containers (Castle, SM, Ninject, Unity) with fluent builders
 
