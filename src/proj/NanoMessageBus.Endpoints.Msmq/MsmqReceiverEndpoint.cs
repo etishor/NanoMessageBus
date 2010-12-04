@@ -1,10 +1,8 @@
 namespace NanoMessageBus.Endpoints
 {
 	using System;
-	using System.IO;
 	using System.Messaging;
 	using System.Runtime.Serialization;
-	using System.Transactions;
 	using Logging;
 	using Serialization;
 
@@ -95,14 +93,9 @@ namespace NanoMessageBus.Endpoints
 				return null;
 			}
 		}
-		private void ForwardToPoisonMessageQueue(Message message, Exception deserializationError)
+		private void ForwardToPoisonMessageQueue(Message message, Exception exception)
 		{
-			using (var serializedExceptionStream = new MemoryStream())
-			{
-				this.serializer.Serialize(serializedExceptionStream, deserializationError);
-				message.Extension = serializedExceptionStream.ToArray();
-			}
-
+			message.Extension = exception.Serialize();
 			this.poisonQueue.Send(message);
 		}
 	}
