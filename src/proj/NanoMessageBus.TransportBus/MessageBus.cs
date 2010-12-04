@@ -37,23 +37,8 @@ namespace NanoMessageBus
 		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
-			this.Dispatch(messages, msg => this.GetRecipients(this.discoverer.GetTypes(msg)));
-		}
-		public ICollection<string> GetRecipients(IEnumerable<Type> messageTypes)
-		{
-			ICollection<string> list = new HashSet<string>();
-
-			foreach (var messageType in messageTypes)
-			{
-				ICollection<string> recipientsForMessageType;
-				if (!this.recipients.TryGetValue(messageType, out recipientsForMessageType))
-					continue;
-
-				foreach (var recipient in recipientsForMessageType)
-					list.Add(recipient);
-			}
-
-			return list;
+			this.Dispatch(messages, msg =>
+				this.recipients.GetMatching(this.discoverer.GetTypes(msg)));
 		}
 
 		public virtual void Reply(params object[] messages)
@@ -65,11 +50,8 @@ namespace NanoMessageBus
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(messages, this.GetSubscribers);
-		}
-		private IEnumerable<string> GetSubscribers(object message)
-		{
-			return this.subscriptions.GetSubscribers(this.discoverer.GetTypeNames(message));
+			this.Dispatch(messages, message =>
+				this.subscriptions.GetSubscribers(this.discoverer.GetTypeNames(message)));
 		}
 
 		private void Dispatch(object[] messages, Func<object, IEnumerable<string>> getRecipients)

@@ -51,6 +51,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Diagnostics.resx</DependentUpon>
     </Compile>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="MessageBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
