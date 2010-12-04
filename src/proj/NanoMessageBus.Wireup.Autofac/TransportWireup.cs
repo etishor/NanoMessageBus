@@ -39,6 +39,12 @@ namespace NanoMessageBus.Wireup
 				.As<IReceiveMessages>()
 				.InstancePerDependency()
 				.ExternallyOwned();
+
+			builder
+				.Register(this.BuildPoisonMessageHandler)
+				.As<IForwardPoisonMessages>()
+				.SingleInstance()
+				.ExternallyOwned();
 		}
 		protected virtual ITransportMessages BuildTransport(IComponentContext c)
 		{
@@ -53,9 +59,14 @@ namespace NanoMessageBus.Wireup
 			var threadSafeContext = c.Resolve<IComponentContext>();
 			return new MessageReceiverWorkerThread(
 				c.Resolve<IReceiveFromEndpoints>(),
-				c.ResolveNamed<ISendToEndpoints>(EndpointWireup.PoisonEndpoint, new Parameter[0]),
+				c.Resolve<IForwardPoisonMessages>(),
 				() => threadSafeContext.Resolve<IRouteMessagesToHandlers>(),
-				action => new BackgroundThread(() => action()),
+				action => new BackgroundThread(() => action()));
+		}
+		protected virtual IForwardPoisonMessages BuildPoisonMessageHandler(IComponentContext c)
+		{
+			return new PoisonMessageHandler(
+				c.ResolveNamed<ISendToEndpoints>(EndpointWireup.PoisonEndpoint, new Parameter[0]),
 				this.maxAttempts);
 		}
 	}

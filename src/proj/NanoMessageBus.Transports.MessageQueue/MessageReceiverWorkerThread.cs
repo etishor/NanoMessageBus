@@ -1,7 +1,6 @@
 namespace NanoMessageBus.Transports
 {
 	using System;
-	using System.Collections.Generic;
 	using Core;
 	using Endpoints;
 	using Logging;
@@ -9,26 +8,22 @@ namespace NanoMessageBus.Transports
 	public class MessageReceiverWorkerThread : IReceiveMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageReceiverWorkerThread));
-		private static readonly IDictionary<Guid, int> MessageFailures = new Dictionary<Guid, int>();
 		private readonly IReceiveFromEndpoints receiverQueue;
-		private readonly ISendToEndpoints poisonQueue;
+		private readonly IForwardPoisonMessages poisonMessageHandler;
 		private readonly Func<IRouteMessagesToHandlers> routerFactory;
 		private readonly IThread thread;
-		private readonly int maxAttempts;
 		private bool started;
 
 		public MessageReceiverWorkerThread(
 			IReceiveFromEndpoints receiverQueue,
-			ISendToEndpoints poisonQueue,
+			IForwardPoisonMessages poisonMessageHandler,
 			Func<IRouteMessagesToHandlers> routerFactory,
-			Func<Action, IThread> thread,
-			int maxAttempts)
+			Func<Action, IThread> thread)
 		{
 			this.receiverQueue = receiverQueue;
-			this.poisonQueue = poisonQueue;
+			this.poisonMessageHandler = poisonMessageHandler;
 			this.routerFactory = routerFactory;
 			this.thread = thread(this.BeginReceive);
-			this.maxAttempts = maxAttempts;
 		}
 
 		public virtual void Start()
@@ -79,32 +74,14 @@ namespace NanoMessageBus.Transports
 			try
 			{
 				router.Route(message);
-				MessageFailures.Remove(message.MessageId);
 				Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
+				this.poisonMessageHandler.MarkAsSuccessful(message);
 			}
 			catch (Exception e)
 			{
-				this.ForwardToPoisonQueue(message, e);
+				Log.Info(Diagnostics.MessageProcessingFailed, this.thread.Name, e.Message);
+				this.poisonMessageHandler.Forward(message, e);
 			}
-		}
-		private void ForwardToPoisonQueue(TransportMessage message, Exception error)
-		{
-			Log.Info(Diagnostics.MessageProcessingFailed, this.thread.Name, error.Message);
-			if (MessageFailures.Increment(message.MessageId) < this.maxAttempts)
-				return;
-
-			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxAttempts, message.MessageId);
-			AppendExceptionHeaders(message, error, 0);
-			this.poisonQueue.Send(message);
-		}
-		private static void AppendExceptionHeaders(TransportMessage message, Exception error, int depth)
-		{
-			message.Headers["ExceptionMessage" + depth] = error.Message;
-			message.Headers["ExceptionStackTrace" + depth] = error.StackTrace;
-			message.Headers["ExceptionSource" + depth] = error.Source;
-
-			if (error.InnerException != null)
-				AppendExceptionHeaders(message, error.InnerException, ++depth);
 		}
 	}
 }

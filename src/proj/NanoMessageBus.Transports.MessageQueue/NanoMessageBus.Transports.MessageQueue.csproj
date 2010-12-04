@@ -50,6 +50,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="IThread.cs" />
     <Compile Include="MessageQueueTransport.cs" />
+    <Compile Include="PoisonMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Diagnostics.Designer.cs">
       <AutoGen>True</AutoGen>
