@@ -71,7 +71,9 @@ namespace NanoMessageBus.Core
 		{
 			this.CurrentMessage = message;
 
-			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
+			if (this.poisonMessageHandler.IsPoison(message))
+				this.DropMessage();
+
 			this.TryRoute(message);
 
 			Log.Debug(Diagnostics.CommittingUnitOfWork);
@@ -81,6 +83,8 @@ namespace NanoMessageBus.Core
 		}
 		private void TryRoute(TransportMessage message)
 		{
+			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
+
 			try
 			{
 				var routes = this.handlerTable.GetHandlers(this.CurrentMessage);

@@ -18,6 +18,16 @@ namespace NanoMessageBus.Core
 			this.maxAttempts = maxAttempts;
 		}
 
+		public virtual bool IsPoison(TransportMessage message)
+		{
+			if (message == null)
+				return false;
+
+			int attempts;
+			this.messageFailures.TryGetValue(message.MessageId, out attempts);
+			return attempts >= this.maxAttempts;
+		}
+
 		public virtual void HandleSuccess(TransportMessage message)
 		{
 			if (message != null)
