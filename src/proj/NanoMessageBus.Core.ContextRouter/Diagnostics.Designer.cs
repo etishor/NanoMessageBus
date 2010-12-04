@@ -88,6 +88,15 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error has occurred at least {0} times while processing message &apos;{1}&apos;.  Forwarding message to poison message queue..
+        /// </summary>
+        internal static string ForwardingMessageToPoisonMessageQueue {
+            get {
+                return ResourceManager.GetString("ForwardingMessageToPoisonMessageQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Getting registered handlers for messages of type &apos;{0}&apos;..
         /// </summary>
         internal static string GettingHandlers {

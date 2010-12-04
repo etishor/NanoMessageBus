@@ -1,7 +1,6 @@
 namespace NanoMessageBus.Transports
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
 
 	internal static class ExtensionMethods
@@ -17,16 +16,6 @@ namespace NanoMessageBus.Transports
 		public static bool IsPopulated(this TransportMessage message)
 		{
 			return message != null && message.LogicalMessages != null && message.LogicalMessages.Count > 0;
-		}
-		public static int Increment(this IDictionary<Guid, int> counts, Guid key)
-		{
-			lock (counts)
-			{
-				int count;
-				counts.TryGetValue(key, out count);
-				counts[key] = ++count;
-				return count;
-			}
 		}
 	}
 }

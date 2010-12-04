@@ -1,14 +1,24 @@
 namespace NanoMessageBus.Wireup
 {
 	using Autofac;
+	using Autofac.Core;
 	using Core;
+	using Endpoints;
 	using Transports;
 
 	public class MessageRouterWireup : WireupModule
 	{
+		private int maxAttempts = 3;
+
 		public MessageRouterWireup(IWireup parent)
 			: base(parent)
 		{
+		}
+
+		public virtual MessageRouterWireup AttemptOnFailureAtLeast(int times)
+		{
+			this.maxAttempts = times;
+			return this;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -47,6 +57,12 @@ namespace NanoMessageBus.Wireup
 				.InstancePerLifetimeScope()
 				.ExternallyOwned();
 
+			builder
+				.Register(this.BuildPoisonMessageHandler)
+				.As<IHandlePoisonMessages>()
+				.SingleInstance()
+				.ExternallyOwned();
+
 			this.Configure<MessageHandlerWireup>().AddHandler(c => c.Resolve<TransportMessageHandler>());
 		}
 		protected virtual IRouteMessagesToHandlers BuildRouter(IComponentContext c)
@@ -62,7 +78,8 @@ namespace NanoMessageBus.Wireup
 					c.Resolve<ILifetimeScope>(),
 					c.Resolve<IHandleUnitOfWork>(),
 					c.Resolve<ITransportMessages>(),
-					c.Resolve<ITrackMessageHandlers>()))
+					c.Resolve<ITrackMessageHandlers>(),
+					c.Resolve<IHandlePoisonMessages>()))
 				.As<MessageRouter>()
 				.As<IMessageContext>()
 				.InstancePerLifetimeScope()
@@ -71,6 +88,12 @@ namespace NanoMessageBus.Wireup
 		protected virtual IDiscoverMessageTypes BuildMessageTypeDiscoverer(IComponentContext c)
 		{
 			return new MessageTypeDiscoverer();
+		}
+		protected virtual IHandlePoisonMessages BuildPoisonMessageHandler(IComponentContext c)
+		{
+			return new PoisonMessageHandler(
+				c.ResolveNamed<ISendToEndpoints>(EndpointWireup.PoisonEndpoint, new Parameter[0]),
+				this.maxAttempts);
 		}
 	}
 }

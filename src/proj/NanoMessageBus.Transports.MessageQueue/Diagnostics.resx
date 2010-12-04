@@ -153,7 +153,4 @@
   <data name="MessageProcessingFailed" xml:space="preserve">
     <value>Worker thread '{0}' failed to process the message.  The exception message was: {1}</value>
   </data>
-  <data name="ForwardingMessageToPoisonMessageQueue" xml:space="preserve">
-    <value>An error has occurred at least {0} times while processing message '{1}'.  Forwarding message to poison message queue.</value>
-  </data>
 </root>

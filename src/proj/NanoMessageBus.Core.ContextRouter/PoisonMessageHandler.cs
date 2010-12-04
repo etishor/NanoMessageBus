@@ -1,11 +1,11 @@
-namespace NanoMessageBus.Transports
+namespace NanoMessageBus.Core
 {
 	using System;
 	using System.Collections.Generic;
 	using Endpoints;
 	using Logging;
 
-	public class PoisonMessageHandler : IForwardPoisonMessages
+	public class PoisonMessageHandler : IHandlePoisonMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(PoisonMessageHandler));
 		private readonly IDictionary<Guid, int> messageFailures = new Dictionary<Guid, int>();
@@ -34,7 +34,13 @@ namespace NanoMessageBus.Transports
 		}
 		private bool ReachedMaxAttempts(TransportMessage message)
 		{
-			return this.messageFailures.Increment(message.MessageId) >= this.maxAttempts;
+			lock (this.messageFailures)
+			{
+				int attempts;
+				this.messageFailures.TryGetValue(message.MessageId, out attempts);
+				this.messageFailures[message.MessageId] = ++attempts;
+				return attempts >= this.maxAttempts;
+			}
 		}
 		private static void AppendExceptionHeaders(TransportMessage message, Exception exception, int depth)
 		{

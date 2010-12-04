@@ -12,18 +12,21 @@ namespace NanoMessageBus.Core
 		private readonly IHandleUnitOfWork unitOfWork;
 		private readonly ITransportMessages messageTransport;
 		private readonly ITrackMessageHandlers handlerTable;
+		private readonly IHandlePoisonMessages poisonMessageHandler;
 		private bool disposed;
 
 		public MessageRouter(
 			IDisposable childContainer,
 			IHandleUnitOfWork unitOfWork,
 			ITransportMessages messageTransport,
-			ITrackMessageHandlers handlerTable)
+			ITrackMessageHandlers handlerTable,
+			IHandlePoisonMessages poisonMessageHandler)
 		{
 			this.childContainer = childContainer;
 			this.unitOfWork = unitOfWork;
 			this.messageTransport = messageTransport;
 			this.handlerTable = handlerTable;
+			this.poisonMessageHandler = poisonMessageHandler;
 			this.ContinueProcessing = true;
 		}
 		~MessageRouter()
@@ -69,13 +72,26 @@ namespace NanoMessageBus.Core
 			this.CurrentMessage = message;
 
 			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
-
-			var routes = this.handlerTable.GetHandlers(this.CurrentMessage);
-			foreach (var route in routes.TakeWhile(route => this.ContinueProcessing))
-				route.Handle(this.CurrentMessage);
+			this.TryRoute(message);
 
 			Log.Debug(Diagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();
+
+			this.poisonMessageHandler.Handle(message);
+		}
+		private void TryRoute(TransportMessage message)
+		{
+			try
+			{
+				var routes = this.handlerTable.GetHandlers(this.CurrentMessage);
+				foreach (var route in routes.TakeWhile(route => this.ContinueProcessing))
+					route.Handle(this.CurrentMessage);
+			}
+			catch (Exception e)
+			{
+				this.poisonMessageHandler.HandleFailure(message, e);
+				throw;
+			}
 		}
 	}
 }

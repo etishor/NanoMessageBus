@@ -156,4 +156,7 @@
   <data name="NoRegisteredHandlersFound" xml:space="preserve">
     <value>No registered handlers found for messages of type '{0}'.</value>
   </data>
+  <data name="ForwardingMessageToPoisonMessageQueue" xml:space="preserve">
+    <value>An error has occurred at least {0} times while processing message '{1}'.  Forwarding message to poison message queue.</value>
+  </data>
 </root>
