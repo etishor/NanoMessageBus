@@ -37,8 +37,12 @@ namespace NanoMessageBus
 		public virtual void Send(params object[] messages)
 		{
 			Log.Debug(Diagnostics.SendingMessage);
-			this.Dispatch(messages, msg =>
-				this.recipients.GetMatching(this.discoverer.GetTypes(msg)));
+			this.Dispatch(messages, this.GetRecipients);
+		}
+		private ICollection<string> GetRecipients(object primaryMessage)
+		{
+			var discoveredTypes = this.discoverer.GetTypes(primaryMessage);
+			return this.recipients.GetMatching(discoveredTypes);
 		}
 
 		public virtual void Reply(params object[] messages)
@@ -50,8 +54,12 @@ namespace NanoMessageBus
 		public virtual void Publish(params object[] messages)
 		{
 			Log.Debug(Diagnostics.Publishing);
-			this.Dispatch(messages, message =>
-				this.subscriptions.GetSubscribers(this.discoverer.GetTypeNames(message)));
+			this.Dispatch(messages, this.GetSubscribers);
+		}
+		private ICollection<string> GetSubscribers(object primaryMessage)
+		{
+			var discoveredTypes = this.discoverer.GetTypeNames(primaryMessage);
+			return this.subscriptions.GetSubscribers(discoveredTypes);
 		}
 
 		private void Dispatch(object[] messages, Func<object, IEnumerable<string>> getRecipients)
