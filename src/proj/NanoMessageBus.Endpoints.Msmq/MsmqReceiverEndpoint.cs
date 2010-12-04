@@ -15,8 +15,8 @@ namespace NanoMessageBus.Endpoints
 
 		public MsmqReceiverEndpoint(MsmqConnector connector, ISerializeMessages serializer)
 		{
-			this.serializer = serializer;
 			this.connector = connector;
+			this.serializer = serializer;
 		}
 		~MsmqReceiverEndpoint()
 		{
@@ -44,20 +44,26 @@ namespace NanoMessageBus.Endpoints
 
 		public virtual TransportMessage Receive()
 		{
+			var message = this.ReceiveMessage();
+			if (message == null)
+				return this.NoMessageAvailable();
+
+			Log.Info(Diagnostics.MessageReceived, message.BodyStream.Length, this.connector.Address);
+
+			using (message)
+			using (message.BodyStream)
+				return (TransportMessage)this.serializer.Deserialize(message.BodyStream);
+		}
+		private Message ReceiveMessage()
+		{
 			try
 			{
-				var message = this.connector.Receive(Timeout);
-
-				Log.Info(Diagnostics.MessageReceived, message.BodyStream.Length, this.connector.Address);
-
-				using (message)
-				using (message.BodyStream)
-					return (TransportMessage)this.serializer.Deserialize(message.BodyStream);
+				return this.connector.Receive(Timeout);
 			}
 			catch (MessageQueueException e)
 			{
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-					return this.NoMessageAvailable();
+					return null;
 
 				if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 					Log.Fatal(Diagnostics.AccessDenied, this.connector.Address);
@@ -65,7 +71,6 @@ namespace NanoMessageBus.Endpoints
 				throw new EndpointException(e.Message, e);
 			}
 		}
-
 		private TransportMessage NoMessageAvailable()
 		{
 			Log.Verbose(Diagnostics.NoMessageAvailable, this.connector.Address);
