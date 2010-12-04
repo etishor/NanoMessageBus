@@ -106,7 +106,7 @@ namespace NanoMessageBus.Endpoints {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A message of length {0} bytes was received from endpoint &apos;{1}&apos;..
+        ///   Looks up a localized string similar to A message of length {0} bytes was received from endpoint &apos;{1}&apos;, attempting to deserialize..
         /// </summary>
         internal static string MessageReceived {
             get {
@@ -192,6 +192,15 @@ namespace NanoMessageBus.Endpoints {
         internal static string TransportMessageContains {
             get {
                 return ResourceManager.GetString("TransportMessageContains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The incoming message could not be deserialized..
+        /// </summary>
+        internal static string UnableToDeserializeMessage {
+            get {
+                return ResourceManager.GetString("UnableToDeserializeMessage", resourceCulture);
             }
         }
     }

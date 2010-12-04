@@ -47,6 +47,8 @@ namespace NanoMessageBus.Serialization
 			this.RegisterMessage(typeof(Uri));
 			this.RegisterMessage(typeof(Guid));
 			this.RegisterMessage(typeof(ProtocolBufferTransportMessage));
+			this.RegisterMessage(typeof(Exception));
+			this.RegisterMessage(typeof(SerializationException));
 		}
 		private void RegisterMessage(Type messageType)
 		{

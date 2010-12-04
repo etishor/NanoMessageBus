@@ -7,6 +7,7 @@ namespace NanoMessageBus.Wireup
 	public class EndpointWireup : WireupModule
 	{
 		private string receiverAddress;
+		private string errorAddress;
 		private bool enlist = true;
 
 		public EndpointWireup(IWireup parent)
@@ -17,6 +18,11 @@ namespace NanoMessageBus.Wireup
 		public virtual EndpointWireup ListenOn(string address)
 		{
 			this.receiverAddress = address;
+			return this;
+		}
+		public virtual EndpointWireup ForwardPoisonMessagesTo(string address)
+		{
+			this.errorAddress = address;
 			return this;
 		}
 		public virtual EndpointWireup IgnoreTransactions()
@@ -45,9 +51,9 @@ namespace NanoMessageBus.Wireup
 		}
 		protected virtual IReceiveFromEndpoints BuildReceiverEndpoint(IComponentContext c)
 		{
-			var address = new MsmqAddress(this.receiverAddress);
 			return new MsmqReceiverEndpoint(
-				MsmqConnector.OpenReceive(address, this.enlist),
+				MsmqConnector.OpenReceive(new MsmqAddress(this.receiverAddress), this.enlist),
+				MsmqConnector.OpenSend(new MsmqAddress(this.errorAddress), this.enlist),
 				c.Resolve<ISerializeMessages>());
 		}
 	}
