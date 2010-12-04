@@ -18,7 +18,7 @@ namespace NanoMessageBus.Core
 			this.maxAttempts = maxAttempts;
 		}
 
-		public virtual void Handle(TransportMessage message)
+		public virtual void HandleSuccess(TransportMessage message)
 		{
 			if (message != null)
 				this.messageFailures.Remove(message.MessageId);
