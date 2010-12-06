@@ -63,6 +63,7 @@ namespace NanoMessageBus.Serialization
 			this.types.Add(messageType, key);
 
 			// TODO: make this faster by using reflection to create a delegate and then invoking the delegate
+			// http://stackoverflow.com/questions/2490828/createdelegate-with-unknown-types/2493903#2493903
 			var deserialize = typeof(Serializer).GetMethod("Deserialize").MakeGenericMethod(messageType);
 			this.deserializers[messageType] = stream => deserialize.Invoke(null, new object[] { stream });
 		}
