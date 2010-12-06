@@ -55,6 +55,7 @@
     <Compile Include="MessageHandlerTable.cs" />
     <Compile Include="MessageTypeDiscoverer.cs" />
     <Compile Include="NullMessageContext.cs" />
+    <Compile Include="NonTransactionalPoisonMessageHandler.cs" />
     <Compile Include="PoisonMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransportMessageHandler.cs" />

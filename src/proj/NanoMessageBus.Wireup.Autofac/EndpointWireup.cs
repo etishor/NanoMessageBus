@@ -1,15 +1,18 @@
 namespace NanoMessageBus.Wireup
 {
 	using Autofac;
+	using Autofac.Core;
+	using Core;
 	using Endpoints;
 	using Serialization;
 
 	public class EndpointWireup : WireupModule
 	{
-		internal const string PoisonEndpoint = "PoisonEndpoint";
+		private const string PoisonEndpoint = "PoisonEndpoint";
 		private const bool PoisonEndpointEnlist = false;
 		private string receiverAddress;
 		private string poisonAddress;
+		private int maxRetries = 3;
 		private bool enlist = true;
 
 		public EndpointWireup(IWireup parent)
@@ -25,6 +28,11 @@ namespace NanoMessageBus.Wireup
 		public virtual EndpointWireup ForwardPoisonMessagesTo(string address)
 		{
 			this.poisonAddress = address;
+			return this;
+		}
+		public virtual EndpointWireup RetryAtLeast(int times)
+		{
+			this.maxRetries = times;
 			return this;
 		}
 		public virtual EndpointWireup IgnoreTransactions()
@@ -49,11 +57,24 @@ namespace NanoMessageBus.Wireup
 				.Register(this.BuildPoisonEndpoint)
 				.Named(PoisonEndpoint, typeof(ISendToEndpoints))
 				.SingleInstance();
+
+			builder
+				.Register(this.BuildPoisonMessageHandler)
+				.As<IHandlePoisonMessages>()
+				.SingleInstance()
+				.ExternallyOwned();
 		}
 		protected virtual ISendToEndpoints BuildSenderEndpoint(IComponentContext c)
 		{
 			return new MsmqSenderEndpoint(
 				address => MsmqConnector.OpenSend(new MsmqAddress(address), this.enlist),
+				c.Resolve<ISerializeMessages>());
+		}
+		protected virtual IReceiveFromEndpoints BuildReceiverEndpoint(IComponentContext c)
+		{
+			return new MsmqReceiverEndpoint(
+				MsmqConnector.OpenReceive(new MsmqAddress(this.receiverAddress), this.enlist),
+				MsmqConnector.OpenSend(new MsmqAddress(this.poisonAddress), this.enlist),
 				c.Resolve<ISerializeMessages>());
 		}
 		protected virtual ISendToEndpoints BuildPoisonEndpoint(IComponentContext c)
@@ -64,12 +85,13 @@ namespace NanoMessageBus.Wireup
 				addr => MsmqConnector.OpenSend(address, PoisonEndpointEnlist),
 				c.Resolve<ISerializeMessages>());
 		}
-		protected virtual IReceiveFromEndpoints BuildReceiverEndpoint(IComponentContext c)
+		protected virtual IHandlePoisonMessages BuildPoisonMessageHandler(IComponentContext c)
 		{
-			return new MsmqReceiverEndpoint(
-				MsmqConnector.OpenReceive(new MsmqAddress(this.receiverAddress), this.enlist),
-				MsmqConnector.OpenSend(new MsmqAddress(this.poisonAddress), this.enlist),
-				c.Resolve<ISerializeMessages>());
+			if (!this.enlist)
+				return new NonTransactionalPoisonMessageHandler();
+
+			return new PoisonMessageHandler(
+				c.ResolveNamed<ISendToEndpoints>(PoisonEndpoint, new Parameter[0]), this.maxRetries);
 		}
 	}
 }
