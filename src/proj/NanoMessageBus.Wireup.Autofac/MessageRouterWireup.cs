@@ -15,7 +15,7 @@ namespace NanoMessageBus.Wireup
 		{
 		}
 
-		public virtual MessageRouterWireup AttemptOnFailureAtLeast(int times)
+		public virtual MessageRouterWireup AttemptAtLeast(int times)
 		{
 			this.maxAttempts = times;
 			return this;
