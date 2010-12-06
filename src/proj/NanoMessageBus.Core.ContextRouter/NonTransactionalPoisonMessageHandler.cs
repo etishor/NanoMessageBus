@@ -8,7 +8,7 @@ namespace NanoMessageBus.Core
 		{
 			return false;
 		}
-		public virtual void HandleSuccess(TransportMessage message)
+		public virtual void ClearFailures(TransportMessage message)
 		{
 			// no-op
 		}

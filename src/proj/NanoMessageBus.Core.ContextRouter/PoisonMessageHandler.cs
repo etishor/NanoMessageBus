@@ -29,7 +29,7 @@ namespace NanoMessageBus.Core
 			return retries >= this.maxRetries;
 		}
 
-		public virtual void HandleSuccess(TransportMessage message)
+		public virtual void ClearFailures(TransportMessage message)
 		{
 			if (message != null)
 				this.messageFailures.Remove(message.MessageId);

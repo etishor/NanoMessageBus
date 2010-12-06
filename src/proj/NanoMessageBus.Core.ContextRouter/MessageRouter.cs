@@ -77,7 +77,7 @@ namespace NanoMessageBus.Core
 			Log.Debug(Diagnostics.CommittingUnitOfWork);
 			this.unitOfWork.Complete();
 
-			this.poisonMessageHandler.HandleSuccess(message);
+			this.poisonMessageHandler.ClearFailures(message);
 		}
 		private void TryRoute(TransportMessage message)
 		{
