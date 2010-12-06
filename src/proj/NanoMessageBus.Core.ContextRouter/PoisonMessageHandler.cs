@@ -11,12 +11,12 @@ namespace NanoMessageBus.Core
 		private const string PoisonMessageQueue = ""; // empty string means it is set by configuration
 		private readonly IDictionary<Guid, int> messageFailures = new Dictionary<Guid, int>();
 		private readonly ISendToEndpoints poisonQueue;
-		private readonly int maxAttempts;
+		private readonly int maxRetries;
 
-		public PoisonMessageHandler(ISendToEndpoints poisonQueue, int maxAttempts)
+		public PoisonMessageHandler(ISendToEndpoints poisonQueue, int maxRetries)
 		{
 			this.poisonQueue = poisonQueue;
-			this.maxAttempts = maxAttempts;
+			this.maxRetries = maxRetries;
 		}
 
 		public virtual bool IsPoison(TransportMessage message)
@@ -24,9 +24,9 @@ namespace NanoMessageBus.Core
 			if (message == null)
 				return false;
 
-			int attempts;
-			this.messageFailures.TryGetValue(message.MessageId, out attempts);
-			return attempts >= this.maxAttempts;
+			int retries;
+			this.messageFailures.TryGetValue(message.MessageId, out retries);
+			return retries >= this.maxRetries;
 		}
 
 		public virtual void HandleSuccess(TransportMessage message)
@@ -37,20 +37,20 @@ namespace NanoMessageBus.Core
 
 		public virtual void HandleFailure(TransportMessage message, Exception exception)
 		{
-			if (!this.ReachedMaxAttempts(message))
+			if (this.CanRetry(message))
 				return;
 
 			AppendExceptionHeaders(message, exception, 0);
 			this.ForwardToPoisonMessageQueue(message);
 		}
-		private bool ReachedMaxAttempts(TransportMessage message)
+		private bool CanRetry(TransportMessage message)
 		{
 			lock (this.messageFailures)
 			{
-				int attempts;
-				this.messageFailures.TryGetValue(message.MessageId, out attempts);
-				this.messageFailures[message.MessageId] = ++attempts;
-				return attempts >= this.maxAttempts;
+				int retries;
+				this.messageFailures.TryGetValue(message.MessageId, out retries);
+				this.messageFailures[message.MessageId] = ++retries;
+				return retries < this.maxRetries;
 			}
 		}
 		private static void AppendExceptionHeaders(TransportMessage message, Exception exception, int depth)
@@ -66,7 +66,7 @@ namespace NanoMessageBus.Core
 		}
 		private void ForwardToPoisonMessageQueue(TransportMessage message)
 		{
-			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxAttempts, message.MessageId);
+			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxRetries, message.MessageId);
 			this.poisonQueue.Send(message, PoisonMessageQueue);
 		}
 	}
