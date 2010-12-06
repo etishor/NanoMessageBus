@@ -25,16 +25,14 @@ namespace SendReceive
 			wireup = wireup.Configure<EndpointWireup>()
 						.ListenOn("msmq://./MyReceiverQueue")
 						.ForwardPoisonMessagesTo("msmq://./Error")
-						.IgnoreTransactions();
+						.RetryAtLeast(3.Times());
+						//// .IgnoreTransactions();
 
 			wireup = wireup.Configure<SubscriptionStorageWireup>()
 						.ConnectTo("SubscriptionStorage");
 
 			wireup = wireup.Configure<MessageSubscriberWireup>()
 						.AddSubscription("msmq://./MyReceiverQueue", typeof(MyMessage));
-
-			wireup = wireup.Configure<MessageRouterWireup>()
-						.AttemptOnFailureAtLeast(3.Times());
 
 			wireup = wireup.Configure<MessageBusWireup>()
 						.RegisterMessageEndpoint("msmq://./MyReceiverQueue", typeof(MyMessage))
