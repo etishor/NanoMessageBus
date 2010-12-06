@@ -8,6 +8,7 @@ namespace NanoMessageBus.Core
 	public class PoisonMessageHandler : IHandlePoisonMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(PoisonMessageHandler));
+		private static readonly string PoisonMessageQueue = string.Empty; // "" means set by configuration
 		private readonly IDictionary<Guid, int> messageFailures = new Dictionary<Guid, int>();
 		private readonly ISendToEndpoints poisonQueue;
 		private readonly int maxAttempts;
@@ -40,7 +41,7 @@ namespace NanoMessageBus.Core
 
 			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxAttempts, message.MessageId);
 			AppendExceptionHeaders(message, exception, 0);
-			this.poisonQueue.Send(message);
+			this.poisonQueue.Send(message, PoisonMessageQueue);
 		}
 		private bool ReachedMaxAttempts(TransportMessage message)
 		{

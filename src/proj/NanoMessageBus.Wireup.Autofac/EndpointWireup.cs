@@ -7,7 +7,7 @@ namespace NanoMessageBus.Wireup
 	public class EndpointWireup : WireupModule
 	{
 		internal const string PoisonEndpoint = "PoisonEndpoint";
-		private const bool SuppressPoisonEndpointEnlistment = true;
+		private const bool PoisonEndpointEnlist = false;
 		private string receiverAddress;
 		private string poisonAddress;
 		private bool enlist = true;
@@ -46,7 +46,7 @@ namespace NanoMessageBus.Wireup
 				.SingleInstance();
 
 			builder
-				.Register(this.BuildSenderEndpoint)
+				.Register(this.BuildPoisonEndpoint)
 				.Named(PoisonEndpoint, typeof(ISendToEndpoints))
 				.SingleInstance();
 		}
@@ -61,7 +61,7 @@ namespace NanoMessageBus.Wireup
 			// ignore address provided, always send to the configured poison address
 			var address = new MsmqAddress(this.poisonAddress);
 			return new MsmqSenderEndpoint(
-				addr => MsmqConnector.OpenSend(address, SuppressPoisonEndpointEnlistment),
+				addr => MsmqConnector.OpenSend(address, PoisonEndpointEnlist),
 				c.Resolve<ISerializeMessages>());
 		}
 		protected virtual IReceiveFromEndpoints BuildReceiverEndpoint(IComponentContext c)

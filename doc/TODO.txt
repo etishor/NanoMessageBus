@@ -4,6 +4,9 @@
 [A] Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
 [A] Added threading/lifetime information to interface XML code comments.
 
+[A] UnitOfWorkTransport (only when complete is called does it dispatch all enqueued messages to the actual endpoints)
+    - UnitOfWorkEndpoint???
+
 [B] Support for multiple containers (Castle, SM, Ninject, Unity) with fluent builders
 
 [B] Perhaps we should promote the concept of an "Address" to be first class?
