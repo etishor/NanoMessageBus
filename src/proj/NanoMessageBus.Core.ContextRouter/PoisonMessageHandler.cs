@@ -8,7 +8,7 @@ namespace NanoMessageBus.Core
 	public class PoisonMessageHandler : IHandlePoisonMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(PoisonMessageHandler));
-		private static readonly string PoisonMessageQueue = string.Empty; // "" means set by configuration
+		private const string PoisonMessageQueue = ""; // empty string means it is set by configuration
 		private readonly IDictionary<Guid, int> messageFailures = new Dictionary<Guid, int>();
 		private readonly ISendToEndpoints poisonQueue;
 		private readonly int maxAttempts;
@@ -34,14 +34,14 @@ namespace NanoMessageBus.Core
 			if (message != null)
 				this.messageFailures.Remove(message.MessageId);
 		}
+
 		public virtual void HandleFailure(TransportMessage message, Exception exception)
 		{
 			if (!this.ReachedMaxAttempts(message))
 				return;
 
-			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxAttempts, message.MessageId);
 			AppendExceptionHeaders(message, exception, 0);
-			this.poisonQueue.Send(message, PoisonMessageQueue);
+			this.ForwardToPoisonMessageQueue(message);
 		}
 		private bool ReachedMaxAttempts(TransportMessage message)
 		{
@@ -63,6 +63,11 @@ namespace NanoMessageBus.Core
 			message.Headers["ExceptionSource" + depth] = exception.Source;
 
 			AppendExceptionHeaders(message, exception.InnerException, ++depth);
+		}
+		private void ForwardToPoisonMessageQueue(TransportMessage message)
+		{
+			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxAttempts, message.MessageId);
+			this.poisonQueue.Send(message, PoisonMessageQueue);
 		}
 	}
 }
