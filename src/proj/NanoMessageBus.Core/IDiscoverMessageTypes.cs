@@ -6,6 +6,9 @@ namespace NanoMessageBus.Core
 	/// <summary>
 	/// Indicates the ability to discover all associated types with a particular message.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface IDiscoverMessageTypes
 	{
 		/// <summary>

@@ -5,6 +5,9 @@ namespace NanoMessageBus.MessageSubscriber
 	/// <summary>
 	/// Indicates the ability to dispatch a request to unsubscribe.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface IUnsubscribeFromMessages
 	{
 		/// <summary>

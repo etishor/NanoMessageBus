@@ -3,6 +3,9 @@ namespace NanoMessageBus.Serialization
 	/// <summary>
 	/// Indicates the ability to transform a message into another type.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface ITransformMessages
 	{
 		/// <summary>

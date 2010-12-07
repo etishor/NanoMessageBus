@@ -5,6 +5,9 @@ namespace NanoMessageBus.Core
 	/// <summary>
 	/// Indicates the ability to forward poison messages to the configured poison message queue.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface IHandlePoisonMessages
 	{
 		/// <summary>

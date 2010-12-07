@@ -3,6 +3,10 @@ namespace NanoMessageBus.Transports
 	/// <summary>
 	/// Indicates the ability to receive messages.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface should be designed to be single threaded and
+	/// should not be shared between threads.
+	/// </remarks>
 	public interface IReceiveMessages
 	{
 		/// <summary>

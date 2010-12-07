@@ -5,6 +5,9 @@ namespace NanoMessageBus.Endpoints
 	/// <summary>
 	/// Indicates the ability to send a message to an endpoint.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface ISendToEndpoints : IDisposable
 	{
 		/// <summary>

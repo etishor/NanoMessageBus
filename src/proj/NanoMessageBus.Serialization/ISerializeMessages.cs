@@ -6,6 +6,9 @@ namespace NanoMessageBus.Serialization
 	/// <summary>
 	/// Indicates the ability to serialize and deserialize a message.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface ISerializeMessages
 	{
 		/// <summary>

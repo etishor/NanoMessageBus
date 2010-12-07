@@ -6,6 +6,9 @@ namespace NanoMessageBus.SubscriptionStorage
 	/// <summary>
 	/// Indicates the ability to store, modify, and retreive a list of subscriptions.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface IStoreSubscriptions
 	{
 		/// <summary>

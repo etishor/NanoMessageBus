@@ -3,6 +3,11 @@ namespace NanoMessageBus
 	/// <summary>
 	/// Provides current context surrounding the incoming message being handled.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface should be designed to be single threaded and
+	/// should not be shared between threads.  The object lifetime of instances will be the receipt
+	/// of a single TransportMessage.
+	/// </remarks>
 	public interface IMessageContext
 	{
 		/// <summary>

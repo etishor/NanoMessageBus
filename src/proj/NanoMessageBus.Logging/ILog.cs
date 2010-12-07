@@ -3,6 +3,9 @@ namespace NanoMessageBus.Logging
 	/// <summary>
 	/// Indicates the ability to log diagnostic information.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface ILog
 	{
 		/// <summary>

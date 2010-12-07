@@ -5,6 +5,9 @@ namespace NanoMessageBus.Endpoints
 	/// <summary>
 	/// Indicates the ability to receive a message from an endpoint.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface IReceiveFromEndpoints : IDisposable
 	{
 		/// <summary>

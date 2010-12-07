@@ -5,6 +5,9 @@ namespace NanoMessageBus.MessageSubscriber
 	/// <summary>
 	/// Indicates the ability to dispatch subscription requests.
 	/// </summary>
+	/// <remarks>
+	/// Object instances which implement this interface must be designed to be multi-thread safe.
+	/// </remarks>
 	public interface ISubscribeToMessages
 	{
 		/// <summary>
