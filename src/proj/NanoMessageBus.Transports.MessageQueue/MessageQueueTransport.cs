@@ -19,9 +19,7 @@ namespace NanoMessageBus.Transports
 		private bool disposed;
 
 		public MessageQueueTransport(
-			Func<IReceiveMessages> receiverFactory,
-			ISendToEndpoints sender,
-			int maxThreads)
+			Func<IReceiveMessages> receiverFactory, ISendToEndpoints sender, int maxThreads)
 		{
 			this.receiverFactory = receiverFactory;
 			this.sender = sender;
