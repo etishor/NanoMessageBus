@@ -11,6 +11,9 @@ namespace NanoMessageBus
 	public class MessageBus : ISendMessages, IPublishMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageBus));
+
+		// TODO: make Func<string, ITransport> where address determines transport
+		// TODO: make address a first-class concept?
 		private readonly ITransportMessages transport;
 		private readonly IStoreSubscriptions subscriptions;
 		private readonly IDictionary<Type, ICollection<string>> recipients;
@@ -68,14 +71,12 @@ namespace NanoMessageBus
 			if (!messages.Any())
 				return;
 
-			var addresses = getRecipients(messages[0]).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-			if (addresses.Length == 0)
-			{
-				Log.Warn(Diagnostics.DroppingMessage, messages[0].GetType());
-				return;
-			}
-
-			this.transport.Send(this.builder.BuildMessage(messages), addresses);
+			var primaryMessage = messages[0];
+			var addresses = getRecipients(primaryMessage).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+			if (addresses.Length != 0)
+				this.transport.Send(this.builder.BuildMessage(messages), addresses);
+			else
+				Log.Warn(Diagnostics.DroppingMessage, primaryMessage.GetType());
 		}
 		private static object[] PopulatedMessagesOnly(object[] messages)
 		{

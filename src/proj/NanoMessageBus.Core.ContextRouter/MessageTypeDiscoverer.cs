@@ -6,7 +6,7 @@ namespace NanoMessageBus.Core
 
 	public class MessageTypeDiscoverer : IDiscoverMessageTypes
 	{
-		public IEnumerable<Type> GetTypes(object message)
+		public virtual IEnumerable<Type> GetTypes(object message)
 		{
 			if (message != null)
 			{
@@ -17,7 +17,7 @@ namespace NanoMessageBus.Core
 					yield return @interface;
 			}
 		}
-		public IEnumerable<string> GetTypeNames(object message)
+		public virtual IEnumerable<string> GetTypeNames(object message)
 		{
 			return this.GetTypes(message).Select(type => type.AssemblyQualifiedName);
 		}

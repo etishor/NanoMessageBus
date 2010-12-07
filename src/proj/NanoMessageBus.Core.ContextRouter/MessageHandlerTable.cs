@@ -41,15 +41,15 @@ namespace NanoMessageBus.Core
 
 		public virtual IEnumerable<IHandleMessages<object>> GetHandlers(object message)
 		{
-			var count = 0;
+			var found = false;
 			var handlers = this.messageTypeDiscoverer.GetTypes(message).SelectMany(this.GetHandlersForType);
 			foreach (var handler in handlers)
 			{
-				count++;
+				found = true;
 				yield return handler;
 			}
 
-			if (count == 0)
+			if (!found)
 				Log.Warn(Diagnostics.NoRegisteredHandlersFound, message.GetType());
 		}
 		private IEnumerable<IHandleMessages<object>> GetHandlersForType(Type messageType)

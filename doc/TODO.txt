@@ -1,4 +1,7 @@
-[A] Multiple dispatch to handlers, e.g. IHandleMessages<object> gets everything...
+[A] Specify ordering of message handlers
+[A] Prevent subscriptions to object and/or base IMessage-like type?
+[A] Make address explicit
+[A] MessageBus should get transport based upon address.
 [A] UnitOfWorkTransport (only when complete is called does it dispatch all enqueued messages to the actual endpoints)
     - UnitOfWorkEndpoint???
 [A] Standardize assembly naming, packaging, and ILMerge quirks.
