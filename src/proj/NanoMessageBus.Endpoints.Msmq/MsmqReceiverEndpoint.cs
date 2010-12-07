@@ -41,7 +41,7 @@ namespace NanoMessageBus.Endpoints
 			this.inputQueue.Dispose();
 		}
 
-		public string EndpointAddress
+		public Uri EndpointAddress
 		{
 			get { return this.inputQueue.Address; }
 		}

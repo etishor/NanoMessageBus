@@ -15,7 +15,9 @@ namespace SendReceive
 			using (var container = builder.Build())
 			{
 				Console.WriteLine("Publishing...");
-				container.Resolve<IPublishMessages>().Publish(new MyMessage());
+				var publisher = container.Resolve<IPublishMessages>();
+				for (var i = 0; i < 100; i++)
+					publisher.Publish(new MyMessage());
 
 				Console.WriteLine("Sending...");
 				var sender = container.Resolve<ISendMessages>();

@@ -19,7 +19,7 @@ namespace NanoMessageBus.SubscriptionStorage
 			this.connectionFactory = connectionFactory;
 		}
 
-		public virtual void Subscribe(string address, IEnumerable<string> messageTypes, DateTime expiration)
+		public virtual void Subscribe(Uri address, IEnumerable<string> messageTypes, DateTime expiration)
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
@@ -30,7 +30,7 @@ namespace NanoMessageBus.SubscriptionStorage
 				command.AddParameter(SqlStatements.ExpirationParameter, expiration.ToNull());
 			});
 		}
-		public virtual void Unsubscribe(string address, IEnumerable<string> messageTypes)
+		public virtual void Unsubscribe(Uri address, IEnumerable<string> messageTypes)
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
@@ -40,9 +40,9 @@ namespace NanoMessageBus.SubscriptionStorage
 				command.CommandText = SqlStatements.DeleteSubscription;
 			});
 		}
-		private void ExecuteCommand(string address, IEnumerable<string> messageTypes, Action<IDbCommand> callback)
+		private void ExecuteCommand(Uri address, IEnumerable<string> messageTypes, Action<IDbCommand> callback)
 		{
-			if (string.IsNullOrEmpty(address) || messageTypes == null)
+			if (address == null || messageTypes == null)
 				return;
 
 			using (var transaction = NewTransaction())
@@ -77,12 +77,17 @@ namespace NanoMessageBus.SubscriptionStorage
 			return new TransactionScope(TransactionScopeOption.RequiresNew, options);
 		}
 
-		public virtual ICollection<string> GetSubscribers(IEnumerable<string> messageTypes)
+		public virtual ICollection<Uri> GetSubscribers(IEnumerable<string> messageTypes)
 		{
 			using (SuppressTransaction())
 			using (var connection = this.connectionFactory())
 			using (var query = BuildQuery(connection, messageTypes))
-				return query.ExecuteWrappedQuery().Select(record => (string)record[0]).ToArray();
+				return query.ExecuteWrappedQuery().Select(GetSubscriber).ToArray();
+		}
+		private static IDisposable SuppressTransaction()
+		{
+			var options = new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted };
+			return new TransactionScope(TransactionScopeOption.Suppress, options);
 		}
 		private static IDbCommand BuildQuery(IDbConnection connection, IEnumerable<string> messageTypes)
 		{
@@ -94,10 +99,9 @@ namespace NanoMessageBus.SubscriptionStorage
 			command.CommandText = SqlStatements.GetSubscribers.FormatWith(statement);
 			return command;
 		}
-		private static IDisposable SuppressTransaction()
+		private static Uri GetSubscriber(IDataRecord record)
 		{
-			var options = new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted };
-			return new TransactionScope(TransactionScopeOption.Suppress, options);
+			return new Uri((string)record[0]);
 		}
 	}
 }

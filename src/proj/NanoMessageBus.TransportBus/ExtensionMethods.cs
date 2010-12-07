@@ -5,14 +5,14 @@ namespace NanoMessageBus
 
 	internal static class ExtensionMethods
 	{
-		public static ICollection<string> GetMatching(
-			this IDictionary<Type, ICollection<string>> source, IEnumerable<Type> types)
+		public static ICollection<Uri> GetMatching(
+			this IDictionary<Type, ICollection<Uri>> source, IEnumerable<Type> types)
 		{
-			ICollection<string> list = new HashSet<string>();
+			ICollection<Uri> list = new HashSet<Uri>();
 
 			foreach (var type in types)
 			{
-				ICollection<string> values;
+				ICollection<Uri> values;
 				if (!source.TryGetValue(type, out values))
 					continue;
 

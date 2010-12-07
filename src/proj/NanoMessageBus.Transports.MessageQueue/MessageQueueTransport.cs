@@ -49,7 +49,7 @@ namespace NanoMessageBus.Transports
 			Log.Info(Diagnostics.TransportDisposed);
 		}
 
-		public virtual void Send(TransportMessage message, params string[] recipients)
+		public virtual void Send(TransportMessage message, params Uri[] recipients)
 		{
 			if (!message.IsPopulated())
 				return;

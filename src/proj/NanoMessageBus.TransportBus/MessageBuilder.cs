@@ -7,14 +7,14 @@ namespace NanoMessageBus
 	{
 		private readonly IDictionary<Type, TimeSpan> timeToLive;
 		private readonly ICollection<Type> transientMessages;
-		private readonly string localAddress;
+		private readonly Uri localAddress;
 
-		public MessageBuilder(string localAddress)
+		public MessageBuilder(Uri localAddress)
 			: this(null, null, localAddress)
 		{
 		}
 		public MessageBuilder(
-			IDictionary<Type, TimeSpan> timeToLive, ICollection<Type> transientMessages, string localAddress)
+			IDictionary<Type, TimeSpan> timeToLive, ICollection<Type> transientMessages, Uri localAddress)
 		{
 			this.timeToLive = timeToLive ?? new Dictionary<Type, TimeSpan>();
 			this.transientMessages = transientMessages ?? new HashSet<Type>();

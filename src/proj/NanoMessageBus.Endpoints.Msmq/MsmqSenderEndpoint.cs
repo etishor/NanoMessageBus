@@ -12,14 +12,13 @@ namespace NanoMessageBus.Endpoints
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MsmqReceiverEndpoint));
 		private const string LabelFormat = "NMB:{0}:{1}";
-		private readonly IDictionary<string, MsmqConnector> activeConnectors;
-		private readonly Func<string, MsmqConnector> connectorFactory;
+		private readonly IDictionary<Uri, MsmqConnector> activeConnectors = new Dictionary<Uri, MsmqConnector>();
+		private readonly Func<Uri, MsmqConnector> connectorFactory;
 		private readonly ISerializeMessages serializer;
 		private bool disposed;
 
-		public MsmqSenderEndpoint(Func<string, MsmqConnector> connectorFactory, ISerializeMessages serializer)
+		public MsmqSenderEndpoint(Func<Uri, MsmqConnector> connectorFactory, ISerializeMessages serializer)
 		{
-			this.activeConnectors = new Dictionary<string, MsmqConnector>();
 			this.connectorFactory = connectorFactory;
 			this.serializer = serializer;
 		}
@@ -49,7 +48,7 @@ namespace NanoMessageBus.Endpoints
 			}
 		}
 
-		public virtual void Send(TransportMessage message, params string[] recipients)
+		public virtual void Send(TransportMessage message, params Uri[] recipients)
 		{
 			Log.Debug(Diagnostics.PreparingMessageToSend, message.MessageId, message.LogicalMessages.Count);
 			foreach (var msg in message.LogicalMessages)
@@ -62,13 +61,13 @@ namespace NanoMessageBus.Endpoints
 			}
 		}
 
-		private void Send(IDisposable message, params string[] recipients)
+		private void Send(IDisposable message, params Uri[] recipients)
 		{
 			using (message)
-				foreach (var recipient in recipients ?? new string[] { })
+				foreach (var recipient in recipients ?? new Uri[] { })
 					this.Send(recipient, message);
 		}
-		private void Send(string address, object message)
+		private void Send(Uri address, object message)
 		{
 			try
 			{
@@ -85,7 +84,7 @@ namespace NanoMessageBus.Endpoints
 				throw new EndpointException(e.Message, e);
 			}
 		}
-		private MsmqConnector OpenConnector(string address)
+		private MsmqConnector OpenConnector(Uri address)
 		{
 			MsmqConnector connector;
 			if (this.activeConnectors.TryGetValue(address, out connector))

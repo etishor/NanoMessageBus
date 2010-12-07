@@ -10,8 +10,8 @@ namespace NanoMessageBus.Wireup
 
 	public class MessageBusWireup : WireupModule
 	{
-		private readonly IDictionary<Type, ICollection<string>> endpoints =
-			new Dictionary<Type, ICollection<string>>();
+		private readonly IDictionary<Type, ICollection<Uri>> endpoints =
+			new Dictionary<Type, ICollection<Uri>>();
 		private readonly IDictionary<Type, TimeSpan> timeToLiveTypes = new Dictionary<Type, TimeSpan>();
 		private readonly ICollection<Type> transientTypes = new HashSet<Type>();
 
@@ -24,11 +24,11 @@ namespace NanoMessageBus.Wireup
 		{
 			foreach (var messageType in messageTypes ?? new Type[] { })
 			{
-				ICollection<string> registered;
+				ICollection<Uri> registered;
 				if (!this.endpoints.TryGetValue(messageType, out registered))
-					this.endpoints[messageType] = registered = new HashSet<string>();
+					this.endpoints[messageType] = registered = new HashSet<Uri>();
 
-				registered.Add(endpointAddress);
+				registered.Add(new Uri(endpointAddress));
 			}
 
 			return this;

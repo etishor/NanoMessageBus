@@ -61,7 +61,7 @@ namespace NanoMessageBus.Endpoints
 			this.queue.Dispose();
 		}
 
-		public virtual string Address
+		public virtual Uri Address
 		{
 			get { return this.address.Canonical; }
 		}

@@ -16,6 +16,6 @@ namespace NanoMessageBus.MessageSubscriber
 		/// <param name="endpointAddress">The endpoint to which the subscription request should be dispatched.</param>
 		/// <param name="expiration">The expiration of the subscription, if accepted.</param>
 		/// <param name="messageTypes">The types of messages requested in the subscription.</param>
-		void Subscribe(string endpointAddress, DateTime expiration, params Type[] messageTypes);
+		void Subscribe(Uri endpointAddress, DateTime expiration, params Type[] messageTypes);
 	}
 }

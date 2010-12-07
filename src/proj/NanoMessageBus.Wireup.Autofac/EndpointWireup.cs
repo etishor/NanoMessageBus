@@ -67,7 +67,7 @@ namespace NanoMessageBus.Wireup
 		protected virtual ISendToEndpoints BuildSenderEndpoint(IComponentContext c)
 		{
 			return new MsmqSenderEndpoint(
-				address => MsmqConnector.OpenSend(new MsmqAddress(address), this.enlist),
+				address => MsmqConnector.OpenSend(new MsmqAddress(address.ToString()), this.enlist),
 				c.Resolve<ISerializeMessages>());
 		}
 		protected virtual IReceiveFromEndpoints BuildReceiverEndpoint(IComponentContext c)

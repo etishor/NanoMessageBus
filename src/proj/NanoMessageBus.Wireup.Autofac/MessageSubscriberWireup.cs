@@ -12,8 +12,8 @@ namespace NanoMessageBus.Wireup
 
 	public class MessageSubscriberWireup : WireupModule
 	{
-		private readonly IDictionary<string, ICollection<Type>> requests =
-			new Dictionary<string, ICollection<Type>>();
+		private readonly IDictionary<Uri, ICollection<Type>> requests =
+			new Dictionary<Uri, ICollection<Type>>();
 
 		public MessageSubscriberWireup(IWireup parent)
 			: base(parent)
@@ -24,8 +24,10 @@ namespace NanoMessageBus.Wireup
 		{
 			// TODO: subscription expiration
 			ICollection<Type> types;
-			if (!this.requests.TryGetValue(publisher, out types))
-				this.requests[publisher] = types = new HashSet<Type>();
+
+			var key = new Uri(publisher);
+			if (!this.requests.TryGetValue(key, out types))
+				this.requests[key] = types = new HashSet<Type>();
 
 			foreach (var messageType in messageTypes)
 				types.Add(messageType);

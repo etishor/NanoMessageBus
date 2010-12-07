@@ -25,6 +25,6 @@ namespace NanoMessageBus.Transports
 		/// </summary>
 		/// <param name="message">The message to be sent.</param>
 		/// <param name="recipients">The set of addresses for the interested recipients.</param>
-		void Send(TransportMessage message, params string[] recipients);
+		void Send(TransportMessage message, params Uri[] recipients);
 	}
 }

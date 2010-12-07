@@ -13,7 +13,7 @@ namespace NanoMessageBus.Endpoints
 		private const int QueueNameCapture = 4;
 		private static readonly Regex AddressFormatRegex = new Regex(Pattern, RegexOptions.Compiled);
 
-		private readonly string canonical;
+		private readonly Uri canonical;
 		private readonly string proprietary;
 
 		public MsmqAddress(string address)
@@ -29,7 +29,7 @@ namespace NanoMessageBus.Endpoints
 			var queueName = match.Groups[QueueNameCapture].Value;
 
 			this.proprietary = MsmqFormat.FormatWith(machineName, queueName);
-			this.canonical = CanonicalFormat.FormatWith(machineName, queueName);
+			this.canonical = new Uri(CanonicalFormat.FormatWith(machineName, queueName));
 		}
 		private static string GetMachineName(string value)
 		{
@@ -38,7 +38,7 @@ namespace NanoMessageBus.Endpoints
 			return value.ToLowerInvariant();
 		}
 
-		public virtual string Canonical
+		public virtual Uri Canonical
 		{
 			get { return this.canonical; }
 		}

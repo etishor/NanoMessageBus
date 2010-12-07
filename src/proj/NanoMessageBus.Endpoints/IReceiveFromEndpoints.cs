@@ -13,7 +13,7 @@ namespace NanoMessageBus.Endpoints
 		/// <summary>
 		/// Gets the address of the endpoint.
 		/// </summary>
-		string EndpointAddress { get; }
+		Uri EndpointAddress { get; }
 
 		/// <summary>
 		/// Receives a message from the endpoint, if any.

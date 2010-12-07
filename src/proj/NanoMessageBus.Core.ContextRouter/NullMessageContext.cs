@@ -5,7 +5,7 @@ namespace NanoMessageBus.Core
 	public class NullMessageContext : IMessageContext
 	{
 		private static readonly TransportMessage NullMessage =
-			new TransportMessage(Guid.Empty, string.Empty, TimeSpan.Zero, false, null, null);
+			new TransportMessage(Guid.Empty, null, TimeSpan.Zero, false, null, null);
 
 		public void DeferMessage()
 		{

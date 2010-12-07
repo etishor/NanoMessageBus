@@ -8,16 +8,16 @@ namespace NanoMessageBus.MessageSubscriber
 	public class MessageSubscriber : ISubscribeToMessages, IUnsubscribeFromMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageSubscriber));
-		private readonly string returnAddress;
+		private readonly Uri returnAddress;
 		private readonly ITransportMessages transport;
 
-		public MessageSubscriber(string returnAddress, ITransportMessages transport)
+		public MessageSubscriber(Uri returnAddress, ITransportMessages transport)
 		{
 			this.returnAddress = returnAddress;
 			this.transport = transport;
 		}
 
-		public virtual void Subscribe(string endpointAddress, DateTime expiration, params Type[] messageTypes)
+		public virtual void Subscribe(Uri endpointAddress, DateTime expiration, params Type[] messageTypes)
 		{
 			var request = BuildRequest(expiration, messageTypes);
 
@@ -35,7 +35,7 @@ namespace NanoMessageBus.MessageSubscriber
 			};
 		}
 
-		public virtual void Unsubscribe(string endpointAddress, params Type[] messageTypes)
+		public virtual void Unsubscribe(Uri endpointAddress, params Type[] messageTypes)
 		{
 			var request = BuildRequest(messageTypes);
 
@@ -52,7 +52,7 @@ namespace NanoMessageBus.MessageSubscriber
 			};
 		}
 
-		private void Send(object request, string endpointAddress)
+		private void Send(object request, Uri endpointAddress)
 		{
 			var transportMessage = this.BuildTransportMessage(request);
 			this.transport.Send(transportMessage, endpointAddress);

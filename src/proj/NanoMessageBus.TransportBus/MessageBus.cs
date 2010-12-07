@@ -16,7 +16,7 @@ namespace NanoMessageBus
 		// TODO: make address a first-class concept?
 		private readonly ITransportMessages transport;
 		private readonly IStoreSubscriptions subscriptions;
-		private readonly IDictionary<Type, ICollection<string>> recipients;
+		private readonly IDictionary<Type, ICollection<Uri>> recipients;
 		private readonly IMessageContext context;
 		private readonly MessageBuilder builder;
 		private readonly IDiscoverMessageTypes discoverer;
@@ -24,7 +24,7 @@ namespace NanoMessageBus
 		public MessageBus(
 			ITransportMessages transport,
 			IStoreSubscriptions subscriptions,
-			IDictionary<Type, ICollection<string>> recipients,
+			IDictionary<Type, ICollection<Uri>> recipients,
 			IMessageContext context,
 			MessageBuilder builder,
 			IDiscoverMessageTypes discoverer)
@@ -42,7 +42,7 @@ namespace NanoMessageBus
 			Log.Debug(Diagnostics.SendingMessage);
 			this.Dispatch(messages, this.GetRecipients);
 		}
-		private ICollection<string> GetRecipients(object primaryMessage)
+		private ICollection<Uri> GetRecipients(object primaryMessage)
 		{
 			var discoveredTypes = this.discoverer.GetTypes(primaryMessage);
 			return this.recipients.GetMatching(discoveredTypes);
@@ -59,22 +59,22 @@ namespace NanoMessageBus
 			Log.Debug(Diagnostics.Publishing);
 			this.Dispatch(messages, this.GetSubscribers);
 		}
-		private ICollection<string> GetSubscribers(object primaryMessage)
+		private ICollection<Uri> GetSubscribers(object primaryMessage)
 		{
 			var discoveredTypes = this.discoverer.GetTypeNames(primaryMessage);
 			return this.subscriptions.GetSubscribers(discoveredTypes);
 		}
 
-		private void Dispatch(object[] messages, Func<object, IEnumerable<string>> getRecipients)
+		private void Dispatch(object[] messages, Func<object, ICollection<Uri>> getRecipients)
 		{
 			messages = PopulatedMessagesOnly(messages);
 			if (!messages.Any())
 				return;
 
 			var primaryMessage = messages[0];
-			var addresses = getRecipients(primaryMessage).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-			if (addresses.Length != 0)
-				this.transport.Send(this.builder.BuildMessage(messages), addresses);
+			var addresses = getRecipients(primaryMessage);
+			if (addresses.Count != 0)
+				this.transport.Send(this.builder.BuildMessage(messages), addresses.ToArray());
 			else
 				Log.Warn(Diagnostics.DroppingMessage, primaryMessage.GetType());
 		}

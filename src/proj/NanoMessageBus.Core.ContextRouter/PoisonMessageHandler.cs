@@ -8,7 +8,7 @@ namespace NanoMessageBus.Core
 	public class PoisonMessageHandler : IHandlePoisonMessages
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(PoisonMessageHandler));
-		private const string PoisonMessageQueue = ""; // empty string means it is set by configuration
+		private static readonly Uri PoisonMessageQueue = null; // set by configuration
 		private readonly IDictionary<Guid, int> messageFailures = new Dictionary<Guid, int>();
 		private readonly ISendToEndpoints poisonQueue;
 		private readonly int maxRetries;

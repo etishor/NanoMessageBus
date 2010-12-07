@@ -138,7 +138,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	public class when_serializing_and_then_deserializing_a_TransportMessage
 	{
 		static readonly TransportMessage InputValue =
-			new TransportMessage(Guid.NewGuid(), "ReturnAddress", TimeSpan.Zero, true, null, new object[] { });
+			new TransportMessage(Guid.NewGuid(), null, TimeSpan.Zero, true, null, new object[] { });
 		static readonly Stream TempStream = new MemoryStream();
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
 		static TransportMessage outputValue;
@@ -165,7 +165,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 		static readonly TransportMessage InputValue =
 			new TransportMessage(
 				Guid.NewGuid(),
-				"ReturnAddress",
+				null, 
 				TimeSpan.Zero,
 				true,
 				null,

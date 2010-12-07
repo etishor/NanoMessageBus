@@ -15,7 +15,7 @@ namespace NanoMessageBus.Serialization
 			: this()
 		{
 			this.MessageId = message.MessageId;
-			this.ReturnAddress = message.ReturnAddress;
+			this.ReturnAddress = message.ReturnAddress.ToString();
 			this.Headers = message.Headers;
 		}
 
@@ -23,7 +23,7 @@ namespace NanoMessageBus.Serialization
 		{
 			return new TransportMessage(
 				this.MessageId,
-				this.ReturnAddress,
+				new Uri(this.ReturnAddress),
 				TimeSpan.Zero,
 				false,
 				this.Headers,

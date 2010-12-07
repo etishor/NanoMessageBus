@@ -16,7 +16,7 @@ namespace NanoMessageBus
 		private readonly Guid messageId;
 
 		[DataMember(Order = 2, EmitDefaultValue = false, IsRequired = false)]
-		private readonly string returnAddress;
+		private readonly Uri returnAddress;
 
 		[IgnoreDataMember]
 		private readonly TimeSpan timeToLive;
@@ -48,7 +48,7 @@ namespace NanoMessageBus
 		/// <param name="logicalMessages">The collection of dispatched logical messages.</param>
 		public TransportMessage(
 			Guid messageId,
-			string returnAddress,
+			Uri returnAddress,
 			TimeSpan timeToLive,
 			bool persistent,
 			IDictionary<string, string> headers,
@@ -73,7 +73,7 @@ namespace NanoMessageBus
 		/// <summary>
 		/// Gets the address to which all replies should be directed.
 		/// </summary>
-		public string ReturnAddress
+		public Uri ReturnAddress
 		{
 			get { return this.returnAddress; }
 		}

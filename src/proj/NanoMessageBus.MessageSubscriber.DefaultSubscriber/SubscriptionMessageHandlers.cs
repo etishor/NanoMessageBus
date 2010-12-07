@@ -1,12 +1,13 @@
 namespace NanoMessageBus.MessageSubscriber
 {
+	using System;
 	using SubscriptionStorage;
 
 	public class SubscriptionMessageHandlers : IHandleMessages<SubscriptionRequestMessage>,
 		IHandleMessages<UnsubscribeRequestMessage>
 	{
 		private readonly IStoreSubscriptions storage;
-		private readonly string subscriberAddress;
+		private readonly Uri subscriberAddress;
 
 		public SubscriptionMessageHandlers(IStoreSubscriptions storage, IMessageContext context)
 		{

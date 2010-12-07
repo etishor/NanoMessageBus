@@ -15,6 +15,6 @@ namespace NanoMessageBus.MessageSubscriber
 		/// </summary>
 		/// <param name="endpointAddress">The endpoint responsible for handling the unsubscribe request.</param>
 		/// <param name="messageTypes">The types of messages to be unsubscribed, if successful.</param>
-		void Unsubscribe(string endpointAddress, params Type[] messageTypes);
+		void Unsubscribe(Uri endpointAddress, params Type[] messageTypes);
 	}
 }
