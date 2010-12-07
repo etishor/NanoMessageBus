@@ -62,6 +62,12 @@ namespace NanoMessageBus.Wireup
 				.As<MessageBuilder>()
 				.SingleInstance()
 				.ExternallyOwned();
+
+			builder
+				.Register(this.BuildNullMessageContext)
+				.As<NullMessageContext>()
+				.SingleInstance()
+				.ExternallyOwned();
 		}
 		protected virtual MessageBus BuildMessageBus(IComponentContext c)
 		{
@@ -69,7 +75,7 @@ namespace NanoMessageBus.Wireup
 				c.Resolve<ITransportMessages>(),
 				c.Resolve<IStoreSubscriptions>(),
 				this.endpoints,
-				c.ResolveOptional<IMessageContext>() ?? new NullMessageContext(),
+				c.ResolveOptional<IMessageContext>() ?? c.Resolve<NullMessageContext>(),
 				c.Resolve<MessageBuilder>(),
 				c.Resolve<IDiscoverMessageTypes>());
 		}
@@ -77,6 +83,10 @@ namespace NanoMessageBus.Wireup
 		{
 			return new MessageBuilder(
 				this.timeToLiveTypes, this.transientTypes, c.Resolve<IReceiveFromEndpoints>().EndpointAddress);
+		}
+		protected virtual NullMessageContext BuildNullMessageContext(IComponentContext c)
+		{
+			return new NullMessageContext(c.ResolveOptional<IReceiveFromEndpoints>().EndpointAddress);
 		}
 	}
 }

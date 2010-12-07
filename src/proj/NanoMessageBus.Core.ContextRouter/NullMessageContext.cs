@@ -4,8 +4,12 @@ namespace NanoMessageBus.Core
 
 	public class NullMessageContext : IMessageContext
 	{
-		private static readonly TransportMessage NullMessage =
-			new TransportMessage(Guid.Empty, null, TimeSpan.Zero, false, null, null);
+		private readonly Uri localAddress;
+
+		public NullMessageContext(Uri localAddress)
+		{
+			this.localAddress = localAddress;
+		}
 
 		public void DeferMessage()
 		{
@@ -15,7 +19,10 @@ namespace NanoMessageBus.Core
 		}
 		public TransportMessage CurrentMessage
 		{
-			get { return NullMessage; }
+			get
+			{
+				return new TransportMessage(Guid.Empty, this.localAddress, TimeSpan.Zero, false, null, null);
+			}
 		}
 		public bool ContinueProcessing
 		{

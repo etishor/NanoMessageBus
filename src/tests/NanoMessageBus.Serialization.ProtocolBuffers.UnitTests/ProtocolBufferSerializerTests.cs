@@ -137,8 +137,13 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 	[Subject("ProtocolBufferSerializer")]
 	public class when_serializing_and_then_deserializing_a_TransportMessage
 	{
-		static readonly TransportMessage InputValue =
-			new TransportMessage(Guid.NewGuid(), null, TimeSpan.Zero, true, null, new object[] { });
+		static readonly TransportMessage InputValue = new TransportMessage(
+			Guid.NewGuid(),
+			new Uri("msmq://localhost/MyQueue"), 
+			TimeSpan.Zero,
+			true,
+			null,
+			new object[] { });
 		static readonly Stream TempStream = new MemoryStream();
 		static readonly ISerializeMessages Serializer = new ProtocolBufferSerializer(InputValue.GetType());
 		static TransportMessage outputValue;
@@ -165,7 +170,7 @@ namespace NanoMessageBus.Serialization.ProtocolBuffers.UnitTests
 		static readonly TransportMessage InputValue =
 			new TransportMessage(
 				Guid.NewGuid(),
-				null, 
+				new Uri("msmq://localhost/myqueue"), 
 				TimeSpan.Zero,
 				true,
 				null,
