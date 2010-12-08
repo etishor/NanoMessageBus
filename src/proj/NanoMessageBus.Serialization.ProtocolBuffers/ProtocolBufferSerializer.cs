@@ -3,6 +3,8 @@ namespace NanoMessageBus.Serialization
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
+	using System.Reflection;
 	using System.Runtime.Serialization;
 	using ProtoBuf;
 
@@ -14,58 +16,67 @@ namespace NanoMessageBus.Serialization
 		private readonly Dictionary<Type, Func<Stream, object>> deserializers =
 			new Dictionary<Type, Func<Stream, object>>();
 
-		public ProtocolBufferSerializer(params Type[] messageTypes)
+		public ProtocolBufferSerializer()
+			: this(new Type[] { })
+		{
+		}
+		public ProtocolBufferSerializer(params string[] messageAssemblyFilenamePatterns)
+			: this(messageAssemblyFilenamePatterns.LoadAssemblies())
+		{
+		}
+		public ProtocolBufferSerializer(params Assembly[] messageAssemblies)
+			: this(messageAssemblies.SelectMany(assembly => assembly.GetTypes()).ToArray())
+		{
+		}
+		public ProtocolBufferSerializer(params Type[] types)
 		{
 			this.RegisterPrimitives();
-			this.RegisterCommonTypes();
 
-			foreach (var messageType in messageTypes ?? new Type[] { })
-				this.RegisterMessage(messageType);
+			foreach (var type in types ?? new Type[] { })
+				this.RegisterType(type);
 		}
 		private void RegisterPrimitives()
 		{
-			this.RegisterMessage(typeof(bool));
+			this.RegisterType(typeof(bool));
 
-			this.RegisterMessage(typeof(char));
-			this.RegisterMessage(typeof(byte));
-			this.RegisterMessage(typeof(sbyte));
+			this.RegisterType(typeof(char));
+			this.RegisterType(typeof(byte));
+			this.RegisterType(typeof(sbyte));
 
-			this.RegisterMessage(typeof(short));
-			this.RegisterMessage(typeof(ushort));
-			this.RegisterMessage(typeof(int));
-			this.RegisterMessage(typeof(uint));
-			this.RegisterMessage(typeof(long));
-			this.RegisterMessage(typeof(ulong));
-			this.RegisterMessage(typeof(double));
-			this.RegisterMessage(typeof(float));
-			this.RegisterMessage(typeof(decimal));
+			this.RegisterType(typeof(short));
+			this.RegisterType(typeof(ushort));
+			this.RegisterType(typeof(int));
+			this.RegisterType(typeof(uint));
+			this.RegisterType(typeof(long));
+			this.RegisterType(typeof(ulong));
+			this.RegisterType(typeof(double));
+			this.RegisterType(typeof(float));
+			this.RegisterType(typeof(decimal));
 
-			this.RegisterMessage(typeof(string));
+			this.RegisterType(typeof(string));
+
+			this.RegisterType(typeof(Uri));
+			this.RegisterType(typeof(Guid));
+			this.RegisterType(typeof(ProtocolBufferTransportMessage));
+			this.RegisterType(typeof(Exception));
+			this.RegisterType(typeof(SerializationException));
 		}
-		private void RegisterCommonTypes()
+		private void RegisterType(Type type)
 		{
-			this.RegisterMessage(typeof(Uri));
-			this.RegisterMessage(typeof(Guid));
-			this.RegisterMessage(typeof(ProtocolBufferTransportMessage));
-			this.RegisterMessage(typeof(Exception));
-			this.RegisterMessage(typeof(SerializationException));
-		}
-		private void RegisterMessage(Type messageType)
-		{
-			if (messageType == null || string.IsNullOrEmpty(messageType.FullName))
+			if (type == null || string.IsNullOrEmpty(type.FullName))
 				return;
 
-			if (this.types.ContainsKey(messageType))
+			if (this.types.ContainsKey(type))
 				return; // already registered
 
-			var key = messageType.FullName.GetHashCode();
-			this.keys.Add(key, messageType);
-			this.types.Add(messageType, key);
+			var key = type.FullName.GetHashCode();
+			this.keys.Add(key, type);
+			this.types.Add(type, key);
 
 			// TODO: make this faster by using reflection to create a delegate and then invoking the delegate
 			// http://stackoverflow.com/questions/2490828/createdelegate-with-unknown-types/2493903#2493903
-			var deserialize = typeof(Serializer).GetMethod("Deserialize").MakeGenericMethod(messageType);
-			this.deserializers[messageType] = stream => deserialize.Invoke(null, new object[] { stream });
+			var deserialize = typeof(Serializer).GetMethod("Deserialize").MakeGenericMethod(type);
+			this.deserializers[type] = stream => deserialize.Invoke(null, new object[] { stream });
 		}
 
 		protected override void SerializeMessage(Stream output, object message)
