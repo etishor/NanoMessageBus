@@ -8,7 +8,7 @@ namespace NanoMessageBus.Core
 	public class MessageRouter : IRouteMessagesToHandlers
 	{
 		private static readonly ILog Log = LogFactory.BuildLogger(typeof(MessageRouter));
-		private readonly IDisposable childContainer;
+		private readonly IDisposable disposer;
 		private readonly IHandleUnitOfWork unitOfWork;
 		private readonly ITransportMessages messageTransport;
 		private readonly ITrackMessageHandlers handlerTable;
@@ -16,13 +16,13 @@ namespace NanoMessageBus.Core
 		private bool disposed;
 
 		public MessageRouter(
-			IDisposable childContainer,
+			IDisposable disposer,
 			IHandleUnitOfWork unitOfWork,
 			ITransportMessages messageTransport,
 			ITrackMessageHandlers handlerTable,
 			IHandlePoisonMessages poisonMessageHandler)
 		{
-			this.childContainer = childContainer;
+			this.disposer = disposer;
 			this.unitOfWork = unitOfWork;
 			this.messageTransport = messageTransport;
 			this.handlerTable = handlerTable;
@@ -49,7 +49,7 @@ namespace NanoMessageBus.Core
 			Log.Debug(Diagnostics.DisposingMessageRouter);
 			this.ContinueProcessing = false;
 			this.unitOfWork.Dispose();
-			this.childContainer.Dispose();
+			this.disposer.Dispose();
 		}
 
 		public virtual TransportMessage CurrentMessage { get; private set; }
