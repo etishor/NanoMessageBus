@@ -5,13 +5,13 @@ namespace NanoMessageBus.Serialization
 	using ProtoBuf;
 
 	[ProtoContract]
-	internal class ProtocolBufferTransportMessage
+	internal class ProtocolBufferEnvelopeMessage
 	{
-		public ProtocolBufferTransportMessage()
+		public ProtocolBufferEnvelopeMessage()
 		{
 			this.LogicalMessages = new List<byte[]>();
 		}
-		public ProtocolBufferTransportMessage(TransportMessage message)
+		public ProtocolBufferEnvelopeMessage(EnvelopeMessage message)
 			: this()
 		{
 			this.MessageId = message.MessageId;
@@ -19,9 +19,9 @@ namespace NanoMessageBus.Serialization
 			this.Headers = message.Headers;
 		}
 
-		public TransportMessage ToMessage()
+		public EnvelopeMessage ToMessage()
 		{
-			return new TransportMessage(
+			return new EnvelopeMessage(
 				this.MessageId,
 				new Uri(this.ReturnAddress),
 				TimeSpan.Zero,

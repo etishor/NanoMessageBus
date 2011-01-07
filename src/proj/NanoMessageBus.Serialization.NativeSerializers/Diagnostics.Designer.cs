@@ -61,11 +61,11 @@ namespace NanoMessageBus.Serialization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default transport message type is &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Default envelope message type is &apos;{0}&apos;..
         /// </summary>
-        internal static string DefaultTransportMessage {
+        internal static string DefaultEnvelopeMessage {
             get {
-                return ResourceManager.GetString("DefaultTransportMessage", resourceCulture);
+                return ResourceManager.GetString("DefaultEnvelopeMessage", resourceCulture);
             }
         }
         

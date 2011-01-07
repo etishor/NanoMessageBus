@@ -17,11 +17,11 @@ namespace NanoMessageBus.Core
 		public void DropMessage()
 		{
 		}
-		public TransportMessage CurrentMessage
+		public EnvelopeMessage CurrentMessage
 		{
 			get
 			{
-				return new TransportMessage(Guid.Empty, this.localAddress, TimeSpan.Zero, false, null, null);
+				return new EnvelopeMessage(Guid.Empty, this.localAddress, TimeSpan.Zero, false, null, null);
 			}
 		}
 		public bool ContinueProcessing

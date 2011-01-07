@@ -19,6 +19,6 @@ namespace NanoMessageBus.Endpoints
 		/// Receives a message from the endpoint, if any.
 		/// </summary>
 		/// <returns>Returns the message received, if any; otherwise null is returned.</returns>
-		TransportMessage Receive();
+		EnvelopeMessage Receive();
 	}
 }

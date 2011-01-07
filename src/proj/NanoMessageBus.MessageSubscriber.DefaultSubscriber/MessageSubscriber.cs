@@ -54,12 +54,12 @@ namespace NanoMessageBus.MessageSubscriber
 
 		private void Send(object request, Uri endpointAddress)
 		{
-			var transportMessage = this.BuildTransportMessage(request);
-			this.transport.Send(transportMessage, endpointAddress);
+			var envelopeMessage = this.BuildEnvelopeMessage(request);
+			this.transport.Send(envelopeMessage, endpointAddress);
 		}
-		private TransportMessage BuildTransportMessage(object logicalMessage)
+		private EnvelopeMessage BuildEnvelopeMessage(object logicalMessage)
 		{
-			return new TransportMessage(
+			return new EnvelopeMessage(
 				Guid.NewGuid(),
 				this.returnAddress,
 				TimeSpan.MaxValue,

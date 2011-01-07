@@ -13,7 +13,7 @@ namespace NanoMessageBus.Transports
 		{
 			return string.Format(CultureInfo.InvariantCulture, format, values);
 		}
-		public static bool IsPopulated(this TransportMessage message)
+		public static bool IsPopulated(this EnvelopeMessage message)
 		{
 			return message != null && message.LogicalMessages != null && message.LogicalMessages.Count > 0;
 		}

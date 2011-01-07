@@ -4,15 +4,15 @@ namespace NanoMessageBus.Core
 
 	public class NonTransactionalPoisonMessageHandler : IHandlePoisonMessages
 	{
-		public virtual bool IsPoison(TransportMessage message)
+		public virtual bool IsPoison(EnvelopeMessage message)
 		{
 			return false;
 		}
-		public virtual void ClearFailures(TransportMessage message)
+		public virtual void ClearFailures(EnvelopeMessage message)
 		{
 			// no-op
 		}
-		public virtual void HandleFailure(TransportMessage message, Exception exception)
+		public virtual void HandleFailure(EnvelopeMessage message, Exception exception)
 		{
 			// no-op
 		}

@@ -15,6 +15,6 @@ namespace NanoMessageBus.Endpoints
 		/// </summary>
 		/// <param name="message">The message to be sent.</param>
 		/// <param name="recipients">The collection of recipients interested in the message provided.</param>
-		void Send(TransportMessage message, params Uri[] recipients);
+		void Send(EnvelopeMessage message, params Uri[] recipients);
 	}
 }

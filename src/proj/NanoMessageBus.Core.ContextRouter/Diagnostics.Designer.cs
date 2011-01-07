@@ -115,7 +115,7 @@ namespace NanoMessageBus.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transport message contains {0} logical messages..
+        ///   Looks up a localized string similar to Envelope message contains {0} logical messages..
         /// </summary>
         internal static string LogicalMessageCount {
             get {

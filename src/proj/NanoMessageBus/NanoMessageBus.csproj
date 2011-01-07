@@ -52,7 +52,7 @@
     <Compile Include="IMessageContext.cs" />
     <Compile Include="ISendMessages.cs" />
     <Compile Include="IPublishMessages.cs" />
-    <Compile Include="TransportMessage.cs" />
+    <Compile Include="EnvelopeMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

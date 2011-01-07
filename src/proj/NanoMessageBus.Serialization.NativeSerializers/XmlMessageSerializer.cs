@@ -14,11 +14,11 @@ namespace NanoMessageBus.Serialization
 			: this(null)
 		{
 		}
-		public XmlMessageSerializer(Type transportMessageType)
+		public XmlMessageSerializer(Type envelopeMessageType)
 		{
-			transportMessageType = transportMessageType ?? typeof(TransportMessage);
-			Log.Debug(Diagnostics.DefaultTransportMessage, transportMessageType);
-			this.serializer = new DataContractSerializer(transportMessageType);
+			envelopeMessageType = envelopeMessageType ?? typeof(EnvelopeMessage);
+			Log.Debug(Diagnostics.DefaultEnvelopeMessage, envelopeMessageType);
+			this.serializer = new DataContractSerializer(envelopeMessageType);
 		}
 
 		protected override void SerializeMessage(Stream output, object message)

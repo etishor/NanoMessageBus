@@ -46,7 +46,7 @@ namespace NanoMessageBus.Endpoints
 			get { return this.inputQueue.Address; }
 		}
 
-		public virtual TransportMessage Receive()
+		public virtual EnvelopeMessage Receive()
 		{
 			var message = this.DequeueMessage();
 			if (message == null)
@@ -80,11 +80,11 @@ namespace NanoMessageBus.Endpoints
 			Log.Verbose(Diagnostics.NoMessageAvailable, this.inputQueue.Address);
 			return null;
 		}
-		private TransportMessage Deserialize(Message message)
+		private EnvelopeMessage Deserialize(Message message)
 		{
 			try
 			{
-				return (TransportMessage)this.serializer.Deserialize(message.BodyStream);
+				return (EnvelopeMessage)this.serializer.Deserialize(message.BodyStream);
 			}
 			catch (SerializationException e)
 			{

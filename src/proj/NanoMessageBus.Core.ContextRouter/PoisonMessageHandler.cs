@@ -19,7 +19,7 @@ namespace NanoMessageBus.Core
 			this.maxRetries = maxRetries;
 		}
 
-		public virtual bool IsPoison(TransportMessage message)
+		public virtual bool IsPoison(EnvelopeMessage message)
 		{
 			if (message == null)
 				return false;
@@ -29,13 +29,13 @@ namespace NanoMessageBus.Core
 			return retries >= this.maxRetries;
 		}
 
-		public virtual void ClearFailures(TransportMessage message)
+		public virtual void ClearFailures(EnvelopeMessage message)
 		{
 			if (message != null)
 				this.messageFailures.Remove(message.MessageId);
 		}
 
-		public virtual void HandleFailure(TransportMessage message, Exception exception)
+		public virtual void HandleFailure(EnvelopeMessage message, Exception exception)
 		{
 			if (this.CanRetry(message))
 				return;
@@ -43,7 +43,7 @@ namespace NanoMessageBus.Core
 			AppendExceptionHeaders(message, exception, 0);
 			this.ForwardToPoisonMessageQueue(message);
 		}
-		private bool CanRetry(TransportMessage message)
+		private bool CanRetry(EnvelopeMessage message)
 		{
 			lock (this.messageFailures)
 			{
@@ -53,7 +53,7 @@ namespace NanoMessageBus.Core
 				return retries < this.maxRetries;
 			}
 		}
-		private static void AppendExceptionHeaders(TransportMessage message, Exception exception, int depth)
+		private static void AppendExceptionHeaders(EnvelopeMessage message, Exception exception, int depth)
 		{
 			if (null == exception)
 				return;
@@ -64,7 +64,7 @@ namespace NanoMessageBus.Core
 
 			AppendExceptionHeaders(message, exception.InnerException, ++depth);
 		}
-		private void ForwardToPoisonMessageQueue(TransportMessage message)
+		private void ForwardToPoisonMessageQueue(EnvelopeMessage message)
 		{
 			Log.Info(Diagnostics.ForwardingMessageToPoisonMessageQueue, this.maxRetries, message.MessageId);
 			this.poisonQueue.Send(message, PoisonMessageQueue);

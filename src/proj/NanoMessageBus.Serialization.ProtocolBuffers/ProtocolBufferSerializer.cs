@@ -57,7 +57,7 @@ namespace NanoMessageBus.Serialization
 
 			this.RegisterType(typeof(Uri));
 			this.RegisterType(typeof(Guid));
-			this.RegisterType(typeof(ProtocolBufferTransportMessage));
+			this.RegisterType(typeof(ProtocolBufferEnvelopeMessage));
 			this.RegisterType(typeof(Exception));
 			this.RegisterType(typeof(SerializationException));
 		}
@@ -84,15 +84,15 @@ namespace NanoMessageBus.Serialization
 			var messageType = message.GetType();
 			this.WriteTypeToStream(messageType, output);
 
-			if (messageType == typeof(TransportMessage))
-				this.SerializeMessage(output, message as TransportMessage);
+			if (messageType == typeof(EnvelopeMessage))
+				this.SerializeMessage(output, message as EnvelopeMessage);
 			else
 				Serializer.Serialize(output, message);
 		}
 		private void WriteTypeToStream(Type messageType, Stream output)
 		{
-			if (messageType == typeof(TransportMessage))
-				messageType = typeof(ProtocolBufferTransportMessage);
+			if (messageType == typeof(EnvelopeMessage))
+				messageType = typeof(ProtocolBufferEnvelopeMessage);
 
 			int key;
 			if (!this.types.TryGetValue(messageType, out key))
@@ -101,9 +101,9 @@ namespace NanoMessageBus.Serialization
 			var header = BitConverter.GetBytes(key);
 			output.Write(header, 0, header.Length);
 		}
-		private void SerializeMessage(Stream output, TransportMessage message)
+		private void SerializeMessage(Stream output, EnvelopeMessage message)
 		{
-			var protoMessage = new ProtocolBufferTransportMessage(message);
+			var protoMessage = new ProtocolBufferEnvelopeMessage(message);
 			foreach (var logicalMessage in message.LogicalMessages)
 			{
 				using (var stream = new MemoryStream())
@@ -123,10 +123,10 @@ namespace NanoMessageBus.Serialization
 			var messageType = this.GetSerializedType(header);
 
 			var message = this.deserializers[messageType](input);
-			if (messageType != typeof(ProtocolBufferTransportMessage))
+			if (messageType != typeof(ProtocolBufferEnvelopeMessage))
 				return message;
 
-			return this.DeserializeTransportMessage(message as ProtocolBufferTransportMessage);
+			return this.DeserializeEnvelopeMessage(message as ProtocolBufferEnvelopeMessage);
 		}
 		private Type GetSerializedType(byte[] header)
 		{
@@ -136,17 +136,17 @@ namespace NanoMessageBus.Serialization
 			if (!this.keys.TryGetValue(key, out messageType))
 				throw new SerializationException(Diagnostics.UnrecognizedHeader.FormatWith(key));
 
-			return messageType == typeof(TransportMessage) ? typeof(ProtocolBufferTransportMessage) : messageType;
+			return messageType == typeof(EnvelopeMessage) ? typeof(ProtocolBufferEnvelopeMessage) : messageType;
 		}
-		private object DeserializeTransportMessage(ProtocolBufferTransportMessage message)
+		private object DeserializeEnvelopeMessage(ProtocolBufferEnvelopeMessage message)
 		{
-			var transportMessage = message.ToMessage();
+			var envelopeMessage = message.ToMessage();
 
 			foreach (var serializedLogicalMessage in message.LogicalMessages)
 				using (var stream = new MemoryStream(serializedLogicalMessage))
-					transportMessage.LogicalMessages.Add(this.DeserializeMessage(stream));
+					envelopeMessage.LogicalMessages.Add(this.DeserializeMessage(stream));
 
-			return transportMessage;
+			return envelopeMessage;
 		}
 	}
 }

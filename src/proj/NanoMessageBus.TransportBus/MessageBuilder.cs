@@ -21,13 +21,13 @@ namespace NanoMessageBus
 			this.localAddress = localAddress;
 		}
 
-		public virtual TransportMessage BuildMessage(params object[] messages)
+		public virtual EnvelopeMessage BuildMessage(params object[] messages)
 		{
 			if (messages == null || 0 == messages.Length)
 				return null;
 
 			var primaryMessageType = messages[0].GetType();
-			return new TransportMessage(
+			return new EnvelopeMessage(
 				Guid.NewGuid(),
 				this.localAddress,
 				this.GetTimeToLive(primaryMessageType),

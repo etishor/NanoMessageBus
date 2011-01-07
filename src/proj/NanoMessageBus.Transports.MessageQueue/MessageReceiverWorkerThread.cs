@@ -61,7 +61,7 @@ namespace NanoMessageBus.Transports
 			using (var router = this.routerFactory())
 				this.RouteToHandlers(router, this.receiverQueue.Receive());
 		}
-		private void RouteToHandlers(IRouteMessagesToHandlers router, TransportMessage message)
+		private void RouteToHandlers(IRouteMessagesToHandlers router, EnvelopeMessage message)
 		{
 			if (!message.IsPopulated())
 				return;

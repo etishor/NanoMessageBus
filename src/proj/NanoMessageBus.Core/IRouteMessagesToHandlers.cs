@@ -3,7 +3,7 @@ namespace NanoMessageBus.Core
 	using System;
 
 	/// <summary>
-	/// Indicates the ability to route an incoming transport message to all registered message handlers.
+	/// Indicates the ability to route an incoming envlope message to all registered message handlers.
 	/// </summary>
 	/// <remarks>
 	/// Object instances which implement this interface should be designed to be single threaded and
@@ -15,6 +15,6 @@ namespace NanoMessageBus.Core
 		/// Routes the message provided to all registered message handlers.
 		/// </summary>
 		/// <param name="message">The message to be routed.</param>
-		void Route(TransportMessage message);
+		void Route(EnvelopeMessage message);
 	}
 }

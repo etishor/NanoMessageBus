@@ -10,7 +10,7 @@ namespace NanoMessageBus
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class TransportMessage
+	public class EnvelopeMessage
 	{
 		[DataMember(Order = 1, EmitDefaultValue = false, IsRequired = false)]
 		private readonly Guid messageId;
@@ -31,22 +31,22 @@ namespace NanoMessageBus
 		private readonly ICollection<object> logicalMessages;
 
 		/// <summary>
-		/// Initializes a new instance of the TransportMessage class.
+		/// Initializes a new instance of the EnvelopeMessage class.
 		/// </summary>
-		protected TransportMessage()
+		protected EnvelopeMessage()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the TransportMessage class.
+		/// Initializes a new instance of the EnvelopeMessage class.
 		/// </summary>
-		/// <param name="messageId">The value which uniquely identifies the transport message.</param>
+		/// <param name="messageId">The value which uniquely identifies the envelope message.</param>
 		/// <param name="returnAddress">The address to which all replies should be directed.</param>
 		/// <param name="timeToLive">The maximum amount of time the message will live prior to successful receipt.</param>
 		/// <param name="persistent">A value indicating whether the message is durably stored.</param>
 		/// <param name="headers">The message headers which contain additional metadata about the logical messages.</param>
 		/// <param name="logicalMessages">The collection of dispatched logical messages.</param>
-		public TransportMessage(
+		public EnvelopeMessage(
 			Guid messageId,
 			Uri returnAddress,
 			TimeSpan timeToLive,
@@ -63,7 +63,7 @@ namespace NanoMessageBus
 		}
 
 		/// <summary>
-		/// Gets the value which uniquely identifies the transport message.
+		/// Gets the value which uniquely identifies the envelope message.
 		/// </summary>
 		public Guid MessageId
 		{

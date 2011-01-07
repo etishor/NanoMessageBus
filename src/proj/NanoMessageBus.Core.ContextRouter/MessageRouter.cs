@@ -52,7 +52,7 @@ namespace NanoMessageBus.Core
 			this.disposer.Dispose();
 		}
 
-		public virtual TransportMessage CurrentMessage { get; private set; }
+		public virtual EnvelopeMessage CurrentMessage { get; private set; }
 		public virtual bool ContinueProcessing { get; private set; }
 
 		public virtual void DeferMessage()
@@ -67,7 +67,7 @@ namespace NanoMessageBus.Core
 			this.ContinueProcessing = false;
 		}
 
-		public virtual void Route(TransportMessage message)
+		public virtual void Route(EnvelopeMessage message)
 		{
 			this.CurrentMessage = message;
 
@@ -79,7 +79,7 @@ namespace NanoMessageBus.Core
 
 			this.poisonMessageHandler.ClearFailures(message);
 		}
-		private void TryRoute(TransportMessage message)
+		private void TryRoute(EnvelopeMessage message)
 		{
 			Log.Verbose(Diagnostics.RoutingMessagesToHandlers);
 
