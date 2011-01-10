@@ -20,7 +20,7 @@ namespace NanoMessageBus.Transports
 		{
 			this.receiverQueue = receiverQueue;
 			this.routerFactory = routerFactory;
-			this.thread = thread(this.BeginReceive);
+			this.thread = thread(this.StartReceiving);
 		}
 
 		public virtual void Start()
@@ -51,7 +51,7 @@ namespace NanoMessageBus.Transports
 			this.thread.Abort();
 		}
 
-		protected virtual void BeginReceive()
+		protected virtual void StartReceiving()
 		{
 			while (this.started)
 				this.Receive();
@@ -66,10 +66,9 @@ namespace NanoMessageBus.Transports
 			if (!message.IsPopulated())
 				return;
 
-			Log.Info(Diagnostics.DispatchingToRouter, this.thread.Name, router.GetType());
-
 			try
 			{
+				Log.Info(Diagnostics.DispatchingToRouter, this.thread.Name, router.GetType());
 				router.Route(message);
 				Log.Info(Diagnostics.MessageProcessed, this.thread.Name);
 			}

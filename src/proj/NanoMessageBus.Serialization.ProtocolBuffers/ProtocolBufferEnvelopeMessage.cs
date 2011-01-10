@@ -30,16 +30,9 @@ namespace NanoMessageBus.Serialization
 				new List<object>());
 		}
 
-		[ProtoMember(1)]
-		public Guid MessageId { get; set; }
-
-		[ProtoMember(2)]
-		public string ReturnAddress { get; set; }
-
-		[ProtoMember(3)]
-		public IDictionary<string, string> Headers { get; set; }
-
-		[ProtoMember(4)]
-		public ICollection<byte[]> LogicalMessages { get; set; }
+		[ProtoMember(1)] public Guid MessageId { get; set; }
+		[ProtoMember(2)] public string ReturnAddress { get; set; }
+		[ProtoMember(3)] public IDictionary<string, string> Headers { get; set; }
+		[ProtoMember(4)] public ICollection<byte[]> LogicalMessages { get; set; }
 	}
 }
