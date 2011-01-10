@@ -5,8 +5,7 @@ namespace NanoMessageBus
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// The primary message envelope used to hold the metadata and payload necessary to route the message to all
-	/// intended recipients.
+	/// The primary message envelope used to hold the metadata and payload necessary to route the message to all intended recipients.
 	/// </summary>
 	[DataContract]
 	[Serializable]

@@ -1,7 +1,7 @@
 namespace NanoMessageBus
 {
 	/// <summary>
-	/// Provides current context surrounding the incoming message being handled.
+	/// Provides the current context surrounding the incoming message being handled.
 	/// </summary>
 	/// <remarks>
 	/// Object instances which implement this interface should be designed to be single threaded and

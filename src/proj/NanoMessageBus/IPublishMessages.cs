@@ -9,7 +9,7 @@ namespace NanoMessageBus
 	public interface IPublishMessages
 	{
 		/// <summary>
-		/// Publishes the collection of messages provided to the subscribers of the first message.
+		/// Publishes the series of messages provided to the subscribers of the first message.
 		/// </summary>
 		/// <param name="messages">The messages to be published.</param>
 		void Publish(params object[] messages);

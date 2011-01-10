@@ -12,7 +12,7 @@ namespace NanoMessageBus.SubscriptionStorage
 	public interface IStoreSubscriptions
 	{
 		/// <summary>
-		/// Subscribes the endpoint address specified to the message types indicated.
+		/// Adds the endpoint address specified to the message types indicated.
 		/// </summary>
 		/// <param name="address">The endpoint address to be subscribed.</param>
 		/// <param name="messageTypes">The types of messages to add the subscription.</param>

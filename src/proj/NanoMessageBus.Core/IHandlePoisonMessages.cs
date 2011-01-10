@@ -14,11 +14,11 @@ namespace NanoMessageBus.Core
 		/// Gets a value indicating whether the message provided is a poison message.
 		/// </summary>
 		/// <param name="message">The message to be evaluated.</param>
-		/// <returns>If the message has been previously handled is now considered poison, returns true; otherwise false.</returns>
+		/// <returns>If the message has been previously handled and is now considered poison, returns true; otherwise false.</returns>
 		bool IsPoison(EnvelopeMessage message);
 
 		/// <summary>
-		/// Indicates to the poison message handler that processing was successful
+		/// Indicates to the poison message handler that processing was successful.
 		/// </summary>
 		/// <param name="message">The message that was processed successfully.</param>
 		void ClearFailures(EnvelopeMessage message);
