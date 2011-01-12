@@ -69,15 +69,17 @@ namespace NanoMessageBus.Wireup
 				.SingleInstance()
 				.ExternallyOwned();
 		}
-		protected virtual MessageBus BuildMessageBus(IComponentContext c)
+		protected virtual TransactionalBus BuildMessageBus(IComponentContext c)
 		{
-			return new MessageBus(
+			var bus = new MessageBus(
 				c.Resolve<ITransportMessages>(),
 				c.Resolve<IStoreSubscriptions>(),
 				this.endpoints,
 				c.ResolveOptional<IMessageContext>() ?? c.Resolve<NullMessageContext>(),
 				c.Resolve<MessageBuilder>(),
 				c.Resolve<IDiscoverMessageTypes>());
+
+			return new TransactionalBus(c.Resolve<IHandleUnitOfWork>(), bus);
 		}
 		protected virtual MessageBuilder BuildTransportMessageBuilder(IComponentContext c)
 		{
