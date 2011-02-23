@@ -4,6 +4,7 @@ namespace NanoMessageBus.Endpoints
 	using System.Messaging;
 	using System.Transactions;
 	using Logging;
+    using System.Globalization;
 
 	public class MsmqConnector : IDisposable
 	{
@@ -24,8 +25,8 @@ namespace NanoMessageBus.Endpoints
 				return new MsmqConnector(queue, address, enlist);
 
 			queue.Dispose();
-			Log.Error(Diagnostics.NonTransactionalQueue);
-			throw new EndpointException(Diagnostics.NonTransactionalQueue);
+            Log.Error(Diagnostics.NonTransactionalQueue, address.Canonical);
+            throw new EndpointException(string.Format(CultureInfo.InvariantCulture, Diagnostics.NonTransactionalQueue, address.Canonical));
 		}
 		public static MsmqConnector OpenSend(MsmqAddress address, bool enlist)
 		{
