@@ -4,6 +4,7 @@ namespace SendReceive
 	using Autofac;
 	using NanoMessageBus;
 	using NanoMessageBus.Transports;
+    using NanoMessageBus.Core;
 
 	public static class MainProgram
 	{
@@ -14,19 +15,31 @@ namespace SendReceive
 
 			using (var container = builder.Build())
 			{
-				Console.WriteLine("Publishing...");
-				var publisher = container.Resolve<IPublishMessages>();
-				for (var i = 0; i < 100; i++)
-					publisher.Publish(new MyMessage());
+                using (var uowManager = container.Resolve<IManageCurrentUnitOfWork>())
+                {
+                    Console.WriteLine("Publishing...");
+                    var publisher = container.Resolve<IPublishMessages>();
+                    for (var i = 0; i < 100; i++)
+                        publisher.Publish(new MyMessage());
+                    uowManager.CurrentUnitOfWork.Complete();
+                }
 
-				Console.WriteLine("Sending...");
-				var sender = container.Resolve<ISendMessages>();
-				for (var i = 0; i < 100; i++)
-					sender.Send(new MyMessage());
+                using (var uowManager = container.Resolve<IManageCurrentUnitOfWork>())
+                {
+                    Console.WriteLine("Sending...");
+                    var sender = container.Resolve<ISendMessages>();
+                    for (var i = 0; i < 100; i++)
+                        sender.Send(new MyMessage());
+                    uowManager.CurrentUnitOfWork.Complete();
+                }
 
-				Console.WriteLine("Listening...");
-				var transport = container.Resolve<ITransportMessages>();
-				transport.StartListening();
+                using (var uowManager = container.Resolve<IManageCurrentUnitOfWork>())
+                {
+                    Console.WriteLine("Listening...");
+                    var transport = container.Resolve<ITransportMessages>();
+                    transport.StartListening();
+                    uowManager.CurrentUnitOfWork.Complete();
+                }
 
 				Console.WriteLine("Waiting...");
 				Console.ReadLine();

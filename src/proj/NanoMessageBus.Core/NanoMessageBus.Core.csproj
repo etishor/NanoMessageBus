@@ -51,6 +51,7 @@
     <Compile Include="IDiscoverMessageTypes.cs" />
     <Compile Include="IHandlePoisonMessages.cs" />
     <Compile Include="IHandleUnitOfWork.cs" />
+    <Compile Include="IManageCurrentUnitOfWork.cs" />
     <Compile Include="IRouteMessagesToHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +65,9 @@
     <Content Include="..\CustomDictionary.xml">
       <Link>Properties\CustomDictionary.xml</Link>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,6 +20,10 @@ namespace NanoMessageBus.Wireup
 				.InstancePerDependency()
 				.ExternallyOwned();
 
+            builder
+                .RegisterType<ThreadStaticUnitOfWorkManager>()
+                .As<IManageCurrentUnitOfWork>();
+
 			builder
 				.Register(c => new TransactionScopeUnitOfWork())
 				.As<IHandleUnitOfWork>()
