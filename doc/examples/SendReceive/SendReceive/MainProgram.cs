@@ -33,13 +33,10 @@ namespace SendReceive
                     uowManager.CurrentUnitOfWork.Complete();
                 }
 
-                using (var uowManager = container.Resolve<IManageCurrentUnitOfWork>())
-                {
-                    Console.WriteLine("Listening...");
-                    var transport = container.Resolve<ITransportMessages>();
-                    transport.StartListening();
-                    uowManager.CurrentUnitOfWork.Complete();
-                }
+                
+                Console.WriteLine("Listening...");
+                var transport = container.Resolve<ITransportMessages>();
+                transport.StartListening();
 
 				Console.WriteLine("Waiting...");
 				Console.ReadLine();
