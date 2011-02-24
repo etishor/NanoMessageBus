@@ -4,26 +4,26 @@ namespace NanoMessageBus
 
 	public class TransactionalBus : ISendMessages, IPublishMessages
 	{
-		private readonly IManageCurrentUnitOfWork uowManager;
+		private readonly IHandleUnitOfWork unitOfWork;
 		private readonly MessageBus inner;
 
-        public TransactionalBus(IManageCurrentUnitOfWork uowManager, MessageBus inner)
+		public TransactionalBus(IHandleUnitOfWork unitOfWork, MessageBus inner)
 		{
-            this.uowManager = uowManager;
+			this.unitOfWork = unitOfWork;
 			this.inner = inner;
 		}
 
 		public virtual void Send(params object[] messages)
 		{
-			this.uowManager.CurrentUnitOfWork.Register(() => this.inner.Send(messages));
+			this.unitOfWork.Register(() => this.inner.Send(messages));
 		}
 		public virtual void Reply(params object[] messages)
 		{
-            this.uowManager.CurrentUnitOfWork.Register(() => this.inner.Reply(messages));
+			this.unitOfWork.Register(() => this.inner.Reply(messages));
 		}
 		public virtual void Publish(params object[] messages)
 		{
-            this.uowManager.CurrentUnitOfWork.Register(() => this.inner.Publish(messages));
+			this.unitOfWork.Register(() => this.inner.Publish(messages));
 		}
 	}
 }
