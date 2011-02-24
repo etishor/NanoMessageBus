@@ -28,7 +28,7 @@ namespace NanoMessageBus.Wireup
 
 			builder
 				.Register(c => new MessageHandlerTable<IComponentContext>(
-					c, c.Resolve<IDiscoverMessageTypes>()))
+					c.Resolve<IComponentContext>() , c.Resolve<IDiscoverMessageTypes>()))
 				.As<ITrackMessageHandlers>()
 				.InstancePerLifetimeScope()
 				.ExternallyOwned();
