@@ -4,6 +4,7 @@ namespace SendReceive
 	using Autofac;
 	using NanoMessageBus;
 	using NanoMessageBus.Transports;
+    using NanoMessageBus.Core;
 
 	public static class MainProgram
 	{
@@ -12,21 +13,34 @@ namespace SendReceive
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new ConfigModule());
 
+            builder
+                .Register(c => new TransactionScopeUnitOfWork())
+                .As<IHandleUnitOfWork>()
+                .InstancePerLifetimeScope();
+
 			using (var container = builder.Build())
 			{
-				Console.WriteLine("Publishing...");
-				var publisher = container.Resolve<IPublishMessages>();
-				for (var i = 0; i < 100; i++)
-					publisher.Publish(new MyMessage());
+                using (var scope = container.BeginLifetimeScope())
+                {
+                    Console.WriteLine("Publishing...");
+                    var publisher = scope.Resolve<IPublishMessages>();
+                    for (var i = 0; i < 100; i++)
+                        publisher.Publish(new MyMessage());
+                    scope.Resolve<IHandleUnitOfWork>().Complete();
+                }
 
-				Console.WriteLine("Sending...");
-				var sender = container.Resolve<ISendMessages>();
-				for (var i = 0; i < 100; i++)
-					sender.Send(new MyMessage());
+                using (var scope = container.BeginLifetimeScope())
+                {
+                    Console.WriteLine("Sending...");
+                    var sender = scope.Resolve<ISendMessages>();
+                    for (var i = 0; i < 100; i++)
+                        sender.Send(new MyMessage());
+                    scope.Resolve<IHandleUnitOfWork>().Complete();
+                }
 
-				Console.WriteLine("Listening...");
-				var transport = container.Resolve<ITransportMessages>();
-				transport.StartListening();
+                Console.WriteLine("Listening...");
+                var transport = container.Resolve<ITransportMessages>();
+                transport.StartListening();
 
 				Console.WriteLine("Waiting...");
 				Console.ReadLine();
