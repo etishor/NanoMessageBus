@@ -136,7 +136,7 @@
     <value>DELETE
   FROM Subscriptions
  WHERE Subscriber = @subscriber
-   AND MessageType = @messageType{0}
+   AND MessageType = @messageType{0};
 
 INSERT
   INTO Subscriptions

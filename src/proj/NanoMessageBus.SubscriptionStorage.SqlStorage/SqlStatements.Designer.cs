@@ -97,7 +97,7 @@ namespace NanoMessageBus.SubscriptionStorage {
         ///   Looks up a localized string similar to DELETE
         ///  FROM Subscriptions
         /// WHERE Subscriber = @subscriber
-        ///   AND MessageType = @messageType{0}
+        ///   AND MessageType = @messageType{0};
         ///
         ///INSERT
         ///  INTO Subscriptions
