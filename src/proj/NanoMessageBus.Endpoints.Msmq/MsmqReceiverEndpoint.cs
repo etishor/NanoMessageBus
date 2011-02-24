@@ -58,6 +58,8 @@ namespace NanoMessageBus.Endpoints
 			using (message.BodyStream)
 				return this.Deserialize(message);
 		}
+
+        [System.Diagnostics.DebuggerNonUserCode]
 		private Message DequeueMessage()
 		{
 			try
