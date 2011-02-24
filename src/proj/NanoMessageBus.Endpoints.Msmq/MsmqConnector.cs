@@ -67,6 +67,7 @@ namespace NanoMessageBus.Endpoints
 			get { return this.address.Canonical; }
 		}
 
+        [System.Diagnostics.DebuggerNonUserCode]
 		public virtual Message Receive(TimeSpan timeout)
 		{
 			Log.Verbose(Diagnostics.AttemptingToReceiveMessage, this.Address);
