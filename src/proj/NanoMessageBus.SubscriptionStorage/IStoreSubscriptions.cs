@@ -17,7 +17,7 @@ namespace NanoMessageBus.SubscriptionStorage
 		/// <param name="address">The endpoint address to be subscribed.</param>
 		/// <param name="messageTypes">The types of messages to add the subscription.</param>
 		/// <param name="expiration">The point at which the subscription for the message types expires.</param>
-		void Subscribe(Uri address, IEnumerable<string> messageTypes, DateTime expiration);
+		void Subscribe(Uri address, IEnumerable<string> messageTypes, DateTime? expiration);
 
 		/// <summary>
 		/// Removes the set of message types from the endpoint address indicated.

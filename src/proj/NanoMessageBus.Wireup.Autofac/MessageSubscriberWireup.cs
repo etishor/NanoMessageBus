@@ -82,7 +82,7 @@ namespace NanoMessageBus.Wireup
 			{
 				var subscriber = e.Context.Resolve<ISubscribeToMessages>();
 				foreach (var request in this.requests)
-					subscriber.Subscribe(request.Key, DateTime.MaxValue, request.Value.ToArray());
+					subscriber.Subscribe(request.Key, null, request.Value.ToArray());
 			};
 		}
 	}

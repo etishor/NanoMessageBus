@@ -19,7 +19,7 @@ namespace NanoMessageBus.SubscriptionStorage
 			this.connectionFactory = connectionFactory;
 		}
 
-		public virtual void Subscribe(Uri address, IEnumerable<string> messageTypes, DateTime expiration)
+		public virtual void Subscribe(Uri address, IEnumerable<string> messageTypes, DateTime? expiration)
 		{
 			this.ExecuteCommand(address, messageTypes, command =>
 			{
@@ -49,7 +49,7 @@ namespace NanoMessageBus.SubscriptionStorage
 			using (var connection = this.connectionFactory())
 			using (var command = connection.CreateCommand())
 			{
-				command.AddParameter(SqlStatements.SubscriberParameter, address);
+				command.AddParameter(SqlStatements.SubscriberParameter, address.AbsoluteUri);
 				callback(command);
 
 				command.CommandText = PopulateCommand(command, messageTypes);

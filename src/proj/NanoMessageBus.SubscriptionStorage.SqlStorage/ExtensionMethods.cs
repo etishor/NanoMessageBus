@@ -7,9 +7,9 @@ namespace NanoMessageBus.SubscriptionStorage
 
 	internal static class ExtensionMethods
 	{
-		public static object ToNull(this DateTime value)
+		public static object ToNull(this DateTime? value)
 		{
-			return value == DateTime.MinValue || value == DateTime.MaxValue ? DBNull.Value : (object)value;
+			return !value.HasValue || value == DateTime.MinValue || value == DateTime.MaxValue ? DBNull.Value : (object)value;
 		}
 
 		public static string FormatWith(this string value, params object[] values)

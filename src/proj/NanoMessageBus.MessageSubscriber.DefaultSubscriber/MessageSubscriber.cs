@@ -17,7 +17,7 @@ namespace NanoMessageBus.MessageSubscriber
 			this.transport = transport;
 		}
 
-		public virtual void Subscribe(Uri endpointAddress, DateTime expiration, params Type[] messageTypes)
+		public virtual void Subscribe(Uri endpointAddress, DateTime? expiration, params Type[] messageTypes)
 		{
 			var request = BuildRequest(expiration, messageTypes);
 
@@ -26,7 +26,7 @@ namespace NanoMessageBus.MessageSubscriber
 
 			this.Send(request, endpointAddress);
 		}
-		private static SubscriptionRequestMessage BuildRequest(DateTime expiration, IEnumerable<Type> types)
+		private static SubscriptionRequestMessage BuildRequest(DateTime? expiration, IEnumerable<Type> types)
 		{
 			return new SubscriptionRequestMessage
 			{

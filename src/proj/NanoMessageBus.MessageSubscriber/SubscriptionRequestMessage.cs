@@ -21,6 +21,6 @@ namespace NanoMessageBus.MessageSubscriber
 		/// Gets or sets the proposed expiration of the subscription, if accepted.
 		/// </summary>
 		[DataMember(EmitDefaultValue = false, Name = "Expiration", Order = 2)]
-		public DateTime Expiration { get; set; }
+		public DateTime? Expiration { get; set; }
 	}
 }
