@@ -1,3 +1,6 @@
+Allow different kinds of messages to be received trx/non-trx from the same queue, e.g. we peek a message, discover its type and vary the transactionality of the receive.
+
+
 [A] Specify ordering of message handlers
 [A] Prevent subscriptions to object and/or base IMessage-like type?
 [A] MessageBus should get transport based upon address.
