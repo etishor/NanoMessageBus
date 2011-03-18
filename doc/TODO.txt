@@ -3,6 +3,11 @@ Allow different kinds of messages to be received trx/non-trx from the same queue
 before pass the message to the message handlers.  If a message is a regular, transactional message we call UoW complete only after
 all processing has been completed.
 
+Add capability to receive untyped "dynamic" message off the wire,
+and then to route that message to the appropriate handler based upon
+which message matches the schema of the dynamic message.
+
+
 [A] Specify ordering of message handlers
 [A] Prevent subscriptions to object and/or base IMessage-like type?
 [A] MessageBus should get transport based upon address.
