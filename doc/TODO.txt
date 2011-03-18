@@ -1,5 +1,7 @@
 Allow different kinds of messages to be received trx/non-trx from the same queue, e.g. we peek a message, discover its type and vary the transactionality of the receive.
-
+*or* we receive all messages transactionally (unless a queue is non-trx).  Then, upon discovering its type, we complete the UoW even
+before pass the message to the message handlers.  If a message is a regular, transactional message we call UoW complete only after
+all processing has been completed.
 
 [A] Specify ordering of message handlers
 [A] Prevent subscriptions to object and/or base IMessage-like type?
