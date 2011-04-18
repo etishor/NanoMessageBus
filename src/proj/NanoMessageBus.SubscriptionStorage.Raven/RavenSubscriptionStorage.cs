@@ -28,17 +28,25 @@ namespace NanoMessageBus.SubscriptionStorage.Raven
             {
                 return;
             }
-
-            string subscriber = address.ToString();
-
+                        
             using(var tx= NewTransaction())
             using(var session = store.OpenSession())
             {
                 foreach (string messageType in messageTypes)
                 {
-                    session.Advanced.DatabaseCommands.Delete(Subscription.FormatId(address.ToString(), messageType), null);
-                    Subscription subscription = new Subscription(address.ToString(), messageType, expiration);
-                    session.Store(subscription);
+                    Subscription subscription = session.Query<Subscription>()
+                        .Where(s => s.Subscriber == address.ToString() && s.MessageType == messageType)
+                        .SingleOrDefault();
+
+                    if (subscription == null)
+                    {
+                        subscription = new Subscription(address.ToString(), messageType, expiration);
+                        session.Store(subscription);
+                    }
+                    else
+                    {
+                        subscription.Expiration = expiration;
+                    }                    
                 }
                 session.SaveChanges();
                 tx.Complete();
@@ -55,10 +63,7 @@ namespace NanoMessageBus.SubscriptionStorage.Raven
             using (var tx = NewTransaction())
             using (var session = store.OpenSession())
             {
-                foreach (string messageType in messageTypes)
-                {
-                    session.Advanced.DatabaseCommands.Delete(Subscription.FormatId(address.ToString(), messageType), null);
-                }
+                Remove(session, address.ToString(), messageTypes);
                 session.SaveChanges();
                 tx.Complete();
             }
@@ -71,6 +76,25 @@ namespace NanoMessageBus.SubscriptionStorage.Raven
             {
                 return messageTypes.SelectMany(mt => GetSubscribers(session, mt)).Distinct().ToList()
                     .Select(s => new Uri(s)).ToList();
+            }
+        }
+
+        private void Remove(IDocumentSession session, string subscriber, IEnumerable<string> messageTypes)
+        {
+            foreach (string messageType in messageTypes)
+            {
+                Remove(session, subscriber, messageType);
+            }
+        }
+
+        private void Remove(IDocumentSession session, string subscriber, string messageType)
+        {
+            //session.Advanced.DatabaseCommands.Delete(Subscription.FormatId(address.ToString(), messageType), null);
+            Subscription subscription = session.Query<Subscription>()
+                       .Where(s => s.Subscriber == subscriber && s.MessageType == messageType).SingleOrDefault();
+            if (subscription != null)
+            {
+                session.Delete(subscription);
             }
         }
 
