@@ -28,10 +28,21 @@ REM TODO
 echo Merging
 mkdir output\bin
 
-REM Autofac
+echo Marging Primary Assembly
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\NanoMessageBus*.dll"
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /xmldocs /wildcards /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.dll %FILES_TO_MERGE%
+
+echo Rereferencing Merged Assembly
+msbuild /nologo /verbosity:quiet src/NanoMessageBus.sln /p:Configuration=%TARGET_CONFIG% /t:Clean
+msbuild /nologo /verbosity:quiet src/NanoMessageBus.sln /p:Configuration=%TARGET_CONFIG% /p:ILMerged=true /p:TargetFrameworkVersion=%FRAMEWORK_VERSION%
+
+echo Merging SubscriptionStorage.Raven
+SET FILES_TO_MERGE=
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src/proj/NanoMessageBus.SubscriptionStorage.Raven/bin/%TARGET_CONFIG%/NanoMessageBus.*.dll"
+echo NanoMessageBus.*>exclude.txt
+bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /wildcards /internalize:"exclude.txt" /targetplatform:%ILMERGE_VERSION% /out:output/bin/NanoMessageBus.SubscriptionStorage.Raven.dll %FILES_TO_MERGE%
+del exclude.txt
 
 echo Copying
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\Autofac*.*" "output\bin"
