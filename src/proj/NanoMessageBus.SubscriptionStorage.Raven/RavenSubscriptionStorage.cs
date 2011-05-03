@@ -28,9 +28,9 @@ namespace NanoMessageBus.SubscriptionStorage.Raven
             {
                 return;
             }
-                        
-            using(var tx= NewTransaction())
-            using(var session = store.OpenSession())
+
+            using (var tx = NewTransaction())
+            using (var session = store.OpenSession())
             {
                 foreach (string messageType in messageTypes)
                 {
@@ -46,7 +46,7 @@ namespace NanoMessageBus.SubscriptionStorage.Raven
                     else
                     {
                         subscription.Expiration = expiration;
-                    }                    
+                    }
                 }
                 session.SaveChanges();
                 tx.Complete();
@@ -89,7 +89,6 @@ namespace NanoMessageBus.SubscriptionStorage.Raven
 
         private void Remove(IDocumentSession session, string subscriber, string messageType)
         {
-            //session.Advanced.DatabaseCommands.Delete(Subscription.FormatId(address.ToString(), messageType), null);
             Subscription subscription = session.Query<Subscription>()
                        .Where(s => s.Subscriber == subscriber && s.MessageType == messageType).SingleOrDefault();
             if (subscription != null)
