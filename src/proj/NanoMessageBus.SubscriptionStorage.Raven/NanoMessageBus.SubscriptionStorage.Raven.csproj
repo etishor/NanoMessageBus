@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NanoMessageBus (ILMerged)" Condition="'$(ILMerged)' == 'true'">
-      <HintPath>..\..\..\output\bin\NanoMessageBus.dll</HintPath>
+      <HintPath>..\..\..\publish\bin\NanoMessageBus.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\..\lib\RavenDB\.NET 4.0\Raven.Client.Lightweight.dll</HintPath>
