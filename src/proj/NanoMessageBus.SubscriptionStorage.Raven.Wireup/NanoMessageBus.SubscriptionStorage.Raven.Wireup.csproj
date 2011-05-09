@@ -48,11 +48,14 @@
       <Project>{D65F20C0-B794-4AB2-A1B4-9F38A356BFB8}</Project>
       <Name>NanoMessageBus.SubscriptionStorage.Raven</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage\NanoMessageBus.SubscriptionStorage.csproj">
+    <Reference Include="NanoMessageBus (ILMerged)" Condition="'$(ILMerged)' == 'true'">
+      <HintPath>..\..\..\publish\bin\NanoMessageBus.dll</HintPath>
+    </Reference>
+    <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage\NanoMessageBus.SubscriptionStorage.csproj" Condition="'$(ILMerged)' != 'true'">
       <Project>{2787552C-88AE-4CED-A3F3-C0AD78754E63}</Project>
       <Name>NanoMessageBus.SubscriptionStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Wireup.Autofac\NanoMessageBus.Wireup.Autofac.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Wireup.Autofac\NanoMessageBus.Wireup.Autofac.csproj" Condition="'$(ILMerged)' != 'true'">
       <Project>{2122403B-F8F9-413B-A571-5B3B7211BF96}</Project>
       <Name>NanoMessageBus.Wireup.Autofac</Name>
     </ProjectReference>

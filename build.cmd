@@ -56,8 +56,6 @@ copy "src\proj\NanoMessageBus.SubscriptionStorage.Raven\bin\%TARGET_CONFIG%\Rave
 
 echo Copying Dependencies
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\Autofac*.*" "publish\bin"
-copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\Newtonsoft.Json*.*" "publish\bin"
-copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\protobuf-net.*" "publish\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\log4net.*" "publish\bin"
 copy "src\proj\NanoMessageBus.Wireup.Autofac\bin\%TARGET_CONFIG%\NLog.*" "publish\bin"
 copy "src\proj\NanoMessageBus.SubscriptionStorage.SqlStorage\bin\%TARGET_CONFIG%\*.sql" "publish\bin\"
