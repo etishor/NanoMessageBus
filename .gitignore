@@ -2,6 +2,7 @@ obj
 Bin
 bin
 output
+publish
 App.config
 Web.config
 *.user
