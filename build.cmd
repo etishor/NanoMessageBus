@@ -43,7 +43,7 @@ echo Merging SubscriptionStorage.Raven
 mkdir publish\plugins\SubscriptionStorage\Raven\
 SET FILES_TO_MERGE=
 SET FILES_TO_MERGE=%FILES_TO_MERGE% "src/proj/NanoMessageBus.SubscriptionStorage.Raven/bin/%TARGET_CONFIG%/NanoMessageBus.SubscriptionStorage.Raven.dll"
-REM #### will need to add wireup assemblies ####
+SET FILES_TO_MERGE=%FILES_TO_MERGE% "src/proj/NanoMessageBus.SubscriptionStorage.Raven.Wireup/bin/%TARGET_CONFIG%/NanoMessageBus.SubscriptionStorage.Raven.Wireup.dll"
 echo NanoMessageBus.*>exclude.txt
 bin\ILMerge\ILMerge.exe /keyfile:src/NanoMessageBus.snk /wildcards /internalize:"exclude.txt" /targetplatform:%ILMERGE_VERSION% /out:publish/plugins/SubscriptionStorage/Raven/NanoMessageBus.SubscriptionStorage.Raven.dll %FILES_TO_MERGE%
 del exclude.txt
