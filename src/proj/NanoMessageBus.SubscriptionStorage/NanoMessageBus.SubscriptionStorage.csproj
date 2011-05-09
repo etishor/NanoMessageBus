@@ -48,6 +48,7 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="InMemorySubscriptionStorage.cs" />
     <Compile Include="IStoreSubscriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubscriptionStorageException.cs" />
