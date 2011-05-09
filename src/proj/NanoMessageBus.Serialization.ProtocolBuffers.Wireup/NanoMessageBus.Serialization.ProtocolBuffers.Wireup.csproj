@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CC559DE2-5052-42A2-959C-F5163EF2A005}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NanoMessageBus.Serialization.ProtocolBuffers.Wireup</RootNamespace>
+    <AssemblyName>NanoMessageBus.Serialization.ProtocolBuffers.Wireup</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\..\lib\Autofac\.NET 4.0\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ProtocolBuffersSerializationWireupExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj">
+      <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
+      <Name>NanoMessageBus.Serialization.NativeSerializers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization.ProtocolBuffers\NanoMessageBus.Serialization.ProtocolBuffers.csproj">
+      <Project>{BD0CBB4E-B1B4-4E53-8ECC-66CF0E73D78C}</Project>
+      <Name>NanoMessageBus.Serialization.ProtocolBuffers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
+      <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
+      <Name>NanoMessageBus.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Wireup.Autofac\NanoMessageBus.Wireup.Autofac.csproj">
+      <Project>{2122403B-F8F9-413B-A571-5B3B7211BF96}</Project>
+      <Name>NanoMessageBus.Wireup.Autofac</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
