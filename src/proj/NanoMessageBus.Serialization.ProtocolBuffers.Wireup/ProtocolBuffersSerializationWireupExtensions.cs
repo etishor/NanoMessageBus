@@ -1,7 +1,8 @@
 ﻿
-namespace NanoMessageBus.Serialization.ProtocolBuffers.Wireup
+namespace NanoMessageBus
 {
     using NanoMessageBus.Wireup;
+    using NanoMessageBus.Serialization;
 
     public static class ProtocolBuffersSerializationWireupExtensions
     {

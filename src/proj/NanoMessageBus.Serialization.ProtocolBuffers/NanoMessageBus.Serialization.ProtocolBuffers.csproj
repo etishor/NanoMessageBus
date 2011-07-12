@@ -62,17 +62,21 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj">
+    <Reference Include="NanoMessageBus (ILMerged)" Condition="'$(ILMerged)' == 'true'">
+      <HintPath>..\..\..\publish\bin\NanoMessageBus.dll</HintPath>
+    </Reference>
+    
+    <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj" Condition="'$(ILMerged)' != 'true'">
+      <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
+      <Name>NanoMessageBus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj" Condition="'$(ILMerged)' != 'true'">
       <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
       <Name>NanoMessageBus.Serialization.NativeSerializers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
+    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj" Condition="'$(ILMerged)' != 'true'">
       <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
       <Name>NanoMessageBus.Serialization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NanoMessageBus\NanoMessageBus.csproj">
-      <Project>{A6D3AA0C-CEC9-47FF-80DF-B3F77D5B8E34}</Project>
-      <Name>NanoMessageBus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
