@@ -5,6 +5,7 @@ namespace NanoMessageBus.Wireup
 	using Core;
 	using Endpoints;
 	using Serialization;
+    using System;
 
 	public class EndpointWireup : WireupModule
 	{
@@ -91,7 +92,7 @@ namespace NanoMessageBus.Wireup
 				return new NonTransactionalPoisonMessageHandler();
 
 			return new PoisonMessageHandler(
-				c.ResolveNamed<ISendToEndpoints>(PoisonEndpoint, new Parameter[0]), this.maxRetries);
+                c.ResolveNamed<ISendToEndpoints>(PoisonEndpoint, new Parameter[0]),new Uri(this.poisonAddress), this.maxRetries);
 		}
 	}
 }

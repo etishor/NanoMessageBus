@@ -54,9 +54,15 @@ namespace NanoMessageBus.Endpoints
 
 			Log.Info(Diagnostics.MessageReceived, message.BodyStream.Length, this.inputQueue.Address);
 
+            EnvelopeMessage result;
+            
 			using (message)
 			using (message.BodyStream)
-				return this.Deserialize(message);
+				result = this.Deserialize(message);
+
+            result.Headers["ProcessingQueue"] = this.EndpointAddress.ToString();
+
+            return result;
 		}
 
         [System.Diagnostics.DebuggerNonUserCode]
