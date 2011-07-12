@@ -66,7 +66,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
+    <Reference Include="Autofac" Condition="$(TargetFrameworkVersion) == 'v3.5'">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
       <HintPath>..\..\..\lib\Autofac\.NET 3.5\Autofac.dll</HintPath>
     </Reference>

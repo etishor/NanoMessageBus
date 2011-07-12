@@ -1,9 +1,10 @@
 ﻿
-namespace NanoMessageBus.SubscriptionStorage.Raven.Wireup
+namespace NanoMessageBus
 {
     using NanoMessageBus.Wireup;
     using global::Raven.Client;
     using global::Raven.Client.Document;
+    using NanoMessageBus.SubscriptionStorage.Raven;
 
     public static class RavenSubscriptionStorageWireupExtensions
     {
