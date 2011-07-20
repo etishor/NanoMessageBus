@@ -82,5 +82,12 @@ namespace NanoMessageBus.Endpoints
 				? MessageQueueTransactionType.Automatic : MessageQueueTransactionType.Single;
 			this.queue.Send(message, trx);
 		}
+
+        [System.Diagnostics.DebuggerNonUserCode]
+        public virtual bool HasMessages(TimeSpan timeout)
+        {
+            this.queue.Peek(timeout);
+            return true;            
+        }
 	}
 }

@@ -20,5 +20,13 @@ namespace NanoMessageBus.Endpoints
 		/// </summary>
 		/// <returns>The message received, if any; otherwise null.</returns>
 		EnvelopeMessage Receive();
+
+        /// <summary>
+        /// Determines whether this receiver has any messages in queue.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this receiver has any messages in queue; otherwise, <c>false</c>.
+        /// </returns>
+        bool HasMessagesInQueue();
 	}
 }

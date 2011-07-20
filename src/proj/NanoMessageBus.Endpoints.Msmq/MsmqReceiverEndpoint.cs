@@ -46,6 +46,25 @@ namespace NanoMessageBus.Endpoints
 			get { return this.inputQueue.Address; }
 		}
 
+        [System.Diagnostics.DebuggerNonUserCode]
+        public bool HasMessagesInQueue()
+        {
+            try
+            {
+                return this.inputQueue.HasMessages(Timeout);
+            }
+            catch (MessageQueueException e)
+            {
+                if (e.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
+                    return false;
+
+                if (e.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
+                    Log.Fatal(Diagnostics.AccessDenied, this.inputQueue.Address);
+
+                throw new EndpointException(e.Message, e);
+            }
+        }
+
 		public virtual EnvelopeMessage Receive()
 		{
 			var message = this.DequeueMessage();
@@ -105,6 +124,6 @@ namespace NanoMessageBus.Endpoints
 		{
 			message.Extension = exception.Serialize();
 			this.poisonQueue.Send(message);
-		}
-	}
+		}        
+    }
 }
