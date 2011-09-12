@@ -163,6 +163,6 @@
     <value>Sending a message to the endpoint '{0}'.</value>
   </data>
   <data name="UnableToDeserializeMessage" xml:space="preserve">
-    <value>The incoming message could not be deserialized.</value>
+    <value>The incoming message could not be deserialized. '{0}'</value>
   </data>
 </root>
