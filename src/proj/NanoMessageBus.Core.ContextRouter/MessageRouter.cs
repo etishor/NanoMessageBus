@@ -69,6 +69,16 @@ namespace NanoMessageBus.Core
 
 		public virtual void Route(EnvelopeMessage message)
 		{
+            if (message == null || message.LogicalMessages == null || message.LogicalMessages.Count == 0)
+            {
+                // we wore unable to get a valid message from the queue.
+                // probably deserialization issue, and the message has been forwarder to the poison queue.
+                // this will complete the transaction removing the message from the current queue.
+                Log.Debug(Diagnostics.CommittingUnitOfWork);
+                this.unitOfWork.Complete();
+                return;
+            }
+
 			this.CurrentMessage = message;
 
 			if (!this.poisonMessageHandler.IsPoison(message))
