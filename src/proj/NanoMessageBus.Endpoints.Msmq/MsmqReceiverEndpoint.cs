@@ -79,11 +79,6 @@ namespace NanoMessageBus.Endpoints
             using (message.BodyStream)
                 result = this.Deserialize(message);
 
-            if (result != null)
-            {
-                result.Headers["ProcessingQueue"] = this.EndpointAddress.ToString();
-            }
-
             return result;
         }
 
