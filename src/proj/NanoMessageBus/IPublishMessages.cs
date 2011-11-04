@@ -14,12 +14,5 @@ namespace NanoMessageBus
         /// </summary>
         /// <param name="messages">The messages to be published.</param>
         void Publish(params object[] messages);
-
-        /// <summary>
-        /// Publishes the series of messages provided to the subscribers of the first message.
-        /// </summary>
-        /// <param name="headers">The headers.</param>
-        /// <param name="messages">The messages to be published.</param>
-        void Publish(IDictionary<string, string> headers, params object[] messages);
     }
 }

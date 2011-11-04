@@ -39,13 +39,7 @@ namespace NanoMessageBus
         public virtual void Send(params object[] messages)
         {
             Log.Debug(Diagnostics.SendingMessage);
-            this.Send(new Dictionary<string, string>(), messages);
-        }
-
-        public virtual void Send(IDictionary<string, string> headers, params object[] messages)
-        {
-            Log.Debug(Diagnostics.SendingMessage);
-            this.Dispatch(headers, messages, this.GetRecipients);
+            this.Dispatch(messages, this.GetRecipients);
         }
 
         private ICollection<Uri> GetRecipients(object primaryMessage)
@@ -58,25 +52,13 @@ namespace NanoMessageBus
         public virtual void Reply(params object[] messages)
         {
             Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
-            this.Reply(new Dictionary<string, string>(), messages);
-        }
-
-        public virtual void Reply(IDictionary<string, string> headers, params object[] messages)
-        {
-            Log.Debug(Diagnostics.Replying, this.context.CurrentMessage.ReturnAddress);
-            this.Dispatch(headers, messages, msg => new[] { this.context.CurrentMessage.ReturnAddress });
+            this.Dispatch(messages, msg => new[] { this.context.CurrentMessage.ReturnAddress });
         }
 
         public virtual void Publish(params object[] messages)
         {
             Log.Debug(Diagnostics.Publishing);
-            this.Publish(new Dictionary<string, string>(), messages);
-        }
-
-        public virtual void Publish(IDictionary<string, string> headers, params object[] messages)
-        {
-            Log.Debug(Diagnostics.Publishing);
-            this.Dispatch(headers, messages, this.GetSubscribers);
+            this.Dispatch(messages, this.GetSubscribers);
         }
 
         private ICollection<Uri> GetSubscribers(object primaryMessage)
@@ -85,7 +67,7 @@ namespace NanoMessageBus
             return this.subscriptions.GetSubscribers(discoveredTypes);
         }
 
-        private void Dispatch(IDictionary<string, string> headers, object[] messages, Func<object, ICollection<Uri>> getRecipients)
+        private void Dispatch(object[] messages, Func<object, ICollection<Uri>> getRecipients)
         {
             messages = PopulatedMessagesOnly(messages);
             if (!messages.Any())
@@ -93,7 +75,7 @@ namespace NanoMessageBus
 
             var primaryMessage = messages[0];
             var addresses = getRecipients(primaryMessage);
-            this.Dispatch(headers, messages, addresses);
+            this.Dispatch(messages, addresses);
 
             if (!addresses.Any())
                 Log.Warn(Diagnostics.DroppingMessage, primaryMessage.GetType());
@@ -105,12 +87,12 @@ namespace NanoMessageBus
             return messages;
         }
 
-        private void Dispatch(IDictionary<string, string> headers, object[] messages, IEnumerable<Uri> addresses)
+        private void Dispatch(object[] messages, IEnumerable<Uri> addresses)
         {
             if (!addresses.Any())
                 return;
 
-            var transportMessage = this.builder.BuildMessage(headers, messages);
+            var transportMessage = this.builder.BuildMessage(this.context.OutgoingHeaders, messages);
 
             this.transport.Send(transportMessage, addresses.ToArray());
         }

@@ -1,6 +1,5 @@
 namespace NanoMessageBus
 {
-    using System.Collections.Generic;
 
     /// <summary>
     /// Indicates the ability to send messages to registered recipients.
@@ -17,23 +16,9 @@ namespace NanoMessageBus
         void Send(params object[] messages);
 
         /// <summary>
-        /// Sends the series of messages provided to the registered recipients of the first message.
-        /// </summary>
-        /// <param name="headers">The headers.</param>
-        /// <param name="messages">The messages.</param>
-        void Send(IDictionary<string, string> headers, params object[] messages);
-
-        /// <summary>
         /// Sends the series of messages provided back to the return address of the current message context.
         /// </summary>
         /// <param name="messages">The messages to be sent back to the return address.</param>
         void Reply(params object[] messages);
-
-        /// <summary>
-        /// Sends the series of messages provided back to the return address of the current message context.
-        /// </summary>
-        /// <param name="headers">The headers.</param>
-        /// <param name="messages">The messages to be sent back to the return address.</param>
-        void Reply(IDictionary<string, string> headers, params object[] messages);
     }
 }

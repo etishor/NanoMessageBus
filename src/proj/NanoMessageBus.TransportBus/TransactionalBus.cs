@@ -19,29 +19,14 @@ namespace NanoMessageBus
             this.unitOfWork.Register(() => this.inner.Send(messages));
         }
 
-        public virtual void Send(IDictionary<string, string> headers, params object[] messages)
-        {
-            this.unitOfWork.Register(() => this.inner.Send(headers, messages));
-        }
-
         public virtual void Reply(params object[] messages)
         {
             this.unitOfWork.Register(() => this.inner.Reply(messages));
         }
 
-        public void Reply(IDictionary<string, string> headers, params object[] messages)
-        {
-            this.unitOfWork.Register(() => this.inner.Reply(headers, messages));
-        }
-
         public virtual void Publish(params object[] messages)
         {
             this.unitOfWork.Register(() => this.inner.Publish(messages));
-        }
-
-        public void Publish(IDictionary<string, string> headers, params object[] messages)
-        {
-            this.unitOfWork.Register(() => this.inner.Publish(headers, messages));
         }
     }
 }
