@@ -34,6 +34,9 @@
     <Reference Include="Autofac">
       <HintPath>..\..\..\lib\Autofac\.NET 4.0\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\lib\Newtonsoft.Json\.NET 4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
