@@ -1,10 +1,11 @@
 ﻿
 namespace NanoMessageBus
 {
-    using NanoMessageBus.Wireup;
     using global::Raven.Client;
     using global::Raven.Client.Document;
     using NanoMessageBus.SubscriptionStorage.Raven;
+    using NanoMessageBus.Wireup;
+    using Newtonsoft.Json;
 
     public static class RavenSubscriptionStorageWireupExtensions
     {
@@ -18,6 +19,16 @@ namespace NanoMessageBus
         public static SubscriptionStorageWireup WithRavenSubscriptionStorage(this SubscriptionStorageWireup wireup, IDocumentStore store)
         {
             return wireup.WithCustomSubscriptionStorage(new RavenSubscriptionStorage(store));
+        }
+
+        public static SerializationWireup WithRavenJsonSerializer(this SerializationWireup wireup)
+        {
+            return wireup.CustomSerializer(new Serialization.RavenJsonSerializer());
+        }
+
+        public static SerializationWireup WithRavenJsonSerializer(this SerializationWireup wireup, JsonSerializer customSerializer)
+        {
+            return wireup.CustomSerializer(new Serialization.RavenJsonSerializer(customSerializer));
         }
     }
 }

@@ -1,15 +1,22 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="RavenJsonSerializer.cs" company="Recognos Romania">
+// {RecognosCopyrightTextPlaceholder}
+// </copyright>
+// -----------------------------------------------------------------------
+
 namespace NanoMessageBus.Serialization
 {
     using System;
     using System.IO;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Raven.Json.Linq;
 
-    public class JsonMessageSerializer : SerializerBase
+    public class RavenJsonSerializer : SerializerBase
     {
         private readonly JsonSerializer serializer;
 
-        public JsonMessageSerializer(JsonSerializer customSerializer)
+        public RavenJsonSerializer(JsonSerializer customSerializer)
         {
             if (customSerializer == null)
             {
@@ -19,7 +26,7 @@ namespace NanoMessageBus.Serialization
             this.serializer = customSerializer;
         }
 
-        public JsonMessageSerializer()
+        public RavenJsonSerializer()
             : this(CreateDefaultSerializer())
         {
         }
@@ -41,7 +48,7 @@ namespace NanoMessageBus.Serialization
         {
             var streamWriter = new StreamWriter(output);
             var jsonWriter = new JsonTextWriter(streamWriter);
-            this.serializer.Serialize(jsonWriter, message);
+            RavenJToken.FromObject(message, this.serializer).WriteTo(jsonWriter);
             jsonWriter.Flush();
             streamWriter.Flush();
         }
@@ -49,7 +56,10 @@ namespace NanoMessageBus.Serialization
         {
             using (var streamReader = new StreamReader(input))
             using (var jsonReader = new JsonTextReader(streamReader))
-                return this.serializer.Deserialize(jsonReader);
+            using (RavenJTokenReader tokenReader = new RavenJTokenReader(RavenJToken.ReadFrom(jsonReader)))
+            {
+                return serializer.Deserialize(tokenReader);
+            }
         }
     }
 }

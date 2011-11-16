@@ -34,6 +34,9 @@
     <Reference Include="Autofac">
       <HintPath>..\..\..\lib\Autofac\.NET 4.0\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Newtonsoft.Json\.NET 4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\..\lib\RavenDB\.NET 4.0\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
@@ -44,6 +47,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NanoMessageBus.Serialization.NativeSerializers\NanoMessageBus.Serialization.NativeSerializers.csproj">
+      <Project>{D40EACE0-49AB-46FC-9A0A-B56C7D59D328}</Project>
+      <Name>NanoMessageBus.Serialization.NativeSerializers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanoMessageBus.Serialization\NanoMessageBus.Serialization.csproj">
+      <Project>{2BFD260B-E68A-4A06-9E3C-EC02C460E145}</Project>
+      <Name>NanoMessageBus.Serialization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanoMessageBus.SubscriptionStorage.Raven\NanoMessageBus.SubscriptionStorage.Raven.csproj">
       <Project>{D65F20C0-B794-4AB2-A1B4-9F38A356BFB8}</Project>
       <Name>NanoMessageBus.SubscriptionStorage.Raven</Name>
