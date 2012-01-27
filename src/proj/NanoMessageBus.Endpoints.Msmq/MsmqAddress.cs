@@ -1,12 +1,15 @@
 namespace NanoMessageBus.Endpoints
 {
     using System;
+    using System.Net;
     using System.Text.RegularExpressions;
 
     public class MsmqAddress
     {
         private const string LocalHost = ".";
-        private const string MsmqFormat = @"FormatName:Direct=OS:{0}\PRIVATE$\{1}";
+        private const string DirectOS = "OS";
+        private const string DirectTCP = "TCP";
+        private const string MsmqFormat = @"FormatName:Direct={0}:{1}\PRIVATE$\{2}";
         private const string CanonicalFormat = @"msmq://{0}/{1}";
         private const string Pattern = @"^((msmq\://)?([A-Za-z0-9-_.]+)/)?([A-Za-z0-9-_.]+)(/)?$";
         private const int HostNameCapture = 3;
@@ -25,12 +28,23 @@ namespace NanoMessageBus.Endpoints
             if (!match.Success)
                 throw new ArgumentException(Diagnostics.InvalidAddress.FormatWith(address), "address");
 
-            var machineName = GetMachineName(match.Groups[HostNameCapture].Value);
+            var host = match.Groups[HostNameCapture].Value;
+
+            IPAddress ip;
+            string protocol = DirectOS;
+            // if an IP is specified use Direct=TCP since NetBios name resolution might not be available
+            if (IPAddress.TryParse(host, out ip))
+            {
+                protocol = DirectTCP;
+            }
+
+            var machineName = GetMachineName(host);
             var queueName = match.Groups[QueueNameCapture].Value;
 
-            this.proprietary = MsmqFormat.FormatWith(machineName, queueName);
+            this.proprietary = MsmqFormat.FormatWith(protocol, machineName, queueName);
             this.canonical = new Uri(CanonicalFormat.FormatWith(machineName, queueName));
         }
+
         private static string GetMachineName(string value)
         {
             value = (value ?? string.Empty).Trim();
